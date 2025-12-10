@@ -1,0 +1,458 @@
+/* ==========================================================
+   FACILÍTAME - PÁGINAS ESTÁTICAS
+   Para: Política de privacidad, Términos, etc.
+   ========================================================== */
+
+:root {
+    --color-main: #00c2cb;
+    --color-main-dark: #00a8b0;
+    --color-main-light: #e0f7fa;
+    --color-text: #1e293b;
+    --color-text-light: #64748b;
+    --color-bg: #f8fafc;
+    --color-white: #ffffff;
+    --color-border: #e2e8f0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    color: var(--color-text);
+    line-height: 1.7;
+}
+
+/* ==========================================================
+   HEADER
+   ========================================================== */
+
+.static-header {
+    background: linear-gradient(135deg, var(--color-main) 0%, var(--color-main-dark) 100%);
+    padding: 3rem 1rem;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 194, 203, 0.3);
+}
+
+.static-header-logo {
+    max-width: 180px;
+    max-height: 40px;
+    width: auto;
+    height: auto;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.static-header h1 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 auto 0.75rem auto;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+}
+
+.static-header p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0 auto;
+    max-width: 900px;
+    text-align: center !important;
+}
+
+/* ==========================================================
+   CONTAINER
+   ========================================================== */
+
+.static-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.static-card {
+    background: var(--color-white);
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================
+   SECTIONS
+   ========================================================== */
+
+.static-section {
+    margin-bottom: 2.5rem;
+}
+
+.static-section:last-child {
+    margin-bottom: 0;
+}
+
+h2 {
+    color: var(--color-main-dark);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 3px solid var(--color-main);
+    display: inline-block;
+}
+
+h3 {
+    color: var(--color-text);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.75rem 0;
+}
+
+p {
+    text-align: justify;
+    margin-bottom: 1rem;
+    color: var(--color-text-light);
+}
+
+/* ==========================================================
+   INFO TABLE (datos de empresa)
+   ========================================================== */
+
+.info-table {
+    background: var(--color-main-light);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+}
+
+.info-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.info-table td {
+    padding: 0.75rem 1rem;
+    vertical-align: top;
+}
+
+.info-table td:first-child {
+    font-weight: 600;
+    color: var(--color-main-dark);
+    width: 180px;
+    white-space: nowrap;
+}
+
+.info-table td:last-child {
+    color: var(--color-text);
+}
+
+.info-table tr:not(:last-child) td {
+    border-bottom: 1px solid rgba(0, 194, 203, 0.2);
+}
+
+/* ==========================================================
+   LISTS
+   ========================================================== */
+
+ul {
+    margin: 1rem 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+li {
+    position: relative;
+    padding-left: 1.75rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-text-light);
+}
+
+li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    width: 8px;
+    height: 8px;
+    background: var(--color-main);
+    border-radius: 50%;
+}
+
+/* ==========================================================
+   LINKS
+   ========================================================== */
+
+a {
+    color: var(--color-main-dark);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    color: var(--color-main);
+    text-decoration: underline;
+}
+
+/* ==========================================================
+   HIGHLIGHT BOX
+   ========================================================== */
+
+.highlight-box {
+    background: linear-gradient(135deg, var(--color-main-light) 0%, #f0fdff 100%);
+    border-left: 4px solid var(--color-main);
+    padding: 1.25rem;
+    border-radius: 0 12px 12px 0;
+    margin: 1.5rem 0;
+}
+
+.highlight-box p {
+    margin-bottom: 0;
+    color: var(--color-text);
+}
+
+/* ==========================================================
+   COMPANY NAME
+   ========================================================== */
+
+.company-name {
+    color: var(--color-main-dark);
+    font-weight: 600;
+}
+
+/* ==========================================================
+   FOOTER
+   ========================================================== */
+
+.static-footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--color-text-light);
+    font-size: 0.875rem;
+}
+
+.static-footer a {
+    color: var(--color-main);
+}
+
+/* ==========================================================
+   BACK BUTTON
+   ========================================================== */
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--color-main);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+
+.back-button:hover {
+    background: var(--color-main-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 194, 203, 0.3);
+    text-decoration: none;
+    color: white;
+}
+
+.back-button svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 768px) {
+    .static-header h1 {
+        font-size: 2rem;
+    }
+    
+    .static-card {
+        padding: 2rem;
+        border-radius: 16px;
+    }
+    
+    h2 {
+        font-size: 1.3rem;
+    }
+    
+    .info-table td:first-child {
+        width: auto;
+        display: block;
+        padding-bottom: 0.25rem;
+    }
+    
+    .info-table td:last-child {
+        display: block;
+        padding-top: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .static-header {
+        padding: 1.5rem 1rem;
+    }
+    
+    .static-header h1 {
+        font-size: 1.75rem;
+    }
+    
+    .static-card {
+        padding: 1.5rem;
+    }
+    
+    .info-table {
+        padding: 1rem;
+    }
+}
+
+/* ==========================================================
+   ACCESSIBILITY
+   ========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .static-card {
+        animation: none;
+    }
+    
+    .back-button:hover {
+        transform: none;
+    }
+    
+    * {
+        transition-duration: 0.01ms !important;
+    }
+}
+
+@media (prefers-contrast: high) {
+    .info-table {
+        border: 2px solid var(--color-main);
+    }
+    
+    a {
+        text-decoration: underline;
+    }
+}
+
+/* Tabla con cabecera */
+.info-table thead th {
+    background: var(--color-main-facilitame, #00c2cb);
+    color: white;
+    font-weight: 600;
+    padding: 1rem;
+    text-align: left;
+}
+
+/* ==========================================================
+   LEGAL PAGES
+   ========================================================== */
+
+.legal-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 194, 203, 0.08);
+    padding: 3rem;
+}
+
+.legal-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 3px solid var(--color-main);
+}
+
+.legal-header h1 {
+    color: var(--color-main);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+}
+
+.legal-header p {
+    color: var(--color-text-light);
+    font-size: 1rem;
+    margin: 0;
+    text-align: center !important;
+}
+
+/* Botón volver - CORREGIDO */
+.legal-container .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-main);
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    padding: 0;
+    background: none !important;
+    box-shadow: none !important;
+    transition: all 0.2s ease;
+}
+
+.legal-container .back-button:hover {
+    color: var(--color-main-dark);
+    transform: translateX(-3px);
+    background: none !important;
+    box-shadow: none !important;
+}
+
+.legal-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--color-border);
+    text-align: center;
+    color: var(--color-text-light);
+    font-size: 0.875rem;
+}
+
+/* Tabla con thead para cookies */
+.info-table thead th {
+    background: var(--color-main);
+    color: white;
+    font-weight: 600;
+    padding: 1rem;
+    text-align: left;
+}
+
+.info-table tbody td {
+    background: white;
+}
+
+@media (max-width: 768px) {
+    .legal-container {
+        padding: 1.5rem;
+        margin: 1rem;
+        border-radius: 12px;
+    }
+    
+    .legal-header h1 {
+        font-size: 1.75rem;
+    }
+}

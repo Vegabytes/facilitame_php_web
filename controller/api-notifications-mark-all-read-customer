@@ -1,0 +1,40 @@
+<?php
+/**
+ * API: Marcar todas las notificaciones como leídas (cliente)
+ * Endpoint: /api/notifications-mark-all-read-customer
+ * Method: POST
+ */
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    json_response("ko", "Método no permitido", 4051358201);
+}
+
+if (!cliente()) {
+    json_response("ko", "No autorizado", 4031358203);
+}
+
+global $pdo;
+
+$user_id = (int) USER['id'];
+
+try {
+    // Marcar todas como leídas
+    $sql = "
+        UPDATE notifications n
+        INNER JOIN requests req ON req.id = n.request_id
+        SET n.status = 1
+        WHERE req.user_id = :user_id
+        AND n.status = 0
+    ";
+    
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $updated = $stmt->rowCount();
+    
+    json_response("ok", "Se marcaron $updated notificaciones como leídas", 9200101004, ['updated' => $updated]);
+    
+} catch (Throwable $e) {
+    error_log("Error en api-notifications-mark-all-read-customer: " . $e->getMessage());
+    json_response("ko", $e->getMessage(), 9500101002);
+}

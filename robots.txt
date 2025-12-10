@@ -1,0 +1,31 @@
+# Facilitame - robots.txt
+# Permite indexar páginas públicas, bloquea áreas privadas
+
+User-agent: *
+
+# Páginas públicas (permitidas)
+Allow: /login
+Allow: /sign-up
+Allow: /recovery
+Allow: /landing
+
+# Bloquear áreas privadas y técnicas
+Disallow: /api/
+Disallow: /controller/
+Disallow: /bold/
+Disallow: /vendor/
+Disallow: /tests/
+Disallow: /uploads/
+Disallow: /documents/
+Disallow: /home
+Disallow: /request
+Disallow: /customer
+Disallow: /customers
+Disallow: /notifications
+Disallow: /commissions
+Disallow: /appointments
+Disallow: /communications
+Disallow: /invoices
+
+# Sitemap (descomentar cuando exista)
+# Sitemap: https://app.facilitame.es/sitemap.xml

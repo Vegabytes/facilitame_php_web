@@ -1,0 +1,9 @@
+{
+    "require": {
+        "phpmailer/phpmailer": "^6.9",
+        "firebase/php-jwt": "^6.10",
+        "ramsey/uuid": "^4.7",
+        "guzzlehttp/guzzle": "^7.9",
+        "google/apiclient": "^2.18"
+    }
+}

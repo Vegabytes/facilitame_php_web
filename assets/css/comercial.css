@@ -1,0 +1,194 @@
+/* ============================================
+   COMERCIAL - ESTILOS ESPECÍFICOS
+   Complementa dashboard-common.css
+   ============================================ */
+
+/* ===================================
+   1. LAYOUT BASE COMERCIAL
+   =================================== */
+#facilita-app .dashboard-comercial-home {
+    display: flex;
+    flex-direction: column;
+    gap: var(--f-spacing);
+    min-height: calc(100vh - 160px);
+}
+
+#facilita-app .dashboard-comercial-home .dashboard-tabs-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-height: calc(100vh - 280px);
+}
+
+/* ===================================
+   2. KPI CÓDIGO COMERCIAL
+   =================================== */
+#facilita-app .kpi-value.kpi-code {
+    font-size: 1.125rem;
+    font-family: 'Courier New', Consolas, monospace;
+    letter-spacing: 1px;
+    color: var(--f-primary);
+    background: rgba(0, 194, 203, 0.08);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--f-radius-sm);
+}
+
+/* ===================================
+   3. CÓDIGO INVITACIÓN (customers)
+   =================================== */
+#facilita-app .invite-code-compact {
+    font-family: 'Courier New', Consolas, monospace;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--f-primary);
+    background: rgba(0, 194, 203, 0.08);
+    border: 1px dashed rgba(0, 194, 203, 0.3);
+    border-radius: var(--f-radius-sm);
+    padding: 0.5rem 0.75rem;
+    text-align: center;
+}
+
+/* ===================================
+   4. COMISIONES
+   =================================== */
+#facilita-app .commission-amount-box {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: var(--f-radius);
+    padding: 1rem 1.5rem;
+    text-align: center;
+    min-width: 120px;
+}
+
+#facilita-app .commission-amount-label {
+    font-size: 0.75rem;
+    color: var(--f-text-medium);
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+#facilita-app .commission-amount-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #10b981;
+}
+
+#facilita-app .commission-summary {
+    display: flex;
+    justify-content: center;
+}
+
+#facilita-app .summary-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-radius: var(--f-radius);
+    background: var(--f-bg-light);
+    border: 1px solid var(--f-border);
+}
+
+#facilita-app .summary-card-success {
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+#facilita-app .summary-card-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    font-size: 1.5rem;
+}
+
+#facilita-app .summary-card-label {
+    font-size: 0.875rem;
+    color: var(--f-text-medium);
+    margin-bottom: 0.25rem;
+}
+
+#facilita-app .summary-card-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #10b981;
+}
+
+/* ===================================
+   5. PAGINACIÓN ESTILO COMISIONES
+   (Alternativo al pagination-container)
+   =================================== */
+#facilita-app .pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    margin-top: 1rem;
+    border-top: 1px solid var(--f-border);
+}
+
+#facilita-app .pagination-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--f-bg-light);
+    border: 1px solid var(--f-border);
+    border-radius: var(--f-radius-sm);
+    color: var(--f-text-medium);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#facilita-app .pagination-btn:hover:not(:disabled) {
+    background: var(--f-primary);
+    border-color: var(--f-primary);
+    color: #fff;
+}
+
+#facilita-app .pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ===================================
+   6. RESPONSIVE COMERCIAL
+   =================================== */
+@media (max-width: 768px) {
+    #facilita-app .kpi-value.kpi-code {
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+    }
+    
+    #facilita-app .invite-code-compact {
+        font-size: 1rem;
+        letter-spacing: 1px;
+    }
+    
+    #facilita-app .commission-amount-box {
+        padding: 0.75rem 1rem;
+        min-width: 100px;
+    }
+    
+    #facilita-app .commission-amount-value {
+        font-size: 1rem;
+    }
+    
+    #facilita-app .summary-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+    }
+    
+    #facilita-app .summary-card-value {
+        font-size: 1.25rem;
+    }
+}

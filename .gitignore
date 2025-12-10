@@ -1,0 +1,78 @@
+# ====================
+# FACILITAME .gitignore
+# ====================
+
+# Configuración local
+bold/vars.php
+.env
+.env.local
+*.local.php
+
+# Vendor (instalado via composer)
+vendor/
+
+# Node modules (si se usa)
+node_modules/
+
+# Logs
+*.log
+logs/
+apache-error.log
+
+# Cache
+cache/
+tmp/
+temp/
+
+# IDE / Editores
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.project
+.settings/
+*.swp
+*.swo
+*~
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos de usuario subidos (si aplica)
+uploads/user_files/
+storage/uploads/
+
+# Backups de base de datos
+*.sql
+!database/migrate_*.sql
+
+# Archivos de sesión
+sessions/
+
+# Tests - reportes generados
+tests/analysis_report.json
+tests/*.html
+
+# Documentación generada (mantener los .md creados)
+# docs/generated/
+
+# Archivos temporales de PHP
+*.php.bak
+*.php~
+
+# Archivos de certificados/secretos
+*.pem
+*.key
+*.p12
+firebase-*.json
+google-*.json
+credentials*.json
+
+# Metronic templates no usados (opcional - descomentar si quieres excluir)
+# apps/
+# authentication/
+# utilities/
+# dashboards/
+# widgets/
