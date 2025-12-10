@@ -43,11 +43,6 @@ $isPublicPage = !isset(USER['role']) || USER['role'] === null;
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
 
-    <!-- Vendor CSS - Solo si está logueado -->
-    <?php if (!$isPublicPage): ?>
-    <link href="/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" />
-    <?php endif; ?>
-
     <!-- Core CSS -->
     <link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" />
     <link href="/assets/css/style_bundle.min.css" rel="stylesheet" />
@@ -194,9 +189,6 @@ $isPublicPage = !isset(USER['role']) || USER['role'] === null;
     <?php
     if (!empty($scripts)) {
         foreach ($scripts as $s) echo '<script src="/assets/js/bold/'.$s.'.js?v='.$v.'"></script>';
-    }
-    if (!empty($metronic_scripts)) {
-        foreach ($metronic_scripts as $s) echo '<script src="/'.$s.'.js?v='.$v.'"></script>';
     }
     toastr();
     ?>
