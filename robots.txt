@@ -12,6 +12,7 @@ Allow: /terms
 Allow: /legal
 Allow: /privacy
 Allow: /cookies
+Allow: /sitemap
 
 # Bloquear áreas privadas y técnicas
 Disallow: /api/

@@ -10,6 +10,7 @@
             <a href="/terms" target="_blank"><i class="ki-outline ki-shield-tick"></i>Privacidad</a>
             <a href="/legal" target="_blank"><i class="ki-outline ki-document"></i>Aviso Legal</a>
             <a href="/cookies" target="_blank"><i class="ki-outline ki-setting-2"></i>Cookies</a>
+            <a href="/sitemap" target="_blank"><i class="ki-outline ki-route"></i>Mapa del Sitio</a>
             <a href="mailto:soporte@facilitame.es"><i class="ki-outline ki-sms"></i>Soporte</a>
         </div>
         
