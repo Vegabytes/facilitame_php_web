@@ -24,7 +24,7 @@
             $statusClass = $statusMap[$request["status_id"]] ?? 'muted';
         ?>
         <span class="badge-status badge-status-<?php echo $statusClass; ?>">
-            <?php secho($request["status"]) ?>
+            <?php secho($request["status_name"]) ?>
         </span>
     </div>
     

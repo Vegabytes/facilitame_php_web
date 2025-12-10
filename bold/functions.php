@@ -509,7 +509,21 @@ function get_badge_html_incidents($status, $status_id = null)
 function get_messages($request_id)
 {
     global $pdo;
-    $stmt = $pdo->prepare("SELECT * FROM messages_v2 WHERE request_id = :request_id ORDER BY created_at ASC");
+    $stmt = $pdo->prepare("
+        SELECT m.*,
+               CONCAT(u.name, ' ', COALESCE(u.lastname, '')) AS sender_name,
+               CASE
+                   WHEN r.name = 'proveedor' THEN 'provider'
+                   WHEN r.name IN ('particular', 'autonomo', 'empresa') THEN 'customer'
+                   ELSE 'other'
+               END AS sender_type
+        FROM messages_v2 m
+        LEFT JOIN users u ON u.id = m.user_id
+        LEFT JOIN model_has_roles mhr ON mhr.model_id = u.id
+        LEFT JOIN roles r ON r.id = mhr.role_id
+        WHERE m.request_id = :request_id
+        ORDER BY m.created_at ASC
+    ");
     $stmt->bindValue(":request_id", $request_id);
     $stmt->execute();
     return $stmt->fetchAll();

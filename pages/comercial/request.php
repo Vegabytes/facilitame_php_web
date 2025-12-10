@@ -216,7 +216,7 @@ $isDeleted = ((int)$request["status_id"] === 9 || !is_null($request["deleted_at"
                                             <?php secho($msg['sender_name'] ?? 'Usuario'); ?>
                                         </div>
                                         <div class="chat-text" style="font-size: 0.875rem;">
-                                            <?php echo nl2br(htmlspecialchars($msg['message'] ?? '')); ?>
+                                            <?php echo nl2br(htmlspecialchars($msg['content'] ?? '')); ?>
                                         </div>
                                         <div class="chat-time" style="font-size: 0.7rem; color: var(--f-text-muted); margin-top: 0.25rem;">
                                             <?php echo fdate($msg['created_at'], 'd/m/Y H:i'); ?>

@@ -85,12 +85,10 @@
     </a>
 <?php endif; ?>
             
-            <?php if (!comercial()) : ?>
-                <button type="button" class="btn-notif btn-notif-secondary" id="btn-mark-all-read">
-                    <i class="ki-outline ki-check-circle"></i>
-                    <span id="btn-mark-text">Marcar leídas</span>
-                </button>
-            <?php endif; ?>
+            <button type="button" class="btn-notif btn-notif-secondary" id="btn-mark-all-read">
+                <i class="ki-outline ki-check-circle"></i>
+                <span id="btn-mark-text">Marcar leídas</span>
+            </button>
         </div>
     <?php endif; ?>
     <!--end::Footer-->
