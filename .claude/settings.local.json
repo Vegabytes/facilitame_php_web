@@ -29,7 +29,8 @@
       "Bash(/mnt/c/Users/acast/Documents/Facilitame/partials/widgets )",
       "Bash(/mnt/c/Users/acast/Documents/Facilitame/partials/general )",
       "Bash(/mnt/c/Users/acast/Documents/Facilitame/layout/partials/_content.php )",
-      "Bash(/mnt/c/Users/acast/Documents/Facilitame/account )"
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/account )",
+      "Bash(git checkout:*)"
     ]
   }
 }

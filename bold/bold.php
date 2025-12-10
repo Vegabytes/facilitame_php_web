@@ -114,7 +114,7 @@ if (RESOURCE === "/api") // Rutas API
 {
     check_guest();
     $api_file = ROOT_DIR . "/api" . PAGE . ".php";
-    $controller_file = ROOT_DIR . "/controller/api" . PAGE . ".php";
+    $controller_file = ROOT_DIR . "/controller/api" . str_replace("/", "-", PAGE) . ".php";
 
     if (file_exists($api_file)) {
         require $api_file;

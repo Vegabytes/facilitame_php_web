@@ -134,7 +134,7 @@ if ($customer_advisory_id) {
             </div>
             
             <div class="pagination-container" id="apt-pagination" style="display: none;">
-                <div class="pagination-info" id="apt-page-info">P��gina 1 de 1</div>
+                <div class="pagination-info" id="apt-page-info">Pagina 1 de 1</div>
                 <div class="pagination-nav">
                     <button class="btn-pagination" id="apt-prev" disabled>
                         <i class="ki-outline ki-left"></i>
@@ -155,7 +155,7 @@ if ($customer_advisory_id) {
 </div>
 
 <?php if ($customer_advisory_id): ?>
-<!-- Modal Solicitar Cita - Dise�0�9o Mejorado -->
+<!-- Modal Solicitar Cita - Diseno Mejorado -->
 <div class="modal fade" id="modal_request_appointment" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
@@ -166,7 +166,7 @@ if ($customer_advisory_id) {
                     </div>
                     <div>
                         <h5 class="modal-title mb-0">Solicitar Cita</h5>
-                        <p class="text-muted fs-7 mb-0">Prop��n una fecha y tu asesor��a la confirmar��</p>
+                        <p class="text-muted fs-7 mb-0">Propon una fecha y tu asesoria la confirmara</p>
                     </div>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -181,8 +181,8 @@ if ($customer_advisory_id) {
                             <i class="ki-outline ki-information-2"></i>
                         </div>
                         <div class="info-box-content">
-                            <span class="info-box-title">�0�7C��mo funciona?</span>
-                            <span class="info-box-text">Prop��n una fecha y hora. La asesor��a confirmar�� o te propondr�� otra alternativa.</span>
+                            <span class="info-box-title">Como funciona?</span>
+                            <span class="info-box-text">Propon una fecha y hora. La asesoria confirmara o te propondra otra alternativa.</span>
                         </div>
                     </div>
                     
@@ -225,7 +225,7 @@ if ($customer_advisory_id) {
                                     <option value="contabilidad">Contabilidad</option>
                                     <option value="fiscalidad">Fiscalidad</option>
                                     <option value="laboral">Laboral</option>
-                                    <option value="gestion">Gesti��n</option>
+                                    <option value="gestion">Gestion</option>
                                 </select>
                             </div>
                         </div>
@@ -235,7 +235,7 @@ if ($customer_advisory_id) {
                                 <i class="ki-outline ki-calendar input-icon"></i>
                                 <input type="datetime-local" name="proposed_date" id="proposed_date_input" class="form-control form-control-icon" required>
                             </div>
-                            <div class="form-text">Selecciona cu��ndo te viene mejor</div>
+                            <div class="form-text">Selecciona cuando te viene mejor</div>
                         </div>
                     </div>
                     
@@ -272,7 +272,7 @@ if ($customer_advisory_id) {
                     </div>
                     <div>
                         <h5 class="modal-title mb-0">Solicitar Cambio</h5>
-                        <p class="text-muted fs-7 mb-0">Indica qu�� fechas te vendr��an mejor</p>
+                        <p class="text-muted fs-7 mb-0">Indica que fechas te vendrian mejor</p>
                     </div>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -286,14 +286,14 @@ if ($customer_advisory_id) {
                             <i class="ki-outline ki-information-2"></i>
                         </div>
                         <div class="info-box-content">
-                            <span class="info-box-title">�0�7No te viene bien?</span>
-                            <span class="info-box-text">Escribe indicando qu�� fechas te vendr��an mejor.</span>
+                            <span class="info-box-title">No te viene bien?</span>
+                            <span class="info-box-text">Escribe indicando que fechas te vendrian mejor.</span>
                         </div>
                     </div>
                     
                     <div>
                         <label class="form-label fw-semibold">Tu mensaje <span class="text-danger">*</span></label>
-                        <textarea name="message" id="change_message" class="form-control" rows="4" required placeholder="Ej: Me gustar��a cambiar la cita al jueves por la tarde..."></textarea>
+                        <textarea name="message" id="change_message" class="form-control" rows="4" required placeholder="Ej: Me gustaria cambiar la cita al jueves por la tarde..."></textarea>
                     </div>
                     
                 </div>
@@ -552,7 +552,7 @@ if ($customer_advisory_id) {
     var API_URL = '/api-customer-appointments-paginated';
     
     var typeLabels = {'llamada': 'Llamada', 'reunion_virtual': 'Videollamada', 'reunion_presencial': 'Presencial'};
-    var deptLabels = {'contabilidad': 'Contabilidad', 'fiscalidad': 'Fiscalidad', 'laboral': 'Laboral', 'gestion': 'Gesti��n'};
+    var deptLabels = {'contabilidad': 'Contabilidad', 'fiscalidad': 'Fiscalidad', 'laboral': 'Laboral', 'gestion': 'Gestion'};
     var statusLabels = {'solicitado': 'Pendiente', 'agendado': 'Confirmada', 'finalizado': 'Finalizada', 'cancelado': 'Cancelada'};
     
     var state = {
@@ -626,7 +626,7 @@ if ($customer_advisory_id) {
             })
             .catch(function(error) {
                 console.error('Error:', error);
-                showError('Error de conexi��n');
+                showError('Error de conexion');
             })
             .finally(function() {
                 state.isLoading = false;
@@ -638,7 +638,7 @@ if ($customer_advisory_id) {
             var emptyHtml = '<div class="empty-state">' +
                 '<div class="empty-state-icon"><i class="ki-outline ki-calendar"></i></div>' +
                 '<div class="empty-state-title">' + (state.status ? 'Sin resultados' : 'No tienes citas') + '</div>' +
-                '<p class="empty-state-text">' + (state.status ? 'No hay citas con ese estado' : 'Solicita tu primera cita con la asesor��a') + '</p>';
+                '<p class="empty-state-text">' + (state.status ? 'No hay citas con ese estado' : 'Solicita tu primera cita con la asesoria') + '</p>';
             
             if (!state.status) {
                 emptyHtml += '<button class="btn btn-sm btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#modal_request_appointment">' +
@@ -676,7 +676,7 @@ if ($customer_advisory_id) {
                     '<div class="list-card-title">' +
                         '<a href="/appointment?id=' + apt.id + '" class="list-card-customer">#' + apt.id + '</a>' +
                         '<span class="badge-status badge-status-' + statusClass + '">' + (statusLabels[apt.status] || apt.status) + '</span>' +
-                        (needsAction ? '<span class="badge-status badge-status-warning badge-confirm-action">�0�3Confirmar!</span>' : '') +
+                        (needsAction ? '<span class="badge-status badge-status-warning badge-confirm-action">Confirmar!</span>' : '') +
                         '<span class="badge-status badge-status-info">' + (typeLabels[apt.type] || apt.type) + '</span>' +
                     '</div>' +
                     '<div class="list-card-meta">' +
@@ -685,7 +685,7 @@ if ($customer_advisory_id) {
                             '<i class="ki-outline ki-calendar"></i> ' + dateDisplay +
                             (isConfirmed ? ' (Confirmada)' : (needsAction ? ' (Propuesta)' : ' (Tu propuesta)')) +
                         '</span>' +
-                        '<span><i class="ki-outline ki-home-2"></i> ' + escapeHtml(apt.advisory_name || 'Asesor��a') + '</span>' +
+                        '<span><i class="ki-outline ki-home-2"></i> ' + escapeHtml(apt.advisory_name || 'Asesoria') + '</span>' +
                     '</div>' +
                 '</div>' +
                 '<div class="list-card-actions">' + actions + '</div>' +
@@ -714,7 +714,7 @@ if ($customer_advisory_id) {
     
     function updatePaginationControls() {
         pageCurrent.textContent = state.currentPage + ' / ' + state.totalPages;
-        pageInfo.textContent = 'P��gina ' + state.currentPage + ' de ' + state.totalPages;
+        pageInfo.textContent = 'Pagina ' + state.currentPage + ' de ' + state.totalPages;
         prevBtn.disabled = state.currentPage <= 1;
         nextBtn.disabled = state.currentPage >= state.totalPages;
         paginationContainer.style.display = state.totalRecords > state.pageSize ? 'flex' : 'none';
@@ -779,7 +779,7 @@ if ($customer_advisory_id) {
                         window.reloadAppointments();
                         
                         if (typeof Swal !== 'undefined') {
-                            Swal.fire({icon: 'success', title: 'Solicitud enviada', text: 'Tu asesor��a revisar�� la fecha propuesta', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000});
+                            Swal.fire({icon: 'success', title: 'Solicitud enviada', text: 'Tu asesoria revisara la fecha propuesta', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000});
                         }
                         setTimeout(function() { location.reload(); }, 1500);
                     } else {
@@ -801,7 +801,7 @@ if ($customer_advisory_id) {
 
 // Confirmar cita
 window.confirmAppointment = function(id) {
-    if (!confirm('�0�7Confirmar esta cita con la fecha propuesta?')) return;
+    if (!confirm('Confirmar esta cita con la fecha propuesta?')) return;
     
     var fd = new FormData();
     fd.append('appointment_id', id);
@@ -811,7 +811,7 @@ window.confirmAppointment = function(id) {
         .then(function(result) {
             if (result.status === 'ok') {
                 if (typeof Swal !== 'undefined') {
-                    Swal.fire({icon: 'success', title: '�0�3Cita confirmada!', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000});
+                    Swal.fire({icon: 'success', title: 'Cita confirmada!', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000});
                 }
                 window.reloadAppointments();
                 setTimeout(function() { location.reload(); }, 1000);

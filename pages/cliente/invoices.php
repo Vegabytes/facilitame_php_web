@@ -32,7 +32,7 @@
         
         <!-- Paginador -->
         <div class="pagination-container" id="invoices-pagination" style="display: none;">
-            <div class="pagination-info" id="invoices-page-info">Página 1 de 1</div>
+            <div class="pagination-info" id="invoices-page-info">Pagina 1 de 1</div>
             <div class="pagination-nav">
                 <button class="btn-pagination" id="invoices-prev" disabled>
                     <i class="ki-outline ki-left"></i>
@@ -125,7 +125,7 @@
             }
         } catch (error) {
             console.error('Error:', error);
-            showError('Error de conexión');
+            showError('Error de conexion');
         } finally {
             state.isLoading = false;
         }
@@ -142,7 +142,7 @@
                     <p class="empty-state-text">
                         ${state.searchQuery 
                             ? `No se encontraron resultados para "${escapeHtml(state.searchQuery)}"` 
-                            : 'Las facturas de tus servicios aparecerán aquí'}
+                            : 'Las facturas de tus servicios apareceran aqui'}
                     </p>
                 </div>`;
             paginationContainer.style.display = 'none';
@@ -155,7 +155,7 @@
             const borderClass = isVerified ? 'list-card-success' : 'list-card-warning';
             
             const verifiedBadge = isVerified
-                ? '<span class="badge-status badge-status-success">Al día</span>'
+                ? '<span class="badge-status badge-status-success">Al dia</span>'
                 : '<span class="badge-status badge-status-warning">Pendiente este mes</span>';
             
             const invoicesBadge = hasInvoices
@@ -178,7 +178,7 @@
                                     ${inv.invoice_date_formatted}
                                 </span>
                             </td>
-                            <td class="fw-medium">${escapeHtml(inv.description || 'Sin descripción')}</td>
+                            <td class="fw-medium">${escapeHtml(inv.description || 'Sin descripciï¿½n')}</td>
                             <td class="text-end" style="padding-right: 1rem;">
                                 <a href="/uploads/invoices/${encodeURIComponent(inv.filename)}" 
                                    target="_blank" 
@@ -221,7 +221,7 @@
                                 ${req.last_invoice_formatted ? `
                                     <span>
                                         <i class="ki-outline ki-calendar"></i>
-                                        Última: ${req.last_invoice_formatted}
+                                        ï¿½ltima: ${req.last_invoice_formatted}
                                     </span>
                                 ` : ''}
                             </div>
@@ -238,7 +238,7 @@
                             <thead>
                                 <tr class="text-muted" style="background: rgba(0,0,0,0.02);">
                                     <th style="padding: 0.5rem 1rem; width: 140px;">Fecha</th>
-                                    <th>Descripción</th>
+                                    <th>Descripciï¿½n</th>
                                     <th class="text-end" style="padding-right: 1rem; width: 140px;">Acciones</th>
                                 </tr>
                             </thead>
@@ -267,7 +267,7 @@
     
     function updatePaginationControls() {
         pageCurrent.textContent = `${state.currentPage} / ${state.totalPages}`;
-        pageInfo.textContent = `Página ${state.currentPage} de ${state.totalPages}`;
+        pageInfo.textContent = `Pagina ${state.currentPage} de ${state.totalPages}`;
         prevBtn.disabled = state.currentPage <= 1;
         nextBtn.disabled = state.currentPage >= state.totalPages;
         paginationContainer.style.display = state.totalRecords > state.pageSize ? 'flex' : 'none';

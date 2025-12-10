@@ -19,7 +19,7 @@
 #facilita-app{
 padding:var(--f-spacing)!important}
 
-#facilita-app .dashboard-admin-home,#facilita-app .dashboard-cliente-home,#facilita-app .dashboard-comercial-home,#facilita-app .dashboard-proveedor-home{
+#facilita-app .dashboard-admin-home,#facilita-app .dashboard-asesoria-home,#facilita-app .dashboard-cliente-home,#facilita-app .dashboard-comercial-home,#facilita-app .dashboard-proveedor-home{
 display:flex;
     flex-direction:column;
     gap:var(--f-spacing);

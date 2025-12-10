@@ -692,12 +692,12 @@ function get_file_types_kp()
 function get_offers($request_id)
 {
     global $pdo;
-    $stmt = $pdo->prepare("SELECT of.*, rs.status_name
-        FROM offers of
-        LEFT JOIN requests_statuses rs ON rs.id = of.status_id
-        WHERE of.request_id = :request_id
-        AND (of.deleted_at IS NULL OR (of.deleted_at IS NOT NULL AND of.status_id = 11))
-        ORDER BY of.created_at DESC");
+    $stmt = $pdo->prepare("SELECT o.*, rs.status_name
+        FROM offers o
+        LEFT JOIN requests_statuses rs ON rs.id = o.status_id
+        WHERE o.request_id = :request_id
+        AND (o.deleted_at IS NULL OR (o.deleted_at IS NOT NULL AND o.status_id = 11))
+        ORDER BY o.created_at DESC");
     $stmt->bindValue(":request_id", $request_id);
     $stmt->execute();
     return $stmt->fetchAll();
