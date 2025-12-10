@@ -154,47 +154,6 @@ function get_customers(mixed $user = "")
     return [];
 }
 
-function customer_belongs_to_user($customer_id)
-{
-    global $pdo;
-    $stmt = $pdo->prepare("SELECT * FROM customers WHERE deleted = 0 AND user_id = :user_id AND id = :customer_id");
-    $stmt->bindValue(":user_id", USER["id"]);
-    $stmt->bindValue(":customer_id", $customer_id);
-    $stmt->execute();
-    $res = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $res ?: false;
-}
-
-function get_quotations()
-{
-    global $pdo;
-    $stmt = $pdo->prepare("SELECT id FROM customers WHERE user_id = :user_id AND deleted = 0 ORDER BY id ASC");
-    $stmt->bindValue(":user_id", USER["id"]);
-    $stmt->execute();
-    $customers = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
-    if (empty($customers)) return [];
-
-    $placeholders = implode(",", array_fill(0, count($customers), "?"));
-    $stmt = $pdo->prepare("SELECT * FROM quotations WHERE customer_id IN ($placeholders)");
-    $stmt->execute($customers);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-function string_ids($array)
-{
-    return implode(",", array_column($array, "id"));
-}
-
-function get_quotation_items($quotation_id)
-{
-    global $pdo;
-    $stmt = $pdo->prepare("SELECT * FROM quotation_items WHERE quotation_id = :quotation_id");
-    $stmt->bindValue(":quotation_id", $quotation_id);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
 function json_response($status, $message, $code, $data = [], $icon = "")
 {
     header('Content-Type: application/json; charset=utf-8');

@@ -114,7 +114,8 @@ try {
         $stmt->bindValue($key, $value);
     }
     $stmt->execute();
-    $totalRecords = intval($stmt->fetch()['total']);
+    $row = $stmt->fetch();
+    $totalRecords = $row ? intval($row['total']) : 0;
     $totalPages = $totalRecords > 0 ? ceil($totalRecords / $limit) : 1;
     
     // Obtener datos

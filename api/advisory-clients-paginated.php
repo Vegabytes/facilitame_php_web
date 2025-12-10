@@ -63,7 +63,7 @@ try {
     $stmt = $pdo->prepare($countQuery);
     $stmt->execute($params);
     $row = $stmt->fetch();
-    $totalRecords = intval($row['total']);
+    $totalRecords = $row ? intval($row['total']) : 0;
     $totalPages = $totalRecords > 0 ? ceil($totalRecords / $limit) : 1;
     
     // Obtener datos

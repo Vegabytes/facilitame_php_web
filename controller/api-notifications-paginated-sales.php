@@ -98,9 +98,10 @@ try {
         $stmt->bindValue($key, $value);
     }
     $stmt->execute();
-    $totalRecords = intval($stmt->fetch()['total']);
+    $row = $stmt->fetch();
+    $totalRecords = $row ? intval($row['total']) : 0;
     $totalPages = $totalRecords > 0 ? ceil($totalRecords / $limit) : 1;
-    
+
     // Contar no leídas - CORREGIDO: también por receiver_id
     $unreadQuery = "
         SELECT COUNT(*) as total
@@ -111,7 +112,8 @@ try {
     $stmtUnread = $pdo->prepare($unreadQuery);
     $stmtUnread->bindValue(':comercial_id', $comercial_id, PDO::PARAM_INT);
     $stmtUnread->execute();
-    $unreadCount = intval($stmtUnread->fetch()['total']);
+    $rowUnread = $stmtUnread->fetch();
+    $unreadCount = $rowUnread ? intval($rowUnread['total']) : 0;
     
     // Query principal
     $dataQuery = "

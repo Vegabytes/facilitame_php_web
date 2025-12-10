@@ -50,7 +50,8 @@ try {
         AND (is_read = 0 OR is_read IS NULL)
     ");
     $stmt->execute([$appointment_id]);
-    $unread = (int)$stmt->fetch()['cnt'];
+    $row = $stmt->fetch();
+    $unread = $row ? (int)$row['cnt'] : 0;
     
     json_response("ok", "Estado obtenido", 200, [
         'appointment' => [

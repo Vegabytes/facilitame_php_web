@@ -42,8 +42,9 @@ try {
         AND status NOT IN ('cancelado', 'finalizado')
     ");
     $stmt->execute([$advisory_id]);
-    $pending_confirmation = (int)$stmt->fetch()['cnt'];
-    
+    $row = $stmt->fetch();
+    $pending_confirmation = $row ? (int)$row['cnt'] : 0;
+
     // Contar mensajes no leídos de clientes
     $stmt = $pdo->prepare("
         SELECT COUNT(*) as cnt
@@ -54,8 +55,9 @@ try {
         AND (am.is_read = 0 OR am.is_read IS NULL)
     ");
     $stmt->execute([$advisory_id]);
-    $unread_messages = (int)$stmt->fetch()['cnt'];
-    
+    $row = $stmt->fetch();
+    $unread_messages = $row ? (int)$row['cnt'] : 0;
+
     // Contar nuevas citas desde el timestamp
     $stmt = $pdo->prepare("
         SELECT COUNT(*) as cnt
@@ -65,7 +67,8 @@ try {
         AND status = 'solicitado'
     ");
     $stmt->execute([$advisory_id, $since]);
-    $new_appointments = (int)$stmt->fetch()['cnt'];
+    $row = $stmt->fetch();
+    $new_appointments = $row ? (int)$row['cnt'] : 0;
     
     // Obtener cambios recientes
     $stmt = $pdo->prepare("

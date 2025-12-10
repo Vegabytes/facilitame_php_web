@@ -58,7 +58,8 @@ try {
     ";
     $stmt = $pdo->prepare($countQuery);
     $stmt->execute($params);
-    $totalRecords = (int)$stmt->fetch()['total'];
+    $row = $stmt->fetch();
+    $totalRecords = $row ? (int)$row['total'] : 0;
     $totalPages = $totalRecords > 0 ? ceil($totalRecords / $limit) : 1;
     
     // Obtener facturas

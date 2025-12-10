@@ -66,7 +66,8 @@ try {
     ";
     $stmt = $pdo->prepare($count_sql);
     $stmt->execute($params);
-    $total_records = (int)$stmt->fetch()['total'];
+    $row = $stmt->fetch();
+    $total_records = $row ? (int)$row['total'] : 0;
     $total_pages = $total_records > 0 ? ceil($total_records / $limit) : 1;
     
     // Obtener citas con LEFT JOIN optimizado para mensajes no leidos
