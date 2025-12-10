@@ -67,6 +67,8 @@ tests/*.html
 *.key
 *.p12
 firebase-*.json
+*firebase*.json
+*service_account*.json
 google-*.json
 credentials*.json
 
