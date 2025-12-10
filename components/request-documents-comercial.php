@@ -15,7 +15,7 @@
                         <div class="fw-semibold fs-7"><?php secho($doc["name"]); ?></div>
                         <div class="fs-9 text-muted"><?php echo fdate($doc["created_at"]); ?></div>
                     </div>
-                    <a href="<?php echo $doc["url"]; ?>" target="_blank" class="btn btn-sm btn-icon btn-light-primary">
+                    <a href="<?php echo $doc["url"]; ?>" target="_blank" class="btn btn-sm btn-icon btn-icon-primary">
                         <i class="ki-outline ki-eye fs-6"></i>
                     </a>
                 </div>

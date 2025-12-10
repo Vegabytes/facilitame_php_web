@@ -662,11 +662,11 @@ if ($customer_advisory_id) {
             
             var actions = '';
             if (needsAction) {
-                actions += '<button class="btn-icon btn-light-success" onclick="confirmAppointment(' + apt.id + ')" title="Confirmar"><i class="ki-outline ki-check"></i></button>';
+                actions += '<button class="btn-icon btn-icon-success" onclick="confirmAppointment(' + apt.id + ')" title="Confirmar"><i class="ki-outline ki-check"></i></button>';
             }
             actions += '<a href="/appointment?id=' + apt.id + '" class="btn-icon btn-icon-info" title="Ver detalle"><i class="ki-outline ki-eye"></i></a>';
             if (apt.status === 'solicitado' || apt.status === 'agendado') {
-                actions += '<button class="btn-icon btn-light-warning" onclick="openChangeModal(' + apt.id + ')" title="Solicitar cambio"><i class="ki-outline ki-pencil"></i></button>';
+                actions += '<button class="btn-icon btn-icon-warning" onclick="openChangeModal(' + apt.id + ')" title="Solicitar cambio"><i class="ki-outline ki-pencil"></i></button>';
             }
             
             var cardClasses = 'list-card list-card-' + statusClass + (needsAction ? ' needs-confirmation' : '');

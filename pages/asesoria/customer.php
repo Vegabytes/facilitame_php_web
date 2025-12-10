@@ -230,7 +230,7 @@
                                                 <i class="ki-outline ki-folder-down"></i>
                                             </a>
                                             <?php if (!$inv['is_processed']): ?>
-                                            <button class="btn-icon btn-light-success" title="Marcar procesada" onclick="markProcessed(<?php echo $inv['id']; ?>, this)">
+                                            <button class="btn-icon btn-icon-success" title="Marcar procesada" onclick="markProcessed(<?php echo $inv['id']; ?>, this)">
                                                 <i class="ki-outline ki-check"></i>
                                             </button>
                                             <?php endif; ?>

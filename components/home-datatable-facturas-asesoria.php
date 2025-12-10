@@ -170,11 +170,11 @@ $DOCUMENTS_URL = ROOT_URL . '/' . DOCUMENTS_DIR;
                             <i class="ki-outline ki-eye"></i>
                         </a>
                         ${!f.is_processed ? `
-                            <button class="btn-icon btn-light-success" title="Marcar procesada" data-id="${f.id}" onclick="window.markProcessed(this)">
+                            <button class="btn-icon btn-icon-success" title="Marcar procesada" data-id="${f.id}" onclick="window.markProcessed(this)">
                                 <i class="ki-outline ki-check"></i>
                             </button>
                         ` : ''}
-                        <a href="/customer?id=${f.customer_id}" class="btn-icon btn-light-primary" title="Ver cliente">
+                        <a href="/customer?id=${f.customer_id}" class="btn-icon btn-icon-primary" title="Ver cliente">
                             <i class="ki-outline ki-profile-user"></i>
                         </a>
                     </div>

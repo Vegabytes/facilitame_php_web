@@ -135,7 +135,7 @@
                         </div>
                     </div>
                     <div class="list-card-actions">
-                        <a href="/request?id=${item.request_id}" class="btn-icon btn-light-success" title="Ver oferta">
+                        <a href="/request?id=${item.request_id}" class="btn-icon btn-icon-success" title="Ver oferta">
                             <i class="ki-outline ki-eye"></i>
                         </a>
                     </div>

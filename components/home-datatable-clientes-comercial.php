@@ -158,11 +158,11 @@
                         <a href="/customer?id=${c.id}" class="btn-icon" title="Ver perfil">
                             <i class="ki-outline ki-eye"></i>
                         </a>
-                        <button type="button" class="btn-icon btn-light-success" title="Copiar email" onclick="copyClienteEmail('${escapeHtml(c.email)}', this)">
+                        <button type="button" class="btn-icon btn-icon-success" title="Copiar email" onclick="copyClienteEmail('${escapeHtml(c.email)}', this)">
                             <i class="ki-outline ki-copy"></i>
                         </button>
                         ${hasPhone ? `
-                            <a href="tel:${c.phone}" class="btn-icon btn-light-primary" title="Llamar">
+                            <a href="tel:${c.phone}" class="btn-icon btn-icon-primary" title="Llamar">
                                 <i class="ki-outline ki-phone"></i>
                             </a>
                         ` : ''}

@@ -397,11 +397,11 @@ $scripts = [];
                         </div>
                     </div>
                     <div class="list-card-actions">
-                        <a href="/advisory?id=${adv.id}" class="btn-icon btn-light-primary" title="Ver detalle">
+                        <a href="/advisory?id=${adv.id}" class="btn-icon btn-icon-primary" title="Ver detalle">
                             <i class="ki-outline ki-eye"></i>
                         </a>
                         <button type="button" 
-                                class="btn-icon btn-light-danger" 
+                                class="btn-icon btn-icon-danger" 
                                 title="Eliminar"
                                 onclick="deleteAdvisory(${adv.id}, '${escapeHtml(adv.razon_social).replace(/'/g, "\\'")}')">
                             <i class="ki-outline ki-trash"></i>

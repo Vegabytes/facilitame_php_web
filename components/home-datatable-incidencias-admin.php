@@ -155,7 +155,7 @@
                         ${details ? `<div class="list-card-description text-muted mt-1" style="font-size: 0.8125rem;">${escapeHtml(details)}</div>` : ''}
                     </div>
                     <div class="list-card-actions">
-                        <a href="/request?id=${item.request_id}" class="btn-icon btn-light-primary" title="Ver solicitud">
+                        <a href="/request?id=${item.request_id}" class="btn-icon btn-icon-primary" title="Ver solicitud">
                             <i class="ki-outline ki-eye"></i>
                         </a>
                     </div>

@@ -166,11 +166,11 @@
                             <i class="ki-outline ki-eye"></i>
                         </a>
                         ${c.unread_messages > 0 ? `
-                            <a href="/appointment?id=${c.id}#chat" class="btn-icon btn-light-info" title="Ver mensajes">
+                            <a href="/appointment?id=${c.id}#chat" class="btn-icon btn-icon-info" title="Ver mensajes">
                                 <i class="ki-outline ki-message-text"></i>
                             </a>
                         ` : ''}
-                        <a href="/customer?id=${c.customer_id}" class="btn-icon btn-light-primary" title="Ver cliente">
+                        <a href="/customer?id=${c.customer_id}" class="btn-icon btn-icon-primary" title="Ver cliente">
                             <i class="ki-outline ki-profile-user"></i>
                         </a>
                     </div>

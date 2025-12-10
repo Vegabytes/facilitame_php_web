@@ -124,14 +124,14 @@ $statusConfig = [
                         <a href="<?= $file_url ?>" 
                            target="_blank" 
                            rel="noopener"
-                           class="btn-icon btn-light-primary" 
+                           class="btn-icon btn-icon-primary" 
                            title="Ver archivo"
                            data-bs-toggle="tooltip">
                             <i class="ki-outline ki-eye"></i>
                         </a>
                         <a href="<?= $file_url ?>" 
                            download 
-                           class="btn-icon btn-light-success" 
+                           class="btn-icon btn-icon-success" 
                            title="Descargar"
                            data-bs-toggle="tooltip">
                             <i class="ki-outline ki-cloud-download"></i>

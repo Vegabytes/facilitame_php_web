@@ -130,11 +130,11 @@
                         <a href="/customer?id=${c.id}" class="btn-icon" title="Ver cliente">
                             <i class="ki-outline ki-eye"></i>
                         </a>
-                        <a href="/chat?customer=${c.id}" class="btn-icon btn-light-info" title="Enviar mensaje">
+                        <a href="/chat?customer=${c.id}" class="btn-icon btn-icon-info" title="Enviar mensaje">
                             <i class="ki-outline ki-message-text"></i>
                         </a>
                         ${hasPhone ? `
-                            <a href="tel:${c.phone}" class="btn-icon btn-light-success" title="Llamar">
+                            <a href="tel:${c.phone}" class="btn-icon btn-icon-success" title="Llamar">
                                 <i class="ki-outline ki-phone"></i>
                             </a>
                         ` : ''}
