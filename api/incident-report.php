@@ -6,8 +6,8 @@
  * Permitido para: clientes (dueño de la solicitud) y comerciales (del cliente)
  */
 
-// Verificar que el usuario tiene acceso (cliente dueño o comercial del cliente)
-if (!cliente() && !comercial() && !admin()) {
+// Verificar que el usuario tiene acceso (solo clientes pueden reportar incidencias)
+if (!cliente() && !admin()) {
     json_response("ko", "No tienes permisos para comunicar incidencias.", 1598357390);
 }
 
@@ -15,20 +15,20 @@ if (!user_can_access_request($_POST["request_id"])) {
     json_response("ko", "No puedes comunicar una incidencia en esta solicitud.", 1598357393);
 }
 
-// Comprobar que la solicitud está en estado 7 (activa) :: inicio
+// Comprobar que la solicitud está en un estado válido para reportar incidencias
+// Estados válidos: 3 (Aceptada), 4 (En curso), 7 (Activa)
 $query = "SELECT * FROM `requests` WHERE 1
 AND deleted_at IS NULL
 AND id = :request_id
-AND status_id = 7";
+AND status_id IN (3, 4, 7)";
 $stmt = $pdo->prepare($query);
 $stmt->bindValue(":request_id", $_POST["request_id"]);
 $stmt->execute();
 $res = $stmt->fetchAll();
 
 if (count($res) !== 1) {
-    json_response("ko", "La solicitud no está activa.", 2408915345);
+    json_response("ko", "No se puede reportar una incidencia en esta solicitud. Solo es posible en solicitudes activas o en curso.", 2408915345);
 }
-// Comprobar que la solicitud está en estado 7 (activa) :: fin
 
 // Comprobar que hay detalles :: inicio
 if (empty($_POST["incident_details"])) {

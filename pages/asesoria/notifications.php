@@ -70,9 +70,9 @@ $scripts = [];
 (function() {
     'use strict';
 
-    // API para ASESORÍA - usa el mismo endpoint que cliente
-    const API_URL = '/api/notifications-paginated-customer';
-    const API_MARK_ALL = '/api/notifications-mark-all-read-customer';
+    // API para ASESORÍA
+    const API_URL = '/api/notifications-paginated-advisory';
+    const API_MARK_ALL = '/api/notifications-mark-read'; // Endpoint genérico que funciona para cualquier usuario
     const API_MARK_ONE = '/api/notification-mark-read';
 
     const state = {

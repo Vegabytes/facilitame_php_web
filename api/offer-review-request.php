@@ -6,8 +6,8 @@
  * Permitido para: clientes (dueño de la solicitud) y comerciales (del cliente)
  */
 
-// Verificar que el usuario tiene acceso (cliente, comercial o admin)
-if (!cliente() && !comercial() && !admin()) {
+// Verificar que el usuario tiene acceso (solo clientes pueden solicitar revisiones)
+if (!cliente() && !admin()) {
     json_response("ko", "No tienes permisos para solicitar revisiones.", 579238920);
 }
 

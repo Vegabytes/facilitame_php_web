@@ -64,11 +64,16 @@ try {
         AND u.deleted_at IS NULL
         {$searchCondition}
         ORDER BY u.id DESC
-        LIMIT {$limit} OFFSET {$offset}
+        LIMIT :pagination_limit OFFSET :pagination_offset
     ";
-    
+
     $stmt = $db->prepare($dataQuery);
-    $stmt->execute($params);
+    foreach ($params as $key => $value) {
+        $stmt->bindValue($key, $value);
+    }
+    $stmt->bindValue(':pagination_limit', $limit, PDO::PARAM_INT);
+    $stmt->bindValue(':pagination_offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // Formatear respuesta
@@ -84,13 +89,20 @@ try {
         ];
     }, $users);
     
+    $total_pages = $total > 0 ? ceil($total / $limit) : 1;
+    $from = $total > 0 ? $offset + 1 : 0;
+    $to = min($offset + $limit, $total);
+
     json_response("ok", "Usuarios obtenidos", 2001380001, [
         'data' => $formattedUsers,
         'pagination' => [
             'current_page' => $page,
             'per_page' => $limit,
             'total' => $total,
-            'total_pages' => ceil($total / $limit)
+            'total_records' => $total,
+            'total_pages' => $total_pages,
+            'from' => $from,
+            'to' => $to
         ]
     ]);
     

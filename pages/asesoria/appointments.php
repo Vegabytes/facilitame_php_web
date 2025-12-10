@@ -149,11 +149,12 @@ $statusLabels = ['solicitado' => 'Pendiente', 'agendado' => 'Confirmada', 'final
                     <div class="pagination-size">
                         <label for="apt-filter-status">Estado:</label>
                         <select id="apt-filter-status" class="form-select form-select-sm">
-                            <option value="">Todos</option>
+                            <option value="activas" selected>Activas</option>
                             <option value="solicitado">Pendientes</option>
                             <option value="agendado">Confirmadas</option>
                             <option value="finalizado">Finalizadas</option>
                             <option value="cancelado">Canceladas</option>
+                            <option value="">Todos</option>
                         </select>
                     </div>
                     <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modal_create_appointment">
@@ -390,7 +391,7 @@ $statusLabels = ['solicitado' => 'Pendiente', 'agendado' => 'Confirmada', 'final
     var state = {
         currentPage: 1,
         pageSize: 20,
-        status: '',
+        status: 'activas', // Por defecto mostrar solo activas (no finalizadas ni canceladas)
         totalPages: 1,
         totalRecords: 0,
         isLoading: false
@@ -405,12 +406,12 @@ $statusLabels = ['solicitado' => 'Pendiente', 'agendado' => 'Confirmada', 'final
     var statusFilter = document.getElementById('apt-filter-status');
     var paginationContainer = document.getElementById('apt-pagination');
     
-    // Fecha mínima para crear/reprogramar
-    var tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(9, 0, 0, 0);
-    var minDate = tomorrow.toISOString().slice(0, 16);
-    
+    // Fecha mínima para crear/reprogramar: ahora mismo (permite mismo día con hora futura)
+    var now = new Date();
+    // Redondear al próximo intervalo de 15 minutos
+    now.setMinutes(Math.ceil(now.getMinutes() / 15) * 15, 0, 0);
+    var minDate = now.toISOString().slice(0, 16);
+
     var createDateInput = document.getElementById('create_proposed_date');
     var rescheduleDateInput = document.getElementById('reschedule_proposed_date');
     if (createDateInput) createDateInput.min = minDate;

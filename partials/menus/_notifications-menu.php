@@ -1,7 +1,4 @@
 <!--begin::Menu-->
-<?php if (intval(NOTIFICATIONS["unread"]) > 0) : ?>
-    <span class="bullet bullet-dot bg-danger h-10px w-10px animation-blink" id="notification-indicator"></span>
-<?php endif; ?>
 <div class="menu menu-sub menu-sub-dropdown menu-column w-350px" 
      data-kt-menu="true" 
      id="kt_menu_notifications">
@@ -126,7 +123,7 @@
         })
         .then(function(response) { return response.json(); })
         .then(function(data) {
-            if (data.success) {
+            if (data.success || data.status === 'ok') {
                 var unreadItems = document.querySelectorAll('.notification-item.notification-unread');
                 unreadItems.forEach(function(item) {
                     item.classList.remove('notification-unread');

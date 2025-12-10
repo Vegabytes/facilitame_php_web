@@ -418,7 +418,17 @@ function get_request($request_id)
         $request = $stmt->fetchAll();
 
     } elseif (proveedor()) {
-        $stmt = $pdo->prepare("SELECT * FROM requests WHERE id = :request_id AND category_id IN (" . USER["categories"] . ")");
+        // Validar que el proveedor tiene categorías asignadas
+        $categories = USER["categories"] ?? '';
+        if (empty($categories)) {
+            return false;
+        }
+        // Sanitizar categorías (solo números y comas)
+        $categories = preg_replace('/[^0-9,]/', '', $categories);
+        if (empty($categories)) {
+            return false;
+        }
+        $stmt = $pdo->prepare("SELECT * FROM requests WHERE id = :request_id AND category_id IN (" . $categories . ")");
         $stmt->bindValue(":request_id", $request_id);
         $stmt->execute();
         $request = $stmt->fetchAll();
@@ -621,7 +631,17 @@ function user_can_access_request($request_id)
         return $stmt->fetch() !== false;
 
     } elseif (proveedor()) {
-        $stmt = $pdo->prepare("SELECT 1 FROM requests WHERE id = :request_id AND category_id IN (" . USER["categories"] . ")");
+        // Validar que el proveedor tiene categorías asignadas
+        $categories = USER["categories"] ?? '';
+        if (empty($categories)) {
+            return false;
+        }
+        // Sanitizar categorías (solo números y comas)
+        $categories = preg_replace('/[^0-9,]/', '', $categories);
+        if (empty($categories)) {
+            return false;
+        }
+        $stmt = $pdo->prepare("SELECT 1 FROM requests WHERE id = :request_id AND category_id IN (" . $categories . ")");
         $stmt->bindValue(":request_id", $request_id);
         $stmt->execute();
         return $stmt->fetch() !== false;
@@ -766,13 +786,23 @@ function get_requests()
     global $pdo;
 
     if (proveedor()) {
-        $stmt = $pdo->prepare("SELECT CONCAT(COALESCE(u.name, ''), ' ', COALESCE(u.lastname, '')) AS customer_full_name, 
+        // Validar que el proveedor tiene categorías asignadas
+        $categories = USER["categories"] ?? '';
+        if (empty($categories)) {
+            return [];
+        }
+        // Sanitizar categorías (solo números y comas)
+        $categories = preg_replace('/[^0-9,]/', '', $categories);
+        if (empty($categories)) {
+            return [];
+        }
+        $stmt = $pdo->prepare("SELECT CONCAT(COALESCE(u.name, ''), ' ', COALESCE(u.lastname, '')) AS customer_full_name,
             req.*, cat.name AS category_name, sta.status_name AS status
             FROM requests req
             LEFT JOIN categories cat ON cat.id = req.category_id
             LEFT JOIN requests_statuses sta ON sta.id = req.status_id
             LEFT JOIN users u ON u.id = req.user_id
-            WHERE req.category_id IN (" . USER["categories"] . ") 
+            WHERE req.category_id IN (" . $categories . ")
             ORDER BY req.request_date DESC");
         $stmt->execute();
         $requests = $stmt->fetchAll();
@@ -907,13 +937,23 @@ function get_rescheduled_requests()
     global $pdo;
 
     if (proveedor()) {
+        // Validar que el proveedor tiene categorías asignadas
+        $categories = USER["categories"] ?? '';
+        if (empty($categories)) {
+            return [];
+        }
+        // Sanitizar categorías (solo números y comas)
+        $categories = preg_replace('/[^0-9,]/', '', $categories);
+        if (empty($categories)) {
+            return [];
+        }
         $stmt = $pdo->prepare("SELECT CONCAT(COALESCE(u.name, ''), ' ', COALESCE(u.lastname, '')) AS customer_full_name,
             req.*, cat.name AS category_name, sta.status_name AS status
             FROM requests req
             LEFT JOIN categories cat ON cat.id = req.category_id
             LEFT JOIN requests_statuses sta ON sta.id = req.status_id
             LEFT JOIN users u ON u.id = req.user_id
-            WHERE req.status_id = 10 AND req.category_id IN (" . USER["categories"] . ")
+            WHERE req.status_id = 10 AND req.category_id IN (" . $categories . ")
             ORDER BY req.request_date DESC");
         $stmt->execute();
 

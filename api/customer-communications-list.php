@@ -62,7 +62,7 @@ $total_records = $stmt->fetchColumn();
 $total_pages = ceil($total_records / $limit);
 // Obtener registros
 $stmt = $pdo->prepare("
-    SELECT ac.id, ac.subject, ac.message, ac.importance, ac.created_at, 
+    SELECT ac.id, ac.subject, ac.message, ac.importance, ac.created_at,
            acr.is_read, acr.read_at,
            DATE_FORMAT(ac.created_at, '%d %b %Y') as created_at_display
     FROM advisory_communications ac
@@ -80,6 +80,14 @@ $stmt->bindValue(':pagination_limit', $limit, PDO::PARAM_INT);
 $stmt->bindValue(':pagination_offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
 $communications = $stmt->fetchAll();
+
+// Obtener archivos adjuntos para cada comunicación
+$stmt_files = $pdo->prepare("SELECT id, filename, url, mime_type, filesize FROM advisory_communication_files WHERE communication_id = ?");
+foreach ($communications as &$comm) {
+    $stmt_files->execute([$comm['id']]);
+    $comm['attachments'] = $stmt_files->fetchAll();
+}
+unset($comm);
 $from = $total_records > 0 ? $offset + 1 : 0;
 $to = min($offset + $limit, $total_records);
 json_response("ok", "Comunicaciones obtenidas correctamente", 2001, [

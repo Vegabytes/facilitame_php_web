@@ -109,7 +109,7 @@ $importanceClasses = [
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form id="form_new_communication">
+            <form id="form_new_communication" enctype="multipart/form-data">
                 <div class="modal-body pt-4">
                     <div class="mb-4">
                         <label class="form-label fw-semibold">Asunto <span class="text-danger">*</span></label>
@@ -159,6 +159,18 @@ $importanceClasses = [
                             <?php endif; ?>
                         </div>
                     </div>
+                    <!-- Archivos adjuntos -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Archivos adjuntos</label>
+                        <div class="upload-drop-zone" id="comm-drop-zone">
+                            <i class="ki-outline ki-file-up"></i>
+                            <span class="drop-zone-text">Arrastra archivos o haz clic para seleccionar</span>
+                            <input type="file" name="attachments[]" id="comm-attachments" class="drop-zone-input" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.gif">
+                        </div>
+                        <div class="form-text">PDF, Word, Excel, imágenes. Máx. 10MB por archivo, 25MB total.</div>
+                        <div id="comm-files-preview" class="mt-2"></div>
+                    </div>
+
                     <div class="info-box">
                         <div class="info-box-icon">
                             <i class="ki-outline ki-information-2"></i>
@@ -288,6 +300,10 @@ $importanceClasses = [
             var label = importanceLabels[item.importance] || item.importance;
             var preview = item.message.length > 80 ? item.message.substring(0, 80) + '...' : item.message;
             
+            var attachmentsBadge = item.attachments_count > 0
+                ? '<span class="text-primary"><i class="ki-outline ki-paperclip"></i> ' + item.attachments_count + ' archivo' + (item.attachments_count > 1 ? 's' : '') + '</span>'
+                : '';
+
             html += '<div class="list-card list-card-' + colorClass + '">' +
                 '<div class="list-card-content">' +
                     '<div class="list-card-title">' +
@@ -300,6 +316,7 @@ $importanceClasses = [
                         '<span><i class="ki-outline ki-people"></i> ' + item.total_recipients + ' destinatarios</span>' +
                         '<span class="text-success"><i class="ki-outline ki-check"></i> ' + item.read_count + ' leídos</span>' +
                         (item.pending_count > 0 ? '<span class="text-warning"><i class="ki-outline ki-time"></i> ' + item.pending_count + ' pendientes</span>' : '') +
+                        attachmentsBadge +
                     '</div>' +
                 '</div>' +
                 '<div class="list-card-actions">' +
@@ -460,6 +477,27 @@ fetch('/api/advisory-get-communication?id=' + id)
                 var colorClass = importanceClasses[c.importance] || 'primary';
                 var label = importanceLabels[c.importance] || c.importance;
                 
+                // Archivos adjuntos
+                var attachmentsHtml = '';
+                if (c.attachments && c.attachments.length > 0) {
+                    attachmentsHtml = '<div class="mb-4">' +
+                        '<h6 class="mb-2"><i class="ki-outline ki-paperclip me-1"></i>Archivos adjuntos (' + c.attachments.length + ')</h6>' +
+                        '<div class="d-flex flex-wrap gap-2">';
+                    c.attachments.forEach(function(file) {
+                        var icon = 'ki-document';
+                        if (file.mime_type && file.mime_type.includes('image')) icon = 'ki-picture';
+                        else if (file.mime_type && file.mime_type.includes('pdf')) icon = 'ki-document';
+                        else if (file.mime_type && (file.mime_type.includes('sheet') || file.mime_type.includes('excel'))) icon = 'ki-chart-simple';
+
+                        attachmentsHtml += '<a href="/<?php echo DOCUMENTS_DIR; ?>/' + file.url + '" target="_blank" class="btn btn-sm btn-light-primary">' +
+                            '<i class="ki-outline ' + icon + ' me-1"></i>' +
+                            escapeHtml(file.filename) +
+                            (file.filesize ? ' <span class="text-muted">(' + file.filesize + ' MB)</span>' : '') +
+                        '</a>';
+                    });
+                    attachmentsHtml += '</div></div>';
+                }
+
                 var html = '<div class="mb-4">' +
                     '<div class="d-flex gap-2 mb-3">' +
                         '<span class="badge-status badge-status-' + colorClass + '">' + label + '</span>' +
@@ -467,6 +505,7 @@ fetch('/api/advisory-get-communication?id=' + id)
                     '</div>' +
                     '<div class="text-muted small mb-3"><i class="ki-outline ki-calendar me-1"></i>' + c.created_at + '</div>' +
                     '<div class="bg-light rounded p-3 mb-4" style="white-space: pre-wrap; line-height: 1.6;">' + escapeHtml(c.message) + '</div>' +
+                    attachmentsHtml +
                 '</div>' +
                 '<hr class="my-3">' +
                 '<div class="d-flex justify-content-between align-items-center mb-3">' +
@@ -511,4 +550,49 @@ function escapeHtml(text) {
     div.textContent = text;
     return div.innerHTML;
 }
+
+// Preview de archivos seleccionados
+document.getElementById('comm-attachments').addEventListener('change', function() {
+    var preview = document.getElementById('comm-files-preview');
+    var files = this.files;
+
+    if (files.length === 0) {
+        preview.innerHTML = '';
+        return;
+    }
+
+    var html = '<div class="d-flex flex-wrap gap-2">';
+    var totalSize = 0;
+
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        var sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+        totalSize += parseFloat(sizeMB);
+
+        var icon = 'ki-document';
+        if (file.type.includes('image')) icon = 'ki-picture';
+        else if (file.type.includes('pdf')) icon = 'ki-document';
+        else if (file.type.includes('sheet') || file.type.includes('excel')) icon = 'ki-chart-simple';
+
+        html += '<span class="badge bg-light text-dark border">' +
+            '<i class="ki-outline ' + icon + ' me-1"></i>' +
+            escapeHtml(file.name.length > 20 ? file.name.substring(0, 17) + '...' : file.name) +
+            ' <span class="text-muted">(' + sizeMB + ' MB)</span>' +
+        '</span>';
+    }
+
+    html += '</div>';
+
+    if (totalSize > 25) {
+        html += '<div class="text-danger small mt-1"><i class="ki-outline ki-information me-1"></i>El tamaño total excede 25MB</div>';
+    }
+
+    preview.innerHTML = html;
+});
+
+// Limpiar preview al cerrar modal
+document.getElementById('modal_new_communication').addEventListener('hidden.bs.modal', function() {
+    document.getElementById('comm-files-preview').innerHTML = '';
+    document.getElementById('comm-attachments').value = '';
+});
 </script>

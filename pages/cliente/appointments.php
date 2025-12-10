@@ -110,11 +110,12 @@ if ($customer_advisory_id) {
                     <div class="pagination-size">
                         <label for="apt-filter-status">Estado:</label>
                         <select id="apt-filter-status" class="form-select form-select-sm">
-                            <option value="">Todos</option>
+                            <option value="activas" selected>Activas</option>
                             <option value="solicitado">Pendientes</option>
                             <option value="agendado">Confirmadas</option>
                             <option value="finalizado">Finalizadas</option>
                             <option value="cancelado">Canceladas</option>
+                            <option value="">Todos</option>
                         </select>
                     </div>
                     <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modal_request_appointment">
@@ -557,7 +558,7 @@ if ($customer_advisory_id) {
     var state = {
         currentPage: 1,
         pageSize: 15,
-        status: '',
+        status: 'activas', // Por defecto mostrar solo activas (no finalizadas ni canceladas)
         totalPages: 1,
         totalRecords: 0,
         isLoading: false
@@ -572,12 +573,12 @@ if ($customer_advisory_id) {
     var statusFilter = document.getElementById('apt-filter-status');
     var paginationContainer = document.getElementById('apt-pagination');
     
-    // Configurar fecha m��nima (ma�0�9ana a las 9:00)
-    var tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(9, 0, 0, 0);
+    // Configurar fecha mínima: ahora mismo (permite mismo día con hora futura)
+    var now = new Date();
+    // Redondear al próximo intervalo de 15 minutos
+    now.setMinutes(Math.ceil(now.getMinutes() / 15) * 15, 0, 0);
     var proposedInput = document.getElementById('proposed_date_input');
-    if (proposedInput) proposedInput.min = tomorrow.toISOString().slice(0, 16);
+    if (proposedInput) proposedInput.min = now.toISOString().slice(0, 16);
     
     function init() {
         if (!listContainer) return;

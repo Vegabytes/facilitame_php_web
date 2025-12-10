@@ -42,11 +42,11 @@ try {
         $params[] = $search_param;
     }
     
-    if (!empty($status)) {
+    if (!empty($status) && $status !== 'activas') {
         $where_clauses[] = "aa.status = ?";
         $params[] = $status;
     } else {
-        // Por defecto ocultar finalizadas y canceladas
+        // Por defecto o "activas": ocultar finalizadas y canceladas
         $where_clauses[] = "aa.status NOT IN ('finalizado', 'cancelado')";
     }
     

@@ -119,13 +119,13 @@ if (asesoria() && isset($pdo)) {
                 </li>
                 <?php if (!guest()): ?>
                 <li class="menu-item <?= ($currentPage === 'invoices') ? 'active' : '' ?>" role="none">
-                    <a href="/invoices" class="menu-link" role="menuitem" data-tooltip="Mis facturas" <?= ($currentPage === 'invoices') ? 'aria-current="page"' : '' ?>>
+                    <a href="/invoices" class="menu-link" role="menuitem" data-tooltip="Mis Recibos" <?= ($currentPage === 'invoices') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-credit-cart menu-icon" aria-hidden="true"></i>
-                        <span class="menu-text">Mis facturas</span>
+                        <span class="menu-text">Mis Recibos</span>
                     </a>
                 </li>
                 <?php endif; ?>
-                
+
                 <?php if ($has_advisory): ?>
                 <li class="menu-section"><span class="menu-section-text">Mi Asesoría</span></li>
                 <li class="menu-item <?= ($currentPage === 'communications') ? 'active' : '' ?>" role="none">
@@ -138,9 +138,9 @@ if (asesoria() && isset($pdo)) {
                     </a>
                 </li>
                 <li class="menu-item <?= ($currentPage === 'advisory-invoices') ? 'active' : '' ?>" role="none">
-                    <a href="/advisory-invoices" class="menu-link" role="menuitem" data-tooltip="Enviar Facturas" <?= ($currentPage === 'advisory-invoices') ? 'aria-current="page"' : '' ?>>
+                    <a href="/advisory-invoices" class="menu-link" role="menuitem" data-tooltip="Facturas" <?= ($currentPage === 'advisory-invoices') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-document menu-icon" aria-hidden="true"></i>
-                        <span class="menu-text">Enviar Facturas</span>
+                        <span class="menu-text">Facturas</span>
                     </a>
                 </li>
                 <li class="menu-item <?= ($currentPage === 'appointments') ? 'active' : '' ?>" role="none">

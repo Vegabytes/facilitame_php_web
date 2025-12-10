@@ -256,6 +256,10 @@ $importanceClasses = [
             const dateDisplay = item.created_at_display || formatDate(item.created_at);
             const preview = item.message.length > 80 ? item.message.substring(0, 80) + '...' : item.message;
             
+            const attachmentsBadge = item.attachments && item.attachments.length > 0
+                ? `<span class="text-primary"><i class="ki-outline ki-paperclip"></i> ${item.attachments.length}</span>`
+                : '';
+
             return `
                 <div class="list-card list-card-${colorClass}" style="cursor: pointer;" onclick="viewCommunication(${index})">
                     <div class="list-card-content">
@@ -271,6 +275,7 @@ $importanceClasses = [
                                 <i class="ki-outline ki-calendar"></i>
                                 ${dateDisplay}
                             </span>
+                            ${attachmentsBadge}
                         </div>
                     </div>
                     <div class="list-card-actions">
@@ -351,6 +356,28 @@ $importanceClasses = [
         const colorClass = importanceClasses[comm.importance] || 'muted';
         const dateDisplay = comm.created_at_display || formatDate(comm.created_at);
         
+        // Archivos adjuntos
+        let attachmentsHtml = '';
+        if (comm.attachments && comm.attachments.length > 0) {
+            attachmentsHtml = `
+                <div class="mt-4">
+                    <h6 class="mb-2"><i class="ki-outline ki-paperclip me-1"></i>Archivos adjuntos (${comm.attachments.length})</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        ${comm.attachments.map(file => {
+                            let icon = 'ki-document';
+                            if (file.mime_type && file.mime_type.includes('image')) icon = 'ki-picture';
+                            else if (file.mime_type && file.mime_type.includes('pdf')) icon = 'ki-document';
+                            else if (file.mime_type && (file.mime_type.includes('sheet') || file.mime_type.includes('excel'))) icon = 'ki-chart-simple';
+                            return `<a href="/<?php echo DOCUMENTS_DIR; ?>/${file.url}" target="_blank" class="btn btn-sm btn-light-primary">
+                                <i class="ki-outline ${icon} me-1"></i>
+                                ${escapeHtml(file.filename)}
+                                ${file.filesize ? `<span class="text-muted">(${file.filesize} MB)</span>` : ''}
+                            </a>`;
+                        }).join('')}
+                    </div>
+                </div>`;
+        }
+
         document.getElementById('modal_comm_title').textContent = comm.subject;
         document.getElementById('modal_comm_body').innerHTML = `
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -360,8 +387,9 @@ $importanceClasses = [
             <hr class="my-3">
             <div class="bg-light rounded p-4" style="white-space: pre-wrap; line-height: 1.7; font-size: 0.9375rem;">
                 ${escapeHtml(comm.message)}
-            </div>`;
-        
+            </div>
+            ${attachmentsHtml}`;
+
         modal.show();
     };
     

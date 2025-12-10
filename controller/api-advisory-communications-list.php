@@ -82,9 +82,17 @@ $target_labels = [
     'asociacion' => 'Asociaciones',
     'selected' => 'Selección manual'
 ];
+// Obtener archivos adjuntos
+$stmt_files = $pdo->prepare("SELECT id, filename, url, mime_type, filesize FROM advisory_communication_files WHERE communication_id = ?");
+
 $formatted = [];
 foreach ($communications as $comm) {
     $imp = $importance_labels[$comm['importance']] ?? $importance_labels['media'];
+
+    // Obtener archivos de esta comunicación
+    $stmt_files->execute([$comm['id']]);
+    $attachments = $stmt_files->fetchAll();
+
     $formatted[] = [
         'id' => $comm['id'],
         'subject' => $comm['subject'],
@@ -98,7 +106,9 @@ foreach ($communications as $comm) {
         'created_at' => date('d/m/Y H:i', strtotime($comm['created_at'])),
         'total_recipients' => (int)$comm['total_recipients'],
         'read_count' => (int)$comm['read_count'],
-        'pending_count' => (int)$comm['total_recipients'] - (int)$comm['read_count']
+        'pending_count' => (int)$comm['total_recipients'] - (int)$comm['read_count'],
+        'attachments' => $attachments,
+        'attachments_count' => count($attachments)
     ];
 }
 $from = $total_records > 0 ? $offset + 1 : 0;

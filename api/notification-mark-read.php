@@ -3,14 +3,20 @@ try
 {
     $pdo->beginTransaction();
     
-    $notification_id = (int) $_POST["notification_id"];
+    // Aceptar tanto notification_id como id (compatibilidad con diferentes llamadas)
+    $input = json_decode(file_get_contents('php://input'), true);
+    $notification_id = (int) ($input['id'] ?? $input['notification_id'] ?? $_POST["notification_id"] ?? $_POST["id"] ?? 0);
+
+    if ($notification_id <= 0) {
+        json_response("ko", "ID de notificaciÃ³n invÃ¡lido", 1240147689);
+    }
     
-    // Si es comercial, verificar que la notificaci¨®n pertenece a sus clientes
+    // Si es comercial, verificar que la notificaciï¿½ï¿½n pertenece a sus clientes
     if (comercial())
     {
         $comercial_id = (int) USER['id'];
         
-        // Verificar que la notificaci¨®n es de una petici¨®n de sus clientes
+        // Verificar que la notificaciï¿½ï¿½n es de una peticiï¿½ï¿½n de sus clientes
         $stmt = $pdo->prepare("
             SELECT n.id 
             FROM notifications n
@@ -29,14 +35,14 @@ try
     }
     else
     {
-        // Para otros usuarios, usar la verificaci¨®n existente
+        // Para otros usuarios, usar la verificaciï¿½ï¿½n existente
         if (user_can_access_notification($notification_id) !== true)
         {
-            json_response("ko", "No se puede marcar la notificaci¨®n como le¨ªda", 1240147687);
+            json_response("ko", "No se puede marcar la notificaciï¿½ï¿½n como leï¿½ï¿½da", 1240147687);
         }
     }
     
-    // Marcar como le¨ªda
+    // Marcar como leï¿½ï¿½da
     $query = "UPDATE `notifications` SET status = 1 WHERE id = :notification_id";
     $stmt = $pdo->prepare($query);
     $stmt->bindValue(":notification_id", $notification_id);

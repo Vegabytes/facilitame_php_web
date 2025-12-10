@@ -14,7 +14,8 @@ try
 
     $pdo->commit();
 
-    json_response("ok", "", 4006048779);
+    echo json_encode(["success" => true, "status" => "ok", "message" => "", "data" => ["updated" => $stmt->rowCount()]]);
+    exit;
 }
 catch (Throwable $e)
 {

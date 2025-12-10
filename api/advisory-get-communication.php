@@ -92,6 +92,11 @@ foreach ($recipients as $r) {
 $read_count = count(array_filter($formatted_recipients, fn($r) => $r['is_read']));
 $pending_count = count($formatted_recipients) - $read_count;
 
+// Obtener archivos adjuntos
+$stmt = $pdo->prepare("SELECT id, filename, url, mime_type, filesize FROM advisory_communication_files WHERE communication_id = ?");
+$stmt->execute([$communication_id]);
+$attachments = $stmt->fetchAll();
+
 json_response("ok", "Comunicación obtenida correctamente", 2001, [
     'id' => $communication['id'],
     'subject' => $communication['subject'],
@@ -104,6 +109,7 @@ json_response("ok", "Comunicación obtenida correctamente", 2001, [
     'target_subtype' => $communication['target_subtype'],
     'created_at' => date('d/m/Y H:i', strtotime($communication['created_at'])),
     'recipients' => $formatted_recipients,
+    'attachments' => $attachments,
     'stats' => [
         'total' => count($formatted_recipients),
         'read' => $read_count,

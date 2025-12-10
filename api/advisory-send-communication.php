@@ -1,6 +1,8 @@
 <?php
 header('Content-Type: application/json');
 
+use Ramsey\Uuid\Uuid;
+
 if (!asesoria()) {
     json_response("ko", "No autorizado", 4001);
 }
@@ -27,24 +29,92 @@ if (!in_array($importance, ['leve', 'media', 'importante'])) {
     $importance = 'media';
 }
 
+// Configuración de archivos permitidos
+$allowed_extensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png', 'gif'];
+$max_file_size_mb = 10; // 10MB por archivo
+$max_total_size_mb = 25; // 25MB total
+
 try {
     $pdo->beginTransaction();
     
     // Guardar comunicación
-    $query = "INSERT INTO advisory_communications 
-              (advisory_id, subject, message, importance, target_type) 
+    $query = "INSERT INTO advisory_communications
+              (advisory_id, subject, message, importance, target_type)
               VALUES (?, ?, ?, ?, ?)";
     $stmt = $pdo->prepare($query);
     $stmt->execute([$advisory_id, $subject, $message, $importance, $target_type]);
     $communication_id = $pdo->lastInsertId();
+
+    // Procesar archivos adjuntos
+    $uploaded_files = [];
+    if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
+        $upload_dir = ROOT_DIR . "/" . DOCUMENTS_DIR . "/communications/";
+
+        // Crear directorio si no existe
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0755, true);
+        }
+
+        $total_size = 0;
+        $num_files = count($_FILES['attachments']['name']);
+
+        for ($i = 0; $i < $num_files; $i++) {
+            if ($_FILES['attachments']['error'][$i] !== UPLOAD_ERR_OK) {
+                continue;
+            }
+
+            $original_name = $_FILES['attachments']['name'][$i];
+            $tmp_name = $_FILES['attachments']['tmp_name'][$i];
+            $file_size = $_FILES['attachments']['size'][$i];
+            $mime_type = $_FILES['attachments']['type'][$i];
+
+            // Validar extensión
+            $extension = strtolower(pathinfo($original_name, PATHINFO_EXTENSION));
+            if (!in_array($extension, $allowed_extensions)) {
+                continue; // Saltar archivos no permitidos
+            }
+
+            // Validar tamaño individual
+            $file_size_mb = $file_size / (1024 * 1024);
+            if ($file_size_mb > $max_file_size_mb) {
+                continue; // Saltar archivos muy grandes
+            }
+
+            // Validar tamaño total
+            $total_size += $file_size_mb;
+            if ($total_size > $max_total_size_mb) {
+                break; // Detener si excede el total
+            }
+
+            // Generar nombre único
+            $uuid = Uuid::uuid4()->toString();
+            $stored_name = $uuid . "-" . preg_replace('/[^a-zA-Z0-9._-]/', '_', $original_name);
+            $dest_path = $upload_dir . $stored_name;
+
+            if (move_uploaded_file($tmp_name, $dest_path)) {
+                // Guardar en base de datos
+                $stmt_file = $pdo->prepare(
+                    "INSERT INTO advisory_communication_files (communication_id, filename, url, mime_type, filesize)
+                     VALUES (?, ?, ?, ?, ?)"
+                );
+                $stmt_file->execute([
+                    $communication_id,
+                    $original_name,
+                    "communications/" . $stored_name,
+                    $mime_type,
+                    round($file_size_mb, 2)
+                ]);
+
+                $uploaded_files[] = $original_name;
+            }
+        }
+    }
     
     // Obtener clientes según filtro
-    // Usar tabla roles para obtener el tipo real de cliente (empresa, autonomo, particular)
+    // Usar customers_advisories.client_type para filtrar por tipo de cliente
     $query = "SELECT u.id, u.email, u.name, u.lastname, u.firebase_token, u.platform
               FROM users u
               INNER JOIN customers_advisories ca ON u.id = ca.customer_id
-              INNER JOIN model_has_roles mhr ON mhr.model_id = u.id
-              INNER JOIN roles r ON r.id = mhr.role_id
               WHERE ca.advisory_id = ?";
     $params = [$advisory_id];
 
@@ -56,8 +126,8 @@ try {
         $query .= " AND u.id IN ($placeholders)";
         $params = array_merge($params, $selected_clients);
     } elseif ($target_type !== 'all') {
-        // Filtrar por rol: autonomo, empresa, particular
-        $query .= " AND r.name = ?";
+        // Filtrar por tipo de cliente: autonomo, empresa, particular, comunidad, asociacion
+        $query .= " AND ca.client_type = ?";
         $params[] = $target_type;
     }
     
@@ -130,7 +200,9 @@ try {
         'communication_id' => $communication_id,
         'recipients_count' => count($customers),
         'emails_sent' => $sent_count,
-        'push_sent' => $push_count
+        'push_sent' => $push_count,
+        'files_uploaded' => count($uploaded_files),
+        'files' => $uploaded_files
     ]);
     
 } catch (Exception $e) {

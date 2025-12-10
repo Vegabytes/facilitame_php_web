@@ -22,11 +22,11 @@ try {
     $params = [$customer_id];
 
     // Por defecto ocultar finalizadas y canceladas (solo mostrar si se filtra explícitamente)
-    if ($status !== '' && in_array($status, ['solicitado', 'agendado', 'finalizado', 'cancelado'])) {
+    if ($status !== '' && $status !== 'activas' && in_array($status, ['solicitado', 'agendado', 'finalizado', 'cancelado'])) {
         $where[] = "aa.status = ?";
         $params[] = $status;
     } else {
-        // Sin filtro explícito: excluir finalizadas y canceladas
+        // Sin filtro explícito o "activas": excluir finalizadas y canceladas
         $where[] = "aa.status NOT IN ('finalizado', 'cancelado')";
     }
     

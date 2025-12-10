@@ -680,9 +680,11 @@ $proposedBy = $appointment['proposed_by'] ?? null;
 var APPOINTMENT_ID = <?php echo $appointment_id; ?>;
 var chatInterval;
 
-// Fecha minima para proponer
-var tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1); tomorrow.setHours(9, 0, 0, 0);
-var minDate = tomorrow.toISOString().slice(0, 16);
+// Fecha minima para proponer: ahora mismo (permite mismo día con hora futura)
+var now = new Date();
+// Redondear al próximo intervalo de 15 minutos
+now.setMinutes(Math.ceil(now.getMinutes() / 15) * 15, 0, 0);
+var minDate = now.toISOString().slice(0, 16);
 var rescheduleDateInput = document.getElementById('reschedule_proposed_date');
 if (rescheduleDateInput) rescheduleDateInput.min = minDate;
 
