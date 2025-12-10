@@ -1,7 +1,7 @@
 <?php
 /**
  * API: api-requests-paginated-sales.php
- * Paginaci��n y filtrado server-side para COMERCIAL
+ * Paginacion y filtrado server-side para COMERCIAL
  * Solicitudes de clientes asociados al comercial via sales_codes
  */
 
@@ -21,12 +21,12 @@ try {
     $params = [':sales_user_id' => USER['id']];
     $whereConditions = ["req.status_id NOT IN (8, 9, 10)"];
     
-    // Filtro por estado espec��fico
+    // Filtro por estado especifico
     if ($status > 0) {
         $whereConditions[] = "req.status_id = :status_filter";
         $params[':status_filter'] = $status;
         
-        // Si se filtra por un estado excluido (8, 9, 10), quitar la exclusi��n general
+        // Si se filtra por un estado excluido (8, 9, 10), quitar la exclusion general
         if (in_array($status, [8, 9, 10])) {
             $whereConditions = array_filter($whereConditions, function($cond) {
                 return strpos($cond, 'NOT IN (8, 9, 10)') === false;
@@ -143,6 +143,6 @@ try {
     json_response("ok", "", 9200003000, $result);
     
 } catch (Throwable $e) {
-    error_log("Error en api-requests-paginated-sales: " . $e->getMessage() . " l��nea " . $e->getLine());
+    error_log("Error en api-requests-paginated-sales: " . $e->getMessage() . " linea " . $e->getLine());
     json_response("ko", $e->getMessage(), 9500003000);
 }

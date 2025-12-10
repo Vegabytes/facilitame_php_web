@@ -7,7 +7,12 @@ if (!admin() && !proveedor() && !asesoria() && !comercial() && !cliente()) {
 }
 
 global $pdo;
-$request_id = IS_MOBILE_APP ? intval($_POST["id"]) : intval($_GET["id"]);
+$request_id = IS_MOBILE_APP ? intval($_POST["id"] ?? 0) : intval($_GET["id"] ?? 0);
+if ($request_id <= 0) {
+    set_toastr("ko", "Solicitud no encontrada");
+    header("Location:home");
+    exit;
+}
 $read_only = false;
 $advisory_id = 0;
 

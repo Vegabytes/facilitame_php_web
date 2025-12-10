@@ -113,7 +113,17 @@ if (PAGE === "/_dev")
 if (RESOURCE === "/api") // Rutas API
 {
     check_guest();
-    require ROOT_DIR . "/api" . PAGE . ".php";
+    $api_file = ROOT_DIR . "/api" . PAGE . ".php";
+    $controller_file = ROOT_DIR . "/controller/api" . PAGE . ".php";
+
+    if (file_exists($api_file)) {
+        require $api_file;
+    } elseif (file_exists($controller_file)) {
+        require $controller_file;
+    } else {
+        http_response_code(404);
+        json_response("ko", "API no encontrada", 404);
+    }
     close_pdo();
 }
 else // Rutas WEB

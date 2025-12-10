@@ -1,5 +1,5 @@
 /* ============================================
-   SIDEBAR FACILITAME - VERSIÓN COMPLETA
+   SIDEBAR FACILITAME - VERSION COMPLETA
    Incluye: Sidebar + Toggle + Tooltips + Mobile
    ============================================ */
 
@@ -35,11 +35,11 @@
     box-sizing: border-box;
 }
 
-/* FIX: Nav con scroll para pantallas pequeñas */
+/* FIX: Nav con scroll para pantallas pequenas */
 .app-sidebar nav,
 #app_sidebar nav {
     flex: 1 1 auto;
-    min-height: 0; /* Crítico para que flex con overflow funcione */
+    min-height: 0; /* Critico para que flex con overflow funcione */
     max-height: calc(100vh - 180px); /* Logo (~100px) + Footer (~80px) */
     overflow-y: auto;
     overflow-x: hidden;
@@ -65,7 +65,7 @@ nav .menu-list {
 }
 
 /* ============================================
-   2. BOTÓN TOGGLE
+   2. BOTON TOGGLE
    ============================================ */
 
 .sidebar-toggle-btn {
@@ -117,7 +117,7 @@ nav .menu-list {
 
 /* Toggle tooltip */
 .sidebar-toggle-btn::after {
-    content: "Colapsar menú";
+    content: "Colapsar menu";
     position: absolute;
     left: calc(100% + 12px);
     top: 50%;
@@ -144,7 +144,7 @@ nav .menu-list {
 }
 
 .app-sidebar.collapsed .sidebar-toggle-btn::after {
-    content: "Expandir menú";
+    content: "Expandir menu";
 }
 
 /* ============================================
@@ -209,7 +209,7 @@ nav .menu-list {
 }
 
 /* ============================================
-   4. MENÚ - LISTA Y SECCIONES
+   4. MENU - LISTA Y SECCIONES
    ============================================ */
 
 .menu-list {
@@ -251,7 +251,7 @@ nav .menu-list {
 }
 
 /* ============================================
-   5. MENÚ - ITEMS Y LINKS
+   5. MENU - ITEMS Y LINKS
    ============================================ */
 
 .menu-item {
@@ -318,7 +318,7 @@ nav .menu-list {
 }
 
 /* ============================================
-   6. MENÚ - ESTADO ACTIVO
+   6. MENU - ESTADO ACTIVO
    ============================================ */
 
 .menu-item.active .menu-link,
@@ -564,9 +564,16 @@ nav .menu-list {
     min-width: 0.6rem;
     padding: 0;
     margin: 0;
-    background-color: #ef4444;
     border: 2px solid var(--color-main-facilitame);
     animation: pulse-badge 2s infinite;
+}
+
+.app-sidebar.collapsed .menu-link .badge-danger {
+    background-color: #ef4444;
+}
+
+.app-sidebar.collapsed .menu-link .badge-warning {
+    background-color: #f59e0b;
 }
 
 .app-sidebar.collapsed .menu-link .badge-circle {
@@ -674,7 +681,7 @@ nav .menu-list {
     border-color: transparent #00C2CB transparent transparent;
 }
 
-/* Tooltip botón salir */
+/* Tooltip boton salir */
 .app-sidebar.collapsed .btn-footer::after {
     content: "Salir";
     position: absolute;
@@ -722,7 +729,7 @@ nav .menu-list {
 }
 
 /* ============================================
-   11. OVERLAY MÓVIL
+   11. OVERLAY MOVIL
    ============================================ */
 
 .sidebar-overlay {
@@ -763,7 +770,7 @@ nav .menu-list {
 }
 
 /* ============================================
-   13. ANIMACIÓN GLOW
+   13. ANIMACION GLOW
    ============================================ */
 
 @keyframes glow {
@@ -824,7 +831,7 @@ nav .menu-list {
     }
 }
 
-/* Pantallas pequeñas - reducir padding */
+/* Pantallas pequenas - reducir padding */
 @media (max-height: 700px) {
     .sidebar-logo {
         padding: 1rem 1rem 1rem;

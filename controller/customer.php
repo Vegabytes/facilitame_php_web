@@ -9,7 +9,11 @@ global $pdo;
 $user = new User();
 
 if (admin() || proveedor()) {
-    $customer_id = intval($_GET["id"]);
+    $customer_id = intval($_GET["id"] ?? 0);
+    if ($customer_id <= 0) {
+        header("Location:/customers");
+        exit;
+    }
     
     // =============================================
     // QUERY 1: Cliente + Comercial + Conteo (todo en uno)
@@ -88,7 +92,7 @@ if (admin() || proveedor()) {
 // COMERCIAL
 // =============================================
 } elseif (comercial()) {
-    $customer_id = intval($_GET["id"]);
+    $customer_id = intval($_GET["id"] ?? 0);
     $comercial_id = (int) USER['id'];
     
     // Verificar que el cliente pertenece al comercial
@@ -163,7 +167,7 @@ if (admin() || proveedor()) {
         exit;
     }
     $advisory_id = $advisory_row['id'];
-    $customer_id = intval($_GET["id"]);
+    $customer_id = intval($_GET["id"] ?? 0);
 
     // Obtener datos del cliente
     $stmt = $pdo->prepare("

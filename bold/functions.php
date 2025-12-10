@@ -737,7 +737,7 @@ function get_request_category_info($request)
     $keys = $category_keys[$request["category_id"]] ?? [];
     if (empty($keys)) return "";
 
-    if (is_null($request["form_values"])) return "";
+    if (!isset($request["form_values"]) || is_null($request["form_values"])) return "";
 
     $form_values = json_decode($request["form_values"], true);
     if (!is_array($form_values)) {
@@ -1148,7 +1148,7 @@ function notification_v2($sender_id, $receiver_id, $request_id, $title, $descrip
 
 function send_notification($user_notification_info, $notification_subject, $notification_body, $request_id)
 {
-    if (!$user_notification_info || empty($user_notification_info["firebase_token"]) || empty($user_notification_info["platform"])) {
+    if (!$user_notification_info || !isset($user_notification_info["firebase_token"]) || empty($user_notification_info["firebase_token"]) || !isset($user_notification_info["platform"]) || empty($user_notification_info["platform"])) {
         return;
     }
 

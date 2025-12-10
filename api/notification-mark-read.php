@@ -11,12 +11,12 @@ try
         json_response("ko", "ID de notificación inválido", 1240147689);
     }
     
-    // Si es comercial, verificar que la notificaci��n pertenece a sus clientes
+    // Si es comercial, verificar que la notificacion pertenece a sus clientes
     if (comercial())
     {
         $comercial_id = (int) USER['id'];
         
-        // Verificar que la notificaci��n es de una petici��n de sus clientes
+        // Verificar que la notificacion es de una peticion de sus clientes
         $stmt = $pdo->prepare("
             SELECT n.id 
             FROM notifications n
@@ -35,14 +35,14 @@ try
     }
     else
     {
-        // Para otros usuarios, usar la verificaci��n existente
+        // Para otros usuarios, usar la verificacion existente
         if (user_can_access_notification($notification_id) !== true)
         {
-            json_response("ko", "No se puede marcar la notificaci��n como le��da", 1240147687);
+            json_response("ko", "No se puede marcar la notificacion como leida", 1240147687);
         }
     }
     
-    // Marcar como le��da
+    // Marcar como leida
     $query = "UPDATE `notifications` SET status = 1 WHERE id = :notification_id";
     $stmt = $pdo->prepare($query);
     $stmt->bindValue(":notification_id", $notification_id);

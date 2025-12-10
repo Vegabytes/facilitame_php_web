@@ -6,11 +6,16 @@ if (!admin())
 }
 global $pdo;
 
+$user_id = intval($_GET["id"] ?? 0);
+if ($user_id <= 0) {
+    header("Location:home");
+    exit;
+}
 
 $info = [];
 if ($_SERVER['REMOTE_ADDR'] == '62.117.137.219')
 {
-    $target_user = new User($_GET["id"]);
+    $target_user = new User($user_id);
     $info["target_user"] = $target_user;
     $info["customers"] = $target_user->getCustomersV2();
     $info["excluded_services"] = $target_user->getExcludedServices();
@@ -26,7 +31,7 @@ if ($_SERVER['REMOTE_ADDR'] == '62.117.137.219')
 else
 {
     $user = new User();
-    $info["sales_rep"] = get_sales_rep($_GET["id"]);
+    $info["sales_rep"] = get_sales_rep($user_id);
     $query =
         "SELECT users.*, 0 AS services_number, roles.name AS role_name
     FROM `users`
@@ -39,7 +44,7 @@ else
         SELECT id FROM sales_codes WHERE deleted_at IS NULL AND user_id = :sales_rep_id
     )";
     $stmt = $pdo->prepare($query);
-    $stmt->bindValue(":sales_rep_id", $_GET["id"]);
+    $stmt->bindValue(":sales_rep_id", $user_id);
     $stmt->execute();
     $sales_rep_customers = $stmt->fetchAll();
     foreach ($sales_rep_customers as $i => $customer)
@@ -68,7 +73,7 @@ else
     WHERE 1
     AND r.deleted_at IS NULL -- AND r.status_id IN (7,8)";
     $stmt = $pdo->prepare($query);
-    $stmt->bindValue(":sales_rep_id", $_GET["id"]);
+    $stmt->bindValue(":sales_rep_id", $user_id);
     $stmt->execute();
     $requests = $stmt->fetchAll();
     // Solicitudes asociadas :: fin
@@ -93,7 +98,7 @@ else
     
     // Servicios excluidos :: inicio
     $services = get_services();
-    $excluded_services = get_excluded_services($_GET["id"]);
+    $excluded_services = get_excluded_services($user_id);
     // Servicios excluidos :: fin
     
     

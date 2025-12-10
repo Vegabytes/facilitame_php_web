@@ -33,8 +33,8 @@ if ($customer_advisory_id) {
                 <div class="empty-state-icon">
                     <i class="ki-outline ki-information-2"></i>
                 </div>
-                <div class="empty-state-title">No tienes una asesor��a asignada</div>
-                <p class="empty-state-text">Para solicitar citas, primero debes tener una asesor��a vinculada</p>
+                <div class="empty-state-title">No tienes una asesoria asignada</div>
+                <p class="empty-state-text">Para solicitar citas, primero debes tener una asesoria vinculada</p>
             </div>
         </div>
     </div>
@@ -47,8 +47,8 @@ if ($customer_advisory_id) {
         <div class="appointments-alert">
             <i class="ki-outline ki-notification-bing appointments-alert-icon"></i>
             <div class="appointments-alert-content">
-                <h4 class="appointments-alert-title">�9�0 Tienes <?php echo $counts['pendiente_confirmacion']; ?> cita(s) pendiente(s) de confirmar</h4>
-                <p style="margin: 0; font-size: 0.8125rem; color: var(--f-text-medium);">Tu asesor��a ha propuesto una fecha. Rev��sala y confirma, o escr��beles por el chat.</p>
+                <h4 class="appointments-alert-title">Tienes <?php echo $counts['pendiente_confirmacion']; ?> cita(s) pendiente(s) de confirmar</h4>
+                <p style="margin: 0; font-size: 0.8125rem; color: var(--f-text-medium);">Tu asesoria ha propuesto una fecha. Revisala y confirma, o escribeles por el chat.</p>
             </div>
         </div>
         <?php endif; ?>
