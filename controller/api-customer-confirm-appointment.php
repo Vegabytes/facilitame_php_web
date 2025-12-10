@@ -76,7 +76,22 @@ try {
     if (function_exists('send_appointment_email')) {
         send_appointment_email($appointment_id, 'confirmed', 'advisory');
     }
-    
+
+    // Generar notificación para la asesoría
+    $stmt = $pdo->prepare("SELECT user_id FROM advisories WHERE id = ?");
+    $stmt->execute([$appointment['advisory_id']]);
+    $advisory_user = $stmt->fetch();
+
+    if ($advisory_user) {
+        notification(
+            USER['id'],                      // sender_id (cliente)
+            $advisory_user['user_id'],       // receiver_id (usuario de la asesoría)
+            null,                            // request_id (no aplica para citas)
+            'Cita confirmada',
+            USER['name'] . ' ' . USER['lastname'] . ' ha confirmado la cita del ' . date('d/m/Y H:i', strtotime($appointment['proposed_date'])) . '.'
+        );
+    }
+
     json_response("ok", "¡Cita confirmada! La fecha ha sido agendada.", 200, [
         'scheduled_date' => $appointment['proposed_date']
     ]);

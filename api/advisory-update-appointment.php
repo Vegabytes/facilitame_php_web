@@ -374,13 +374,39 @@ try {
     }
     
     // =========================================
-    // ENVIAR EMAIL
+    // ENVIAR EMAIL Y NOTIFICACION
     // =========================================
-    
+
     if ($email_type) {
         send_appointment_email($appointment_id, $email_type, 'customer');
+
+        // Generar notificación para el cliente
+        $notif_titles = [
+            'confirmed' => 'Cita confirmada',
+            'proposal' => 'Nueva propuesta de fecha',
+            'scheduled' => 'Cita agendada',
+            'cancelled' => 'Cita cancelada',
+            'finalized' => 'Cita finalizada'
+        ];
+        $notif_descs = [
+            'confirmed' => 'Tu asesoría ha confirmado la cita.',
+            'proposal' => 'Tu asesoría te ha propuesto una nueva fecha. Accede para confirmar.',
+            'scheduled' => 'Tu asesoría ha agendado la cita.',
+            'cancelled' => 'Tu asesoría ha cancelado la cita.',
+            'finalized' => 'La cita ha sido marcada como finalizada.'
+        ];
+
+        if (isset($notif_titles[$email_type])) {
+            notification(
+                USER['id'],                           // sender_id (asesoría)
+                $appointment['customer_id'],          // receiver_id (cliente)
+                null,                                 // request_id (no aplica)
+                $notif_titles[$email_type],
+                $notif_descs[$email_type]
+            );
+        }
     }
-    
+
     json_response("ok", "Cita actualizada correctamente", 200, [
         'changes' => count($changes),
         'email_sent' => $email_type !== null

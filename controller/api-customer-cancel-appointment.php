@@ -58,7 +58,22 @@ try {
     
     // Enviar email a la asesoría
     send_appointment_email($appointment_id, 'cancelled', 'advisory');
-    
+
+    // Generar notificación para la asesoría
+    $stmt = $pdo->prepare("SELECT user_id FROM advisories WHERE id = ?");
+    $stmt->execute([$appointment['advisory_id']]);
+    $advisory_user = $stmt->fetch();
+
+    if ($advisory_user) {
+        notification(
+            USER['id'],                      // sender_id (cliente)
+            $advisory_user['user_id'],       // receiver_id (usuario de la asesoría)
+            null,                            // request_id (no aplica para citas)
+            'Cita cancelada',
+            USER['name'] . ' ' . USER['lastname'] . ' ha cancelado su cita.'
+        );
+    }
+
     json_response("ok", "Cita cancelada correctamente", 200);
     
 } catch (Throwable $e) {

@@ -226,7 +226,7 @@
                                             <?php endif; ?>
                                         </div>
                                         <div class="list-card-actions">
-                                            <a href="/<?php echo DOCUMENTS_DIR; ?>/<?php echo $inv['filename']; ?>" class="btn-icon" title="Descargar" target="_blank">
+                                            <a href="/api/file-download?type=advisory_invoice&id=<?php echo $inv['id']; ?>" class="btn-icon" title="Descargar" target="_blank">
                                                 <i class="ki-outline ki-folder-down"></i>
                                             </a>
                                             <?php if (!$inv['is_processed']): ?>

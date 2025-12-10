@@ -65,7 +65,16 @@ try {
             null,
             'Mensaje enviado en el chat'
         );
-        
+
+        // Generar notificación para el cliente
+        notification(
+            USER['id'],                        // sender_id (asesoría)
+            $appointment['customer_id'],       // receiver_id (cliente)
+            null,                              // request_id (no aplica para citas)
+            'Nuevo mensaje de cita',
+            'Tu asesoría te ha enviado un mensaje.'
+        );
+
         json_response("ok", "Mensaje enviado", 200, [
             'message_id' => $result['message_id']
         ]);

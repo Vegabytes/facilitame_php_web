@@ -169,6 +169,7 @@ $scripts = [];
                      data-id="${n.notification_id}"
                      data-status="${n.notification_status}"
                      data-request="${n.request_id || n.id}"
+                     data-sender="${n.sender_id || ''}"
                      style="margin-bottom: 0.5rem; cursor: pointer;">
                     <div class="list-card-content">
                         <div class="list-card-title">
@@ -200,9 +201,14 @@ $scripts = [];
     }
 
     function handleCardClick(e) {
+        // Si se hizo click en el botón de acción, dejar que el link funcione normalmente
         if (e.target.closest('a')) {
-            markAsReadAndGo(this);
-            return;
+            const notifId = this.dataset.id;
+            const notifStatus = this.dataset.status;
+            if (notifStatus == '0') {
+                markAsRead(notifId, this);
+            }
+            return; // Permite la navegación del link
         }
         e.preventDefault();
         markAsReadAndGo(this);
@@ -211,9 +217,15 @@ $scripts = [];
     function markAsReadAndGo(card) {
         const notifId = card.dataset.id;
         const notifStatus = card.dataset.status;
+        const senderId = card.dataset.sender;
 
         if (notifStatus == '0') {
             markAsRead(notifId, card);
+        }
+
+        // Navegar al cliente
+        if (senderId) {
+            window.location.href = '/customer?id=' + senderId;
         }
     }
 

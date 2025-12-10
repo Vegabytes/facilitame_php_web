@@ -40,8 +40,16 @@
             <?php foreach (NOTIFICATIONS as $index => $notification) : ?>
                 <?php if ($index === "unread") continue; ?>
                 <?php $is_unread = $notification["status"] == 0; ?>
-                
-                <a href="/request?id=<?= $notification["request_id"] ?>" 
+                <?php
+                // Asesoria navega al cliente, otros roles navegan a la solicitud
+                if (asesoria() && !empty($notification["sender_id"])) {
+                    $notif_href = "/customer?id=" . $notification["sender_id"];
+                } else {
+                    $notif_href = "/request?id=" . $notification["request_id"];
+                }
+                ?>
+
+                <a href="<?= $notif_href ?>" 
                    data-notification-status="<?= $notification["status"] ?>" 
                    data-notification-id="<?= $notification["id"] ?>" 
                    class="notification-item <?= $is_unread ? 'notification-unread' : '' ?>">

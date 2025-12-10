@@ -874,9 +874,9 @@ $tags = [
                     </div>
                 </div>
                 <div class="list-card-actions">
-                    <a href="<?php echo ROOT_URL . '/' . DOCUMENTS_DIR; ?>/${inv.filename}" 
-                       target="_blank" 
-                       class="btn-icon" 
+                    <a href="/api/file-download?type=advisory_invoice&id=${inv.id}"
+                       target="_blank"
+                       class="btn-icon"
                        title="Ver archivo">
                         <i class="ki-outline ki-eye"></i>
                     </a>

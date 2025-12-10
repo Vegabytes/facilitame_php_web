@@ -489,7 +489,7 @@ fetch('/api/advisory-get-communication?id=' + id)
                         else if (file.mime_type && file.mime_type.includes('pdf')) icon = 'ki-document';
                         else if (file.mime_type && (file.mime_type.includes('sheet') || file.mime_type.includes('excel'))) icon = 'ki-chart-simple';
 
-                        attachmentsHtml += '<a href="/<?php echo DOCUMENTS_DIR; ?>/' + file.url + '" target="_blank" class="btn btn-sm btn-light-primary">' +
+                        attachmentsHtml += '<a href="/api/file-download?type=communication_file&id=' + file.id + '" target="_blank" class="btn btn-sm btn-light-primary">' +
                             '<i class="ki-outline ' + icon + ' me-1"></i>' +
                             escapeHtml(file.filename) +
                             (file.filesize ? ' <span class="text-muted">(' + file.filesize + ' MB)</span>' : '') +

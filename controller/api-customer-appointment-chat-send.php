@@ -55,7 +55,22 @@ try {
             null,
             'Mensaje enviado en el chat'
         );
-        
+
+        // Generar notificación para la asesoría
+        $stmt = $pdo->prepare("SELECT user_id FROM advisories WHERE id = ?");
+        $stmt->execute([$appointment['advisory_id']]);
+        $advisory_user = $stmt->fetch();
+
+        if ($advisory_user) {
+            notification(
+                USER['id'],                      // sender_id (cliente)
+                $advisory_user['user_id'],       // receiver_id (usuario de la asesoría)
+                null,                            // request_id (no aplica para citas)
+                'Nuevo mensaje de cita',
+                USER['name'] . ' ' . USER['lastname'] . ' te ha enviado un mensaje.'
+            );
+        }
+
         json_response("ok", "Mensaje enviado", 200, [
             'message_id' => $result['message_id']
         ]);

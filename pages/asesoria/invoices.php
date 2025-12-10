@@ -291,7 +291,6 @@ $tagLabels = [
     'use strict';
     
     var API_URL = '/api-advisory-invoices-paginated';
-    var DOCUMENTS_URL = '<?php echo ROOT_URL . "/" . DOCUMENTS_DIR; ?>';
     var tagLabels = <?php echo json_encode($tagLabels); ?>;
     
     var state = {
@@ -412,7 +411,7 @@ $tagLabels = [
                     '</div>' +
                 '</div>' +
                 '<div class="list-card-actions">' +
-                    '<a href="' + DOCUMENTS_URL + '/' + inv.url + '" target="_blank" class="btn-icon" title="Ver"><i class="ki-outline ki-eye"></i></a>' +
+                    '<a href="/api/file-download?type=advisory_invoice&id=' + inv.id + '" target="_blank" class="btn-icon" title="Ver"><i class="ki-outline ki-eye"></i></a>' +
                     (!inv.is_processed 
                         ? '<button type="button" class="btn-icon btn-icon-success btn-mark-processed" data-id="' + inv.id + '" title="Marcar procesada"><i class="ki-outline ki-check"></i></button>'
                         : '') +
