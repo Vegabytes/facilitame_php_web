@@ -46,8 +46,13 @@ if (admin()) {
     $sql = $base_select . $base_sales_join . " WHERE req.id = :request_id";
     
 } elseif (proveedor()) {
-    $sql = $base_select . $base_sales_join . " 
-        WHERE req.id = :request_id 
+    // Verificar que el proveedor tiene categorías asignadas
+    if (empty(USER["categories"])) {
+        header("Location:/home?error=no_categories");
+        exit;
+    }
+    $sql = $base_select . $base_sales_join . "
+        WHERE req.id = :request_id
           AND req.category_id IN (" . USER["categories"] . ")";
     
 } elseif (cliente()) {

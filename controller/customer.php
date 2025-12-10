@@ -62,8 +62,12 @@ if (admin() || proveedor()) {
         $stmt->execute();
         $info["requests"] = $stmt->fetchAll();
     } elseif (proveedor()) {
-        // Proveedor solo ve requests de sus categorías
-        $sql = "
+        // Verificar que el proveedor tiene categorías asignadas
+        if (empty(USER["categories"])) {
+            $info["requests"] = [];
+        } else {
+            // Proveedor solo ve requests de sus categorías
+            $sql = "
             SELECT req.*, cat.name AS category_name, sta.status_name AS status
             FROM requests req
             LEFT JOIN categories cat ON cat.id = req.category_id
@@ -73,10 +77,11 @@ if (admin() || proveedor()) {
               AND req.category_id IN (" . USER["categories"] . ")
             ORDER BY req.created_at DESC
         ";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(":customer_id", $customer_id, PDO::PARAM_INT);
-        $stmt->execute();
-        $info["requests"] = $stmt->fetchAll();
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(":customer_id", $customer_id, PDO::PARAM_INT);
+            $stmt->execute();
+            $info["requests"] = $stmt->fetchAll();
+        }
     }
 
 // =============================================
