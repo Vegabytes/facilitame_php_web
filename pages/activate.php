@@ -15,7 +15,7 @@ if (isset($info["requires_password"]) && $info["requires_password"]) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="shortcut icon" href="assets/media/bold/favicon.png" />
         <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" />
-        <link href="assets/css/style.bundle.css" rel="stylesheet" />
+        <link href="assets/css/style_bundle.min.css" rel="stylesheet" />
         <link href="assets/css/bold.css" rel="stylesheet" />
         <link href="assets/css/login.css" rel="stylesheet" />
     </head>
