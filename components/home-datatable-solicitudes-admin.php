@@ -186,7 +186,7 @@
                         </div>
                     </div>
                     <div class="list-card-actions">
-                        <a href="/request?id=${item.id}" class="btn-icon btn-light-primary" title="Ver solicitud">
+                        <a href="/request?id=${item.id}" class="btn-icon btn-icon-info" title="Ver solicitud">
                             <i class="ki-outline ki-eye"></i>
                         </a>
                     </div>

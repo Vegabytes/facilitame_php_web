@@ -62,7 +62,9 @@ $isPublicPage = !isset(USER['role']) || USER['role'] === null;
     <link href="/assets/css/static.css?v=<?= $v ?>" rel="stylesheet" />
     <?php endif; ?>
     <link href="/assets/css/dashboard-common.css?v=<?= $v ?>" rel="stylesheet" />
-    <?php 
+    <link href="/assets/css/buttons.css?v=<?= $v ?>" rel="stylesheet" />
+    <link href="/assets/css/modals.css?v=<?= $v ?>" rel="stylesheet" />
+    <?php
         $roleCSS = match(true) {
             admin() => 'admin',
             cliente() => 'cliente', 

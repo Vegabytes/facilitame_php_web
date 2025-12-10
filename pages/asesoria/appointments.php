@@ -507,7 +507,7 @@ $statusLabels = ['solicitado' => 'Pendiente', 'agendado' => 'Confirmada', 'final
             }
             
             // Acciones
-            var actions = '<a href="/appointment?id=' + apt.id + '" class="btn-icon" title="Ver/Editar"><i class="ki-outline ki-eye"></i></a>';
+            var actions = '<a href="/appointment?id=' + apt.id + '" class="btn-icon btn-icon-info" title="Ver/Editar"><i class="ki-outline ki-eye"></i></a>';
             
             if (needsAction && apt.proposed_date) {
                 actions += '<button class="btn-icon btn-icon-success" onclick="acceptProposal(' + apt.id + ')" title="Aceptar propuesta"><i class="ki-outline ki-check"></i></button>';

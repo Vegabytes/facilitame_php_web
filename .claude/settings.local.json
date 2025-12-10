@@ -14,7 +14,22 @@
       "Bash(git commit:*)",
       "Bash(git config:*)",
       "Bash(cat:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(xargs:*)",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/api/_canvas.php )",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/api/_test-dev.php )",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/_temp-dev )",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/layout/partials/header/_menu )",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/partials/_drawers.php )",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/partials/modals/_invite-friends.php )",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/partials/modals/_upgrade-plan.php )",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/partials/modals/_view-users.php )",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/partials/search )",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/partials/theme-mode )",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/partials/widgets )",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/partials/general )",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/layout/partials/_content.php )",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/account )"
     ]
   }
 }

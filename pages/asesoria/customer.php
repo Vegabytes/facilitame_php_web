@@ -181,7 +181,7 @@
                                             <?php endif; ?>
                                         </div>
                                         <div class="list-card-actions">
-                                            <a href="/appointment?id=<?php echo $apt['id']; ?>" class="btn-icon" title="Ver cita"><i class="ki-outline ki-eye"></i></a>
+                                            <a href="/appointment?id=<?php echo $apt['id']; ?>" class="btn-icon btn-icon-info" title="Ver cita"><i class="ki-outline ki-eye"></i></a>
                                         </div>
                                     </div>
                                 <?php endforeach; ?>

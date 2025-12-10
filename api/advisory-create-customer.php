@@ -1,13 +1,9 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
-error_log("=== API CREATE CUSTOMER - INICIO ===");
 
 if (!asesoria()) {
-    error_log("API CREATE CUSTOMER - No autorizado");
     json_response('error', 'No autorizado', 403);
 }
-
-error_log("API CREATE CUSTOMER - Usuario autorizado");
 
 global $pdo;
 
@@ -17,11 +13,8 @@ $stmt->execute([USER['id']]);
 $advisory = $stmt->fetch();
 
 if (!$advisory) {
-    error_log("API CREATE CUSTOMER - Asesoría no encontrada");
     json_response('error', 'Asesoría no encontrada', 404);
 }
-
-error_log("API CREATE CUSTOMER - Advisory ID: " . $advisory['id']);
 
 $advisory_id = $advisory['id'];
 $advisory_code = $advisory['codigo_identificacion'];
@@ -30,13 +23,9 @@ $advisory_code = $advisory['codigo_identificacion'];
 $required = ['name', 'lastname', 'email', 'client_type'];
 foreach ($required as $field) {
     if (empty($_POST[$field])) {
-        error_log("API CREATE CUSTOMER - Campo faltante: $field");
         json_response('error', "El campo {$field} es obligatorio", 400);
     }
 }
-
-error_log("API CREATE CUSTOMER - Campos validados OK");
-error_log("API CREATE CUSTOMER - POST: " . print_r($_POST, true));
 
 $name = trim($_POST['name']);
 $lastname = trim($_POST['lastname']);
@@ -47,17 +36,13 @@ $client_type = $_POST['client_type'];
 
 // Validar NIF/CIF obligatorio
 if (empty($nif_cif)) {
-    error_log("API CREATE CUSTOMER - NIF/CIF vacío");
     json_response('error', 'El NIF/CIF es obligatorio', 400);
 }
 
 // Validar email
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    error_log("API CREATE CUSTOMER - Email inválido: $email");
     json_response('error', 'Email inválido', 400);
 }
-
-error_log("API CREATE CUSTOMER - Verificando si email existe: $email");
 
 // Verificar que el email no exista
 $stmt = $pdo->prepare("SELECT id, name, lastname FROM users WHERE email = ?");
@@ -65,18 +50,14 @@ $stmt->execute([$email]);
 $existing_user = $stmt->fetch();
 
 if ($existing_user) {
-    error_log("API CREATE CUSTOMER - Usuario existente encontrado: " . $existing_user['id']);
-    
     // Verificar si ya está vinculado a esta asesoría
     $stmt = $pdo->prepare("SELECT 1 FROM customers_advisories WHERE customer_id = ? AND advisory_id = ?");
     $stmt->execute([$existing_user['id'], $advisory_id]);
-    
+
     if ($stmt->fetch()) {
-        error_log("API CREATE CUSTOMER - Cliente ya vinculado a esta asesoría");
         json_response('error', 'Este cliente ya está vinculado a tu asesoría', 409);
     }
-    
-    error_log("API CREATE CUSTOMER - Devolviendo status 'exists' para vincular");
+
     // Ofrecer vincular el cliente existente
     json_response('exists', 'Ya existe un usuario con este email', 200, [
         'existing_user_id' => $existing_user['id'],
@@ -84,8 +65,6 @@ if ($existing_user) {
         'email' => $email
     ]);
 }
-
-error_log("API CREATE CUSTOMER - Email no existe, creando nuevo usuario");
 
 // Determinar subtipo según client_type
 $subtype = '';
@@ -106,11 +85,8 @@ switch ($client_type) {
 
 // Validar que se haya seleccionado subtipo
 if (empty($subtype)) {
-    error_log("API CREATE CUSTOMER - Subtipo vacío");
     json_response('error', 'Debes seleccionar el subtipo', 400);
 }
-
-error_log("API CREATE CUSTOMER - Subtipo: $subtype");
 
 // Determinar role_id según client_type
 $role_map = [
@@ -127,18 +103,16 @@ $role_id = $role_map[$client_type] ?? 6;
 $verification_token = bin2hex(random_bytes(32));
 $token_expires = date('Y-m-d H:i:s', strtotime('+24 hours'));
 
-error_log("API CREATE CUSTOMER - Iniciando transacción");
-
 try {
     $pdo->beginTransaction();
-    
+
     // 1. Crear usuario
     $stmt = $pdo->prepare("
         INSERT INTO users (
-            name, 
-            lastname, 
-            email, 
-            phone, 
+            name,
+            lastname,
+            email,
+            phone,
             nif_cif,
             verification_token,
             token_expires_at,
@@ -146,72 +120,63 @@ try {
             created_at
         ) VALUES (?, ?, ?, ?, ?, ?, ?, NULL, NOW())
     ");
-    
+
     $stmt->execute([
-        $name, 
-        $lastname, 
-        $email, 
-        $phone, 
+        $name,
+        $lastname,
+        $email,
+        $phone,
         $nif_cif,
         $verification_token,
         $token_expires
     ]);
-    
+
     $customer_id = $pdo->lastInsertId();
-    error_log("API CREATE CUSTOMER - Usuario creado ID: $customer_id");
-    
+
     // 2. Asignar rol
     $stmt = $pdo->prepare("
         INSERT INTO model_has_roles (role_id, model_type, model_id)
         VALUES (?, 'App\\\\Models\\\\User', ?)
     ");
     $stmt->execute([$role_id, $customer_id]);
-    error_log("API CREATE CUSTOMER - Rol asignado");
-    
+
     // 3. Vincular con asesoría
     $stmt = $pdo->prepare("
         INSERT INTO customers_advisories (customer_id, advisory_id, client_type, client_subtype, created_at)
         VALUES (?, ?, ?, ?, NOW())
     ");
     $stmt->execute([$customer_id, $advisory_id, $client_type, $subtype]);
-    error_log("API CREATE CUSTOMER - Vinculado con asesoría");
-    
+
     $pdo->commit();
-    error_log("API CREATE CUSTOMER - Transacción completada");
-    
+
     // Obtener nombre de la asesoría
     $query = "SELECT razon_social FROM advisories WHERE id = :advisory_id";
     $stmt = $pdo->prepare($query);
     $stmt->bindValue(":advisory_id", $advisory['id']);
     $stmt->execute();
     $advisory_info = $stmt->fetch();
-    
+
     $advisory_name = $advisory_info ? $advisory_info['razon_social'] : 'Tu asesoría';
-    
+
     // Envío del email con el enlace de activación
     $data = [
         'name' => $name,
         'token' => $verification_token,
         'advisory_name' => $advisory_name
     ];
-    
-    error_log("API CREATE CUSTOMER - Preparando email");
-    
+
     ob_start();
     require(ROOT_DIR . "/email-templates/customer-activation.php");
     $body = ob_get_clean();
-    
+
     $subject = "Activa tu cuenta de Facilítame";
     send_mail($email, $name, $subject, $body, 8844552211);
-    
-    error_log("API CREATE CUSTOMER - Email enviado, devolviendo respuesta OK");
-    
+
     json_response('ok', 'Cliente creado correctamente. Se ha enviado un email de activación.', 200, [
         'customer_id' => $customer_id
     ]);
-    
+
 } catch (Exception $e) {
     $pdo->rollBack();
-    error_log("API CREATE CUSTOMER - ERROR: " . $e->getMessage());
     json_response('error', 'Error al crear el cliente: ' . $e->getMessage(), 500);
 }

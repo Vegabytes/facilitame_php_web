@@ -8,6 +8,10 @@ Allow: /login
 Allow: /sign-up
 Allow: /recovery
 Allow: /landing
+Allow: /terms
+Allow: /legal
+Allow: /privacy
+Allow: /cookies
 
 # Bloquear áreas privadas y técnicas
 Disallow: /api/
@@ -17,6 +21,10 @@ Disallow: /vendor/
 Disallow: /tests/
 Disallow: /uploads/
 Disallow: /documents/
+Disallow: /partials/
+Disallow: /components/
+Disallow: /temp/
+Disallow: /assets/
 Disallow: /home
 Disallow: /request
 Disallow: /customer
@@ -26,6 +34,9 @@ Disallow: /commissions
 Disallow: /appointments
 Disallow: /communications
 Disallow: /invoices
+Disallow: /profile
+Disallow: /appointment
+Disallow: /chat
 
-# Sitemap (descomentar cuando exista)
-# Sitemap: https://app.facilitame.es/sitemap.xml
+# Sitemap
+Sitemap: https://app.facilitame.es/sitemap.xml

@@ -3,19 +3,19 @@
     <!-- Páginas públicas -->
     <url>
         <loc>https://app.facilitame.es/login</loc>
-        <lastmod>2025-01-01</lastmod>
+        <lastmod>2025-12-10</lastmod>
         <changefreq>monthly</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
         <loc>https://app.facilitame.es/sign-up</loc>
-        <lastmod>2025-01-01</lastmod>
+        <lastmod>2025-12-10</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
         <loc>https://app.facilitame.es/recovery</loc>
-        <lastmod>2025-01-01</lastmod>
+        <lastmod>2025-12-10</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.5</priority>
     </url>
@@ -23,25 +23,25 @@
     <!-- Páginas legales -->
     <url>
         <loc>https://app.facilitame.es/terms</loc>
-        <lastmod>2025-01-01</lastmod>
+        <lastmod>2025-12-10</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
         <loc>https://app.facilitame.es/legal</loc>
-        <lastmod>2025-01-01</lastmod>
+        <lastmod>2025-12-10</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
         <loc>https://app.facilitame.es/privacy</loc>
-        <lastmod>2025-01-01</lastmod>
+        <lastmod>2025-12-10</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
         <loc>https://app.facilitame.es/cookies</loc>
-        <lastmod>2025-01-01</lastmod>
+        <lastmod>2025-12-10</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>

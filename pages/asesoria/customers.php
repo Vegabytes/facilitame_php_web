@@ -242,7 +242,7 @@ function copyLink() {
                     '</div>' +
                 '</div>' +
                 '<div class="list-card-actions">' +
-                    '<a href="/customer?id=' + client.id + '" class="btn-icon" title="Ver perfil"><i class="ki-outline ki-eye"></i></a>' +
+                    '<a href="/customer?id=' + client.id + '" class="btn-icon btn-icon-info" title="Ver perfil"><i class="ki-outline ki-eye"></i></a>' +
                 '</div>' +
             '</div>';
         });

@@ -411,7 +411,7 @@ $tagLabels = [
                     '</div>' +
                 '</div>' +
                 '<div class="list-card-actions">' +
-                    '<a href="/api/file-download?type=advisory_invoice&id=' + inv.id + '" target="_blank" class="btn-icon" title="Ver"><i class="ki-outline ki-eye"></i></a>' +
+                    '<a href="/api/file-download?type=advisory_invoice&id=' + inv.id + '" target="_blank" class="btn-icon btn-icon-info" title="Ver"><i class="ki-outline ki-eye"></i></a>' +
                     (!inv.is_processed 
                         ? '<button type="button" class="btn-icon btn-icon-success btn-mark-processed" data-id="' + inv.id + '" title="Marcar procesada"><i class="ki-outline ki-check"></i></button>'
                         : '') +

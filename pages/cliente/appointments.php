@@ -664,7 +664,7 @@ if ($customer_advisory_id) {
             if (needsAction) {
                 actions += '<button class="btn-icon btn-light-success" onclick="confirmAppointment(' + apt.id + ')" title="Confirmar"><i class="ki-outline ki-check"></i></button>';
             }
-            actions += '<a href="/appointment?id=' + apt.id + '" class="btn-icon" title="Ver detalle"><i class="ki-outline ki-eye"></i></a>';
+            actions += '<a href="/appointment?id=' + apt.id + '" class="btn-icon btn-icon-info" title="Ver detalle"><i class="ki-outline ki-eye"></i></a>';
             if (apt.status === 'solicitado' || apt.status === 'agendado') {
                 actions += '<button class="btn-icon btn-light-warning" onclick="openChangeModal(' + apt.id + ')" title="Solicitar cambio"><i class="ki-outline ki-pencil"></i></button>';
             }

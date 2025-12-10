@@ -1,0 +1,889 @@
+/* ============================================
+   BOTONES - ESTILOS UNIFICADOS
+   Sistema coherente de botones para Facilitame
+   ============================================ */
+
+/* ===================================
+   1. VARIABLES DE COLORES
+   =================================== */
+:root {
+    /* Colores principales */
+    --btn-primary: #00c2cb;
+    --btn-primary-hover: #00a3ab;
+    --btn-primary-light: rgba(0, 194, 203, 0.1);
+    --btn-primary-light-hover: rgba(0, 194, 203, 0.18);
+
+    --btn-success: #16a34a;
+    --btn-success-hover: #15803d;
+    --btn-success-light: rgba(22, 163, 74, 0.1);
+    --btn-success-light-hover: rgba(22, 163, 74, 0.18);
+
+    --btn-danger: #ef4444;
+    --btn-danger-hover: #dc2626;
+    --btn-danger-light: rgba(239, 68, 68, 0.1);
+    --btn-danger-light-hover: rgba(239, 68, 68, 0.18);
+
+    --btn-warning: #f59e0b;
+    --btn-warning-hover: #d97706;
+    --btn-warning-light: rgba(245, 158, 11, 0.1);
+    --btn-warning-light-hover: rgba(245, 158, 11, 0.18);
+
+    --btn-info: #0ea5e9;
+    --btn-info-hover: #0284c7;
+    --btn-info-light: rgba(14, 165, 233, 0.1);
+    --btn-info-light-hover: rgba(14, 165, 233, 0.18);
+
+    --btn-muted: #64748b;
+    --btn-muted-hover: #475569;
+    --btn-muted-light: rgba(100, 116, 139, 0.1);
+    --btn-muted-light-hover: rgba(100, 116, 139, 0.18);
+}
+
+/* ===================================
+   2. BOTÓN ICONO BASE
+   =================================== */
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-icon i {
+    font-size: 1.125rem;
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.btn-icon:focus {
+    outline: none;
+}
+
+.btn-icon:focus-visible {
+    box-shadow: 0 0 0 2px var(--btn-primary);
+}
+
+/* Tamaños */
+.btn-icon-sm {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 6px;
+}
+
+.btn-icon-sm i {
+    font-size: 0.9375rem;
+}
+
+.btn-icon-lg {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 10px;
+}
+
+.btn-icon-lg i {
+    font-size: 1.375rem;
+}
+
+/* ===================================
+   3. BOTONES LIGHT (Fondo claro, hover intensifica)
+   El hover intensifica el fondo, NO cambia a sólido
+   =================================== */
+
+/* Primary */
+.btn-light-primary {
+    background: var(--btn-primary-light) !important;
+    color: var(--btn-primary) !important;
+}
+
+.btn-light-primary i {
+    color: var(--btn-primary) !important;
+}
+
+.btn-light-primary:hover {
+    background: var(--btn-primary-light-hover) !important;
+    transform: translateY(-1px);
+}
+
+.btn-light-primary:hover i {
+    color: var(--btn-primary) !important;
+}
+
+/* Success */
+.btn-light-success {
+    background: var(--btn-success-light) !important;
+    color: var(--btn-success) !important;
+}
+
+.btn-light-success i {
+    color: var(--btn-success) !important;
+}
+
+.btn-light-success:hover {
+    background: var(--btn-success-light-hover) !important;
+    transform: translateY(-1px);
+}
+
+.btn-light-success:hover i {
+    color: var(--btn-success) !important;
+}
+
+/* Danger */
+.btn-light-danger {
+    background: var(--btn-danger-light) !important;
+    color: var(--btn-danger) !important;
+}
+
+.btn-light-danger i {
+    color: var(--btn-danger) !important;
+}
+
+.btn-light-danger:hover {
+    background: var(--btn-danger-light-hover) !important;
+    transform: translateY(-1px);
+}
+
+.btn-light-danger:hover i {
+    color: var(--btn-danger) !important;
+}
+
+/* Warning */
+.btn-light-warning {
+    background: var(--btn-warning-light) !important;
+    color: var(--btn-warning) !important;
+}
+
+.btn-light-warning i {
+    color: var(--btn-warning) !important;
+}
+
+.btn-light-warning:hover {
+    background: var(--btn-warning-light-hover) !important;
+    transform: translateY(-1px);
+}
+
+.btn-light-warning:hover i {
+    color: var(--btn-warning) !important;
+}
+
+/* Info */
+.btn-light-info {
+    background: var(--btn-info-light) !important;
+    color: var(--btn-info) !important;
+}
+
+.btn-light-info i {
+    color: var(--btn-info) !important;
+}
+
+.btn-light-info:hover {
+    background: var(--btn-info-light-hover) !important;
+    transform: translateY(-1px);
+}
+
+.btn-light-info:hover i {
+    color: var(--btn-info) !important;
+}
+
+/* Muted */
+.btn-light-muted {
+    background: var(--btn-muted-light) !important;
+    color: var(--btn-muted) !important;
+}
+
+.btn-light-muted i {
+    color: var(--btn-muted) !important;
+}
+
+.btn-light-muted:hover {
+    background: var(--btn-muted-light-hover) !important;
+    transform: translateY(-1px);
+}
+
+.btn-light-muted:hover i {
+    color: var(--btn-muted) !important;
+}
+
+/* ===================================
+   4. BOTONES SÓLIDOS (Fondo color, texto blanco)
+   =================================== */
+
+/* Primary */
+.btn-solid-primary {
+    background: var(--btn-primary) !important;
+    color: #fff !important;
+}
+
+.btn-solid-primary i {
+    color: #fff !important;
+}
+
+.btn-solid-primary:hover {
+    background: var(--btn-primary-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 194, 203, 0.3);
+}
+
+/* Success */
+.btn-solid-success {
+    background: var(--btn-success) !important;
+    color: #fff !important;
+}
+
+.btn-solid-success i {
+    color: #fff !important;
+}
+
+.btn-solid-success:hover {
+    background: var(--btn-success-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+}
+
+/* Danger */
+.btn-solid-danger {
+    background: var(--btn-danger) !important;
+    color: #fff !important;
+}
+
+.btn-solid-danger i {
+    color: #fff !important;
+}
+
+.btn-solid-danger:hover {
+    background: var(--btn-danger-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* Warning */
+.btn-solid-warning {
+    background: var(--btn-warning) !important;
+    color: #fff !important;
+}
+
+.btn-solid-warning i {
+    color: #fff !important;
+}
+
+.btn-solid-warning:hover {
+    background: var(--btn-warning-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+/* Info */
+.btn-solid-info {
+    background: var(--btn-info) !important;
+    color: #fff !important;
+}
+
+.btn-solid-info i {
+    color: #fff !important;
+}
+
+.btn-solid-info:hover {
+    background: var(--btn-info-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+/* ===================================
+   5. BOTONES OUTLINE
+   =================================== */
+
+/* Primary */
+.btn-outline-primary {
+    background: transparent !important;
+    border: 2px solid var(--btn-primary) !important;
+    color: var(--btn-primary) !important;
+}
+
+.btn-outline-primary i {
+    color: var(--btn-primary) !important;
+}
+
+.btn-outline-primary:hover {
+    background: var(--btn-primary) !important;
+    color: #fff !important;
+}
+
+.btn-outline-primary:hover i {
+    color: #fff !important;
+}
+
+/* Success */
+.btn-outline-success {
+    background: transparent !important;
+    border: 2px solid var(--btn-success) !important;
+    color: var(--btn-success) !important;
+}
+
+.btn-outline-success i {
+    color: var(--btn-success) !important;
+}
+
+.btn-outline-success:hover {
+    background: var(--btn-success) !important;
+    color: #fff !important;
+}
+
+.btn-outline-success:hover i {
+    color: #fff !important;
+}
+
+/* Danger */
+.btn-outline-danger {
+    background: transparent !important;
+    border: 2px solid var(--btn-danger) !important;
+    color: var(--btn-danger) !important;
+}
+
+.btn-outline-danger i {
+    color: var(--btn-danger) !important;
+}
+
+.btn-outline-danger:hover {
+    background: var(--btn-danger) !important;
+    color: #fff !important;
+}
+
+.btn-outline-danger:hover i {
+    color: #fff !important;
+}
+
+/* ===================================
+   6. BOTONES GHOST (Sin fondo, hover muestra fondo light)
+   =================================== */
+
+.btn-ghost {
+    background: transparent !important;
+    color: var(--btn-muted) !important;
+}
+
+.btn-ghost i {
+    color: var(--btn-muted) !important;
+}
+
+.btn-ghost:hover {
+    background: var(--btn-muted-light) !important;
+    color: var(--btn-muted) !important;
+}
+
+/* Ghost Primary */
+.btn-ghost-primary {
+    background: transparent !important;
+    color: var(--btn-primary) !important;
+}
+
+.btn-ghost-primary i {
+    color: var(--btn-primary) !important;
+}
+
+.btn-ghost-primary:hover {
+    background: var(--btn-primary-light) !important;
+}
+
+/* Ghost Danger */
+.btn-ghost-danger {
+    background: transparent !important;
+    color: var(--btn-muted) !important;
+}
+
+.btn-ghost-danger i {
+    color: var(--btn-muted) !important;
+}
+
+.btn-ghost-danger:hover {
+    background: var(--btn-danger-light) !important;
+    color: var(--btn-danger) !important;
+}
+
+.btn-ghost-danger:hover i {
+    color: var(--btn-danger) !important;
+}
+
+/* ===================================
+   7. BOTONES DE ACCIÓN (Con texto)
+   =================================== */
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.btn-action i {
+    font-size: 1rem;
+}
+
+.btn-action:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Action Primary */
+.btn-action-primary {
+    background: var(--btn-primary);
+    color: #fff;
+}
+
+.btn-action-primary:hover:not(:disabled) {
+    background: var(--btn-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 194, 203, 0.25);
+}
+
+/* Action Success */
+.btn-action-success {
+    background: var(--btn-success);
+    color: #fff;
+}
+
+.btn-action-success:hover:not(:disabled) {
+    background: var(--btn-success-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);
+}
+
+/* Action Danger */
+.btn-action-danger {
+    background: var(--btn-danger);
+    color: #fff;
+}
+
+.btn-action-danger:hover:not(:disabled) {
+    background: var(--btn-danger-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+
+/* Action Light */
+.btn-action-light {
+    background: #f1f5f9;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+}
+
+.btn-action-light:hover:not(:disabled) {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+/* Action Light Primary */
+.btn-action-light-primary {
+    background: var(--btn-primary-light);
+    color: var(--btn-primary);
+}
+
+.btn-action-light-primary:hover:not(:disabled) {
+    background: var(--btn-primary-light-hover);
+    transform: translateY(-1px);
+}
+
+/* ===================================
+   8. ICON WRAPPERS (Para iconos decorativos)
+   =================================== */
+.icon-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.icon-wrapper i {
+    line-height: 1;
+}
+
+/* Tamaños */
+.icon-wrapper-sm {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    border-radius: 8px;
+}
+
+.icon-wrapper-sm i {
+    font-size: 1rem;
+}
+
+.icon-wrapper-md {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+}
+
+.icon-wrapper-md i {
+    font-size: 1.25rem;
+}
+
+.icon-wrapper-lg {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    border-radius: 12px;
+}
+
+.icon-wrapper-lg i {
+    font-size: 1.5rem;
+}
+
+/* Colores */
+.icon-wrapper-primary {
+    background: var(--btn-primary-light);
+    color: var(--btn-primary);
+}
+
+.icon-wrapper-primary i {
+    color: var(--btn-primary);
+}
+
+.icon-wrapper-success {
+    background: var(--btn-success-light);
+    color: var(--btn-success);
+}
+
+.icon-wrapper-success i {
+    color: var(--btn-success);
+}
+
+.icon-wrapper-danger {
+    background: var(--btn-danger-light);
+    color: var(--btn-danger);
+}
+
+.icon-wrapper-danger i {
+    color: var(--btn-danger);
+}
+
+.icon-wrapper-warning {
+    background: var(--btn-warning-light);
+    color: var(--btn-warning);
+}
+
+.icon-wrapper-warning i {
+    color: var(--btn-warning);
+}
+
+.icon-wrapper-info {
+    background: var(--btn-info-light);
+    color: var(--btn-info);
+}
+
+.icon-wrapper-info i {
+    color: var(--btn-info);
+}
+
+.icon-wrapper-muted {
+    background: var(--btn-muted-light);
+    color: var(--btn-muted);
+}
+
+.icon-wrapper-muted i {
+    color: var(--btn-muted);
+}
+
+/* Gradientes (para iconos destacados) */
+.icon-wrapper-gradient-primary {
+    background: linear-gradient(135deg, var(--btn-primary) 0%, #00a8b0 100%);
+    color: #fff;
+}
+
+.icon-wrapper-gradient-primary i {
+    color: #fff;
+}
+
+.icon-wrapper-gradient-success {
+    background: linear-gradient(135deg, var(--btn-success) 0%, #15803d 100%);
+    color: #fff;
+}
+
+.icon-wrapper-gradient-success i {
+    color: #fff;
+}
+
+.icon-wrapper-gradient-danger {
+    background: linear-gradient(135deg, var(--btn-danger) 0%, #dc2626 100%);
+    color: #fff;
+}
+
+.icon-wrapper-gradient-danger i {
+    color: #fff;
+}
+
+.icon-wrapper-gradient-warning {
+    background: linear-gradient(135deg, var(--btn-warning) 0%, #d97706 100%);
+    color: #fff;
+}
+
+.icon-wrapper-gradient-warning i {
+    color: #fff;
+}
+
+/* ===================================
+   9. BTN-ICON VARIANTES DE COLOR
+   Alias para combinar btn-icon con colores
+   =================================== */
+
+/* Primary */
+.btn-icon.btn-icon-primary,
+.btn-icon-primary {
+    background: var(--btn-primary-light) !important;
+    color: var(--btn-primary) !important;
+}
+
+.btn-icon.btn-icon-primary i,
+.btn-icon-primary i {
+    color: var(--btn-primary) !important;
+}
+
+.btn-icon.btn-icon-primary:hover,
+.btn-icon-primary:hover {
+    background: var(--btn-primary-light-hover) !important;
+    transform: translateY(-1px);
+}
+
+/* Success */
+.btn-icon.btn-icon-success,
+.btn-icon-success {
+    background: var(--btn-success-light) !important;
+    color: var(--btn-success) !important;
+}
+
+.btn-icon.btn-icon-success i,
+.btn-icon-success i {
+    color: var(--btn-success) !important;
+}
+
+.btn-icon.btn-icon-success:hover,
+.btn-icon-success:hover {
+    background: var(--btn-success-light-hover) !important;
+    transform: translateY(-1px);
+}
+
+/* Danger */
+.btn-icon.btn-icon-danger,
+.btn-icon-danger {
+    background: var(--btn-danger-light) !important;
+    color: var(--btn-danger) !important;
+}
+
+.btn-icon.btn-icon-danger i,
+.btn-icon-danger i {
+    color: var(--btn-danger) !important;
+}
+
+.btn-icon.btn-icon-danger:hover,
+.btn-icon-danger:hover {
+    background: var(--btn-danger-light-hover) !important;
+    transform: translateY(-1px);
+}
+
+/* Warning */
+.btn-icon.btn-icon-warning,
+.btn-icon-warning {
+    background: var(--btn-warning-light) !important;
+    color: var(--btn-warning) !important;
+}
+
+.btn-icon.btn-icon-warning i,
+.btn-icon-warning i {
+    color: var(--btn-warning) !important;
+}
+
+.btn-icon.btn-icon-warning:hover,
+.btn-icon-warning:hover {
+    background: var(--btn-warning-light-hover) !important;
+    transform: translateY(-1px);
+}
+
+/* Info */
+.btn-icon.btn-icon-info,
+.btn-icon-info {
+    background: var(--btn-info-light) !important;
+    color: var(--btn-info) !important;
+}
+
+.btn-icon.btn-icon-info i,
+.btn-icon-info i {
+    color: var(--btn-info) !important;
+}
+
+.btn-icon.btn-icon-info:hover,
+.btn-icon-info:hover {
+    background: var(--btn-info-light-hover) !important;
+    transform: translateY(-1px);
+}
+
+/* Muted */
+.btn-icon.btn-icon-muted,
+.btn-icon-muted {
+    background: var(--btn-muted-light) !important;
+    color: var(--btn-muted) !important;
+}
+
+.btn-icon.btn-icon-muted i,
+.btn-icon-muted i {
+    color: var(--btn-muted) !important;
+}
+
+.btn-icon.btn-icon-muted:hover,
+.btn-icon-muted:hover {
+    background: var(--btn-muted-light-hover) !important;
+    transform: translateY(-1px);
+}
+
+/* Tamaño pequeño con colores */
+.btn-icon-sm.btn-icon-primary,
+.btn-icon-sm.btn-icon-success,
+.btn-icon-sm.btn-icon-danger,
+.btn-icon-sm.btn-icon-warning,
+.btn-icon-sm.btn-icon-info,
+.btn-icon-sm.btn-icon-muted {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 6px;
+}
+
+/* ===================================
+   10. LOADING STATE
+   =================================== */
+.btn-loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.btn-loading .btn-text {
+    visibility: hidden;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-top: -8px;
+    margin-left: -8px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: btn-spin 0.6s linear infinite;
+}
+
+@keyframes btn-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ===================================
+   10. DISABLED STATE
+   =================================== */
+.btn-icon:disabled,
+.btn-action:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ===================================
+   11. RESPONSIVE
+   =================================== */
+@media (max-width: 576px) {
+    .btn-action {
+        padding: 0.5rem 0.875rem;
+        font-size: 0.8125rem;
+    }
+
+    .btn-action i {
+        font-size: 0.9375rem;
+    }
+}
+
+/* ===================================
+   12. OVERRIDES - Corrige dashboard-common.css
+   El hover debe MANTENER el color coherente, no cambiar a sólido
+   =================================== */
+
+/* Override para que btn-light-* dentro de list-card-actions
+   mantenga el hover coherente (no cambie a color sólido) */
+#facilita-app .list-card-actions .btn-light-primary:hover,
+.request-page .list-card-actions .btn-light-primary:hover {
+    background: var(--btn-primary-light-hover) !important;
+    color: var(--btn-primary) !important;
+    transform: translateY(-1px);
+}
+
+#facilita-app .list-card-actions .btn-light-primary:hover i,
+.request-page .list-card-actions .btn-light-primary:hover i {
+    color: var(--btn-primary) !important;
+}
+
+#facilita-app .list-card-actions .btn-light-success:hover,
+.request-page .list-card-actions .btn-light-success:hover {
+    background: var(--btn-success-light-hover) !important;
+    color: var(--btn-success) !important;
+    transform: translateY(-1px);
+}
+
+#facilita-app .list-card-actions .btn-light-success:hover i,
+.request-page .list-card-actions .btn-light-success:hover i {
+    color: var(--btn-success) !important;
+}
+
+#facilita-app .list-card-actions .btn-light-danger:hover,
+.request-page .list-card-actions .btn-light-danger:hover {
+    background: var(--btn-danger-light-hover) !important;
+    color: var(--btn-danger) !important;
+    transform: translateY(-1px);
+}
+
+#facilita-app .list-card-actions .btn-light-danger:hover i,
+.request-page .list-card-actions .btn-light-danger:hover i {
+    color: var(--btn-danger) !important;
+}
+
+#facilita-app .list-card-actions .btn-light-warning:hover,
+.request-page .list-card-actions .btn-light-warning:hover {
+    background: var(--btn-warning-light-hover) !important;
+    color: var(--btn-warning) !important;
+    transform: translateY(-1px);
+}
+
+#facilita-app .list-card-actions .btn-light-warning:hover i,
+.request-page .list-card-actions .btn-light-warning:hover i {
+    color: var(--btn-warning) !important;
+}
+
+#facilita-app .list-card-actions .btn-light-info:hover,
+.request-page .list-card-actions .btn-light-info:hover {
+    background: var(--btn-info-light-hover) !important;
+    color: var(--btn-info) !important;
+    transform: translateY(-1px);
+}
+
+#facilita-app .list-card-actions .btn-light-info:hover i,
+.request-page .list-card-actions .btn-light-info:hover i {
+    color: var(--btn-info) !important;
+}
