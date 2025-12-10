@@ -1241,18 +1241,18 @@ function get_notifications($limit = 20)
         $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
     } else {
         $user_id = USER["id"];
-        
+
         // Fast unread count
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM notifications WHERE receiver_id = ? AND status = 0");
         $stmt->execute([$user_id]);
         $unread_count = (int)$stmt->fetchColumn();
-        
-        // Limited notifications
+
+        // Limited notifications (incluir sender_id para navegación en asesoria)
         $order = IS_MOBILE_APP ? "created_at DESC" : "status ASC, created_at DESC";
-        $stmt = $pdo->prepare("SELECT id, request_id, description, status, created_at 
-            FROM notifications 
-            WHERE receiver_id = ? 
-            ORDER BY $order 
+        $stmt = $pdo->prepare("SELECT id, request_id, sender_id, description, status, created_at
+            FROM notifications
+            WHERE receiver_id = ?
+            ORDER BY $order
             LIMIT " . (int)$limit);
         $stmt->execute([$user_id]);
         $res = $stmt->fetchAll(PDO::FETCH_ASSOC);

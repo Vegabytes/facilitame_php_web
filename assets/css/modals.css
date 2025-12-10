@@ -1,0 +1,577 @@
+/* ============================================
+   MODALES - ESTILOS UNIFICADOS
+   Estilo consistente para todos los modales de Facilitame
+   ============================================ */
+
+/* ===================================
+   1. BASE MODAL STYLES
+   =================================== */
+.modal {
+    --f-modal-radius: 16px;
+    --f-modal-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.modal-dialog {
+    margin: 1.75rem auto;
+}
+
+.modal-content {
+    border: none;
+    border-radius: var(--f-modal-radius);
+    box-shadow: var(--f-modal-shadow);
+    overflow: hidden;
+}
+
+/* ===================================
+   2. MODAL HEADER
+   =================================== */
+.modal-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--f-border, #e5e7eb);
+    background: var(--f-bg-light, #f8fafc);
+}
+
+.modal-header .modal-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--f-text-dark, #1e293b);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.modal-header .btn-close {
+    padding: 0.5rem;
+    margin: -0.5rem -0.5rem -0.5rem auto;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+
+.modal-header .btn-close:hover {
+    opacity: 1;
+}
+
+/* Header con gradiente (para modales destacados) */
+.modal-header-gradient {
+    background: linear-gradient(135deg, var(--f-primary, #00c2cb) 0%, #00a8b0 100%) !important;
+    border-bottom: none !important;
+    padding: 1.5rem !important;
+}
+
+.modal-header-gradient .modal-title {
+    color: #fff;
+}
+
+.modal-header-gradient .btn-close {
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+}
+
+.modal-header-gradient .btn-close:hover {
+    opacity: 1;
+}
+
+/* ===================================
+   3. MODAL BODY
+   =================================== */
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-body-compact {
+    padding: 1.25rem;
+}
+
+.modal-body-spacious {
+    padding: 2rem;
+}
+
+/* ===================================
+   4. MODAL FOOTER
+   =================================== */
+.modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--f-border, #e5e7eb);
+    background: var(--f-bg-light, #f8fafc);
+}
+
+.modal-footer-between {
+    justify-content: space-between;
+}
+
+.modal-footer-center {
+    justify-content: center;
+}
+
+/* ===================================
+   5. MODAL ICON WRAPPER
+   =================================== */
+.modal-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.modal-icon-wrapper i {
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.modal-icon-primary {
+    background: linear-gradient(135deg, var(--f-primary, #00c2cb) 0%, #00a8b0 100%);
+}
+
+.modal-icon-success {
+    background: linear-gradient(135deg, var(--f-success, #16a34a) 0%, #15803d 100%);
+}
+
+.modal-icon-warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.modal-icon-danger {
+    background: linear-gradient(135deg, var(--f-danger, #ef4444) 0%, #dc2626 100%);
+}
+
+.modal-icon-info {
+    background: linear-gradient(135deg, var(--f-info, #0ea5e9) 0%, #0284c7 100%);
+}
+
+/* ===================================
+   6. HEADER CON ICONO Y TEXTO
+   =================================== */
+.modal-header-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.modal-header-text {
+    flex: 1;
+}
+
+.modal-header-text .modal-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem;
+}
+
+.modal-header-text .modal-subtitle {
+    font-size: 0.875rem;
+    color: var(--f-text-medium, #64748b);
+    margin: 0;
+}
+
+.modal-header-gradient .modal-header-text .modal-title {
+    color: #fff;
+}
+
+.modal-header-gradient .modal-header-text .modal-subtitle {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* ===================================
+   7. FORM STYLES DENTRO DE MODALES
+   =================================== */
+.modal .form-group {
+    margin-bottom: 1rem;
+}
+
+.modal .form-group:last-child {
+    margin-bottom: 0;
+}
+
+.modal .form-label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--f-text-dark, #1e293b);
+    margin-bottom: 0.5rem;
+}
+
+.modal .form-label-required::after {
+    content: '*';
+    color: var(--f-danger, #ef4444);
+    margin-left: 0.25rem;
+}
+
+.modal .form-control,
+.modal .form-select {
+    width: 100%;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    border: 1px solid var(--f-border, #e5e7eb);
+    border-radius: 8px;
+    background-color: #fff;
+    transition: all 0.2s ease;
+}
+
+.modal .form-control:focus,
+.modal .form-select:focus {
+    border-color: var(--f-primary, #00c2cb);
+    box-shadow: 0 0 0 3px rgba(0, 194, 203, 0.15);
+    outline: none;
+}
+
+.modal .form-control.is-invalid,
+.modal .form-select.is-invalid {
+    border-color: var(--f-danger, #ef4444);
+}
+
+.modal .form-control.is-invalid:focus,
+.modal .form-select.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.modal textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.modal .form-hint {
+    font-size: 0.75rem;
+    color: var(--f-text-light, #94a3b8);
+    margin-top: 0.375rem;
+}
+
+.modal .form-error {
+    font-size: 0.75rem;
+    color: var(--f-danger, #ef4444);
+    margin-top: 0.375rem;
+}
+
+/* ===================================
+   8. INFO BOXES DENTRO DE MODALES
+   =================================== */
+.modal-info-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.modal-info-box:last-child {
+    margin-bottom: 0;
+}
+
+.modal-info-box-primary {
+    background: rgba(0, 194, 203, 0.08);
+    border: 1px solid rgba(0, 194, 203, 0.2);
+}
+
+.modal-info-box-warning {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.modal-info-box-danger {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.modal-info-box-success {
+    background: rgba(22, 163, 74, 0.08);
+    border: 1px solid rgba(22, 163, 74, 0.2);
+}
+
+.modal-info-icon {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.modal-info-icon i {
+    font-size: 1.125rem;
+}
+
+.modal-info-box-primary .modal-info-icon {
+    background: rgba(0, 194, 203, 0.15);
+}
+
+.modal-info-box-primary .modal-info-icon i {
+    color: var(--f-primary, #00c2cb);
+}
+
+.modal-info-box-warning .modal-info-icon {
+    background: rgba(245, 158, 11, 0.15);
+}
+
+.modal-info-box-warning .modal-info-icon i {
+    color: #f59e0b;
+}
+
+.modal-info-box-danger .modal-info-icon {
+    background: rgba(239, 68, 68, 0.15);
+}
+
+.modal-info-box-danger .modal-info-icon i {
+    color: var(--f-danger, #ef4444);
+}
+
+.modal-info-box-success .modal-info-icon {
+    background: rgba(22, 163, 74, 0.15);
+}
+
+.modal-info-box-success .modal-info-icon i {
+    color: var(--f-success, #16a34a);
+}
+
+.modal-info-content {
+    flex: 1;
+}
+
+.modal-info-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--f-text-dark, #1e293b);
+    margin-bottom: 0.25rem;
+}
+
+.modal-info-text {
+    font-size: 0.8125rem;
+    color: var(--f-text-medium, #64748b);
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* ===================================
+   9. BOTONES PARA MODALES
+   =================================== */
+.modal .btn-modal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal .btn-modal:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.modal .btn-modal-primary {
+    background: var(--f-primary, #00c2cb);
+    color: #fff;
+}
+
+.modal .btn-modal-primary:hover:not(:disabled) {
+    background: var(--f-primary-dark, #00a3ab);
+    transform: translateY(-1px);
+}
+
+.modal .btn-modal-success {
+    background: var(--f-success, #16a34a);
+    color: #fff;
+}
+
+.modal .btn-modal-success:hover:not(:disabled) {
+    background: #15803d;
+    transform: translateY(-1px);
+}
+
+.modal .btn-modal-danger {
+    background: var(--f-danger, #ef4444);
+    color: #fff;
+}
+
+.modal .btn-modal-danger:hover:not(:disabled) {
+    background: #dc2626;
+    transform: translateY(-1px);
+}
+
+.modal .btn-modal-light {
+    background: var(--f-bg-light, #f8fafc);
+    color: var(--f-text-medium, #64748b);
+    border: 1px solid var(--f-border, #e5e7eb);
+}
+
+.modal .btn-modal-light:hover:not(:disabled) {
+    background: var(--f-border, #e5e7eb);
+    color: var(--f-text-dark, #1e293b);
+}
+
+/* ===================================
+   10. LOADING STATE
+   =================================== */
+.modal .btn-modal.loading {
+    pointer-events: none;
+}
+
+.modal .btn-modal.loading .btn-text {
+    visibility: hidden;
+}
+
+.modal .btn-modal.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ===================================
+   11. MODAL SIZES
+   =================================== */
+.modal-dialog-sm {
+    max-width: 400px;
+}
+
+.modal-dialog-md {
+    max-width: 500px;
+}
+
+.modal-dialog-lg {
+    max-width: 700px;
+}
+
+.modal-dialog-xl {
+    max-width: 900px;
+}
+
+/* ===================================
+   12. BACKDROP
+   =================================== */
+.modal-backdrop {
+    background-color: rgba(15, 23, 42, 0.5);
+}
+
+.modal-backdrop.show {
+    opacity: 1;
+}
+
+/* ===================================
+   13. CONFIRMATION MODAL
+   =================================== */
+.modal-confirm {
+    text-align: center;
+}
+
+.modal-confirm .modal-body {
+    padding: 2rem 1.5rem;
+}
+
+.modal-confirm-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 1.25rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-confirm-icon i {
+    font-size: 2rem;
+    color: #fff;
+}
+
+.modal-confirm-icon-warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.modal-confirm-icon-danger {
+    background: linear-gradient(135deg, var(--f-danger, #ef4444) 0%, #dc2626 100%);
+}
+
+.modal-confirm-icon-success {
+    background: linear-gradient(135deg, var(--f-success, #16a34a) 0%, #15803d 100%);
+}
+
+.modal-confirm-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--f-text-dark, #1e293b);
+    margin-bottom: 0.75rem;
+}
+
+.modal-confirm-text {
+    font-size: 0.9375rem;
+    color: var(--f-text-medium, #64748b);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.modal-confirm .modal-footer {
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* ===================================
+   14. RESPONSIVE
+   =================================== */
+@media (max-width: 576px) {
+    .modal-dialog {
+        margin: 1rem;
+    }
+
+    .modal-header {
+        padding: 1rem;
+    }
+
+    .modal-body {
+        padding: 1rem;
+    }
+
+    .modal-footer {
+        padding: 0.875rem 1rem;
+        flex-wrap: wrap;
+    }
+
+    .modal-footer .btn-modal {
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .modal-icon-wrapper {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+    }
+
+    .modal-icon-wrapper i {
+        font-size: 1.25rem;
+    }
+
+    .modal-confirm-icon {
+        width: 64px;
+        height: 64px;
+    }
+
+    .modal-confirm-icon i {
+        font-size: 1.75rem;
+    }
+}

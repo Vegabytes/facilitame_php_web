@@ -10,7 +10,11 @@
       "Bash(/mnt/c/laragon/bin/mysql/mysql-8.4.3-winx64/bin/mysql.exe:*)",
       "Bash(git init:*)",
       "Bash(git branch:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git config:*)",
+      "Bash(cat:*)",
+      "Bash(git push:*)"
     ]
   }
 }
