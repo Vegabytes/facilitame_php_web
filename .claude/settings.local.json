@@ -35,7 +35,8 @@
       "Bash(/mnt/c/Users/acast/Documents/Facilitame/assets/media/stock )",
       "Bash(/mnt/c/Users/acast/Documents/Facilitame/assets/js/custom/landing.js )",
       "Bash(/mnt/c/Users/acast/Documents/Facilitame/assets/plugins/custom/fslightbox )",
-      "Bash(/mnt/c/Users/acast/Documents/Facilitame/assets/plugins/custom/typedjs )"
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/assets/plugins/custom/typedjs )",
+      "Bash(sort:*)"
     ]
   }
 }

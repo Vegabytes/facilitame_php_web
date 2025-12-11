@@ -40,6 +40,11 @@ $isPublicPage = !isset(USER['role']) || USER['role'] === null;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
+    <!-- Preload críticos -->
+    <link rel="preload" href="/assets/plugins/global/plugins.bundle.css" as="style" />
+    <link rel="preload" href="/assets/css/style_bundle.min.css" as="style" />
+    <link rel="preload" href="/assets/plugins/global/plugins.bundle.js" as="script" />
+
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
 
@@ -59,19 +64,6 @@ $isPublicPage = !isset(USER['role']) || USER['role'] === null;
     <link href="/assets/css/dashboard-common.css?v=<?= $v ?>" rel="stylesheet" />
     <link href="/assets/css/buttons.css?v=<?= $v ?>" rel="stylesheet" />
     <link href="/assets/css/modals.css?v=<?= $v ?>" rel="stylesheet" />
-    <?php
-        $roleCSS = match(true) {
-            admin() => 'admin',
-            cliente() => 'cliente', 
-            proveedor() => 'proveedor',
-            comercial() => 'comercial',
-            asesoria() => 'asesoria',
-            default => null
-        };
-        if ($roleCSS): 
-    ?>
-    <link href="/assets/css/<?= $roleCSS ?>.css?v=<?= $v ?>" rel="stylesheet" />
-    <?php endif; ?>
     <?php endif; ?>
 
     <!-- JSON-LD -->
@@ -144,7 +136,7 @@ $isPublicPage = !isset(USER['role']) || USER['role'] === null;
     <!-- JS -->
     <script>var hostUrl="/assets/";</script>
     <script src="/assets/plugins/global/plugins.bundle.js"></script>
-    <script src="/assets/js/scripts.bundle.js"></script>
+    <script src="/assets/js/scripts.bundle.js" defer></script>
     
     <?php if (!$isPublicPage): ?>
     <script src="/assets/js/bold/_helpers.js?v=<?= $v ?>"></script>
