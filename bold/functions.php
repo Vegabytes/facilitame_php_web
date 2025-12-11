@@ -67,6 +67,8 @@ function controller($target = "")
 {
     if ($target == "") $target = $_SERVER["REDIRECT_URL"];
     $target = str_replace('/api/', '/api-', $target);
+    // Quitar extensión .php si ya la tiene para evitar doble extensión
+    $target = preg_replace('/\.php$/', '', $target);
     require CONTROLLER . $target . ".php";
     return json_encode($info);
 }
