@@ -106,7 +106,7 @@
                                             Autorizado
                                         </span>
                                         <small class="customer-detail-note">
-                                            Desde <?php echo date("d/m/Y", strtotime($customer["allow_invoice_access_granted_at"])); ?>
+                                            Desde <?php echo fdate($customer["allow_invoice_access_granted_at"]); ?>
                                         </small>
                                     <?php else : ?>
                                         <span class="badge-status badge-status-danger">

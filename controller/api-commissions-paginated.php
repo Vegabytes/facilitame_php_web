@@ -85,9 +85,12 @@ try {
         $total_commission = $commission_detail["admin_commission"] + $commission_detail["sales_rep_commission"];
         
         if (intval($total_commission) == 0) continue;
-        
+
         // Filtrar por fecha de activación
-        $activated_date = strtotime($r["active_offer"]["activated_at"]);
+        $activated_at = $r["active_offer"]["activated_at"] ?? null;
+        if (empty($activated_at)) continue;
+
+        $activated_date = strtotime($activated_at);
         $activated_year = intval(date('Y', $activated_date));
         $activated_month = intval(date('m', $activated_date));
         
@@ -112,8 +115,8 @@ try {
             'id' => $r['id'],
             'customer_name' => $r['customer_name'] ?? '',
             'category_display' => $r['category_display'] ?? '',
-            'activated_at' => date("d/m/Y", strtotime($r["active_offer"]["activated_at"])),
-            'expires_at' => date("d/m/Y", strtotime($r["active_offer"]["expires_at"])),
+            'activated_at' => !empty($r["active_offer"]["activated_at"]) ? date("d/m/Y", strtotime($r["active_offer"]["activated_at"])) : '-',
+            'expires_at' => !empty($r["active_offer"]["expires_at"]) ? date("d/m/Y", strtotime($r["active_offer"]["expires_at"])) : '-',
             'total_amount' => $r["active_offer"]["total_amount"] ?? 0,
             'commission_type_id' => $r["active_offer"]["commision_type_id"] ?? null,
             'commission_value' => $r["active_offer"]["commision"] ?? '-',

@@ -598,6 +598,10 @@ background:rgba(239,68,68,.12);
 background:rgba(148,163,184,.12);
     color:var(--f-text-light)}
 
+#facilita-app .badge-status-secondary,.request-page .badge-status-secondary{
+background:rgba(100,116,139,.15);
+    color:#64748b}
+
 #facilita-app .btn-icon,.request-page .btn-icon{
 width:32px;
     height:32px;

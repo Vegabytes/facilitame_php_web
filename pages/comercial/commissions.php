@@ -192,13 +192,14 @@ window.commissionTypes = <?php echo json_encode($commission_types ?? []); ?>;
                 <div class="list-card list-card-success">
                     <div class="list-card-content">
                         <div class="list-card-title">
-                            <span class="fw-semibold">Solicitud #${c.id}</span>
+                            <span class="badge-status badge-status-neutral">#${c.id}</span>
+                            <span class="fw-semibold">Solicitud</span>
                             <span class="badge-status badge-status-primary">${escapeHtml(c.category_display)}</span>
                         </div>
                         <div class="list-card-meta">
                             <span>
                                 <i class="ki-outline ki-profile-user"></i>
-                                ${escapeHtml(c.customer_name)}
+                                <a href="/customer?id=${c.customer_id}" class="text-muted">${escapeHtml(c.customer_name)}</a>
                             </span>
                             <span>
                                 <i class="ki-outline ki-calendar"></i>

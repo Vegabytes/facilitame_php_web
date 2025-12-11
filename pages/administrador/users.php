@@ -36,7 +36,7 @@ $card_variant = (TYPE === "sales-rep") ? "info" : "warning";
                     </select>
                 </div>
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-add-user">
-                    <i class="ki-outline ki-plus me-1"></i>Añadir <?= $type_singular ?>
+                    <i class="ki-outline ki-plus me-1"></i>A帽adir <?= $type_singular ?>
                 </button>
             </div>
         </div>
@@ -53,7 +53,7 @@ $card_variant = (TYPE === "sales-rep") ? "info" : "warning";
         
         <!-- Paginador -->
         <div class="pagination-container" id="users-pagination" style="display: none;">
-            <div class="pagination-info" id="users-page-info">Página 1 de 1</div>
+            <div class="pagination-info" id="users-page-info">P谩gina 1 de 1</div>
             <div class="pagination-nav">
                 <button class="btn-pagination" id="users-prev" disabled>
                     <i class="ki-outline ki-left"></i>
@@ -69,12 +69,12 @@ $card_variant = (TYPE === "sales-rep") ? "info" : "warning";
     
 </div>
 
-<!-- Modal Añadir Usuario -->
+<!-- Modal A帽adir Usuario -->
 <div class="modal fade" id="modal-add-user" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Añadir <?= $type_singular ?></h5>
+                <h5 class="modal-title">A帽adir <?= $type_singular ?></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <form id="form-add-user">
@@ -93,19 +93,19 @@ $card_variant = (TYPE === "sales-rep") ? "info" : "warning";
                             <input type="email" class="form-control" name="email" required>
                         </div>
                         <div class="col-12">
-                            <label class="form-label">Teléfono</label>
+                            <label class="form-label">Tel茅fono</label>
                             <input type="tel" class="form-control" name="phone">
                         </div>
                         <?php if (TYPE === "sales-rep") : ?>
                         <div class="col-12">
-                            <label class="form-label required">Código comercial</label>
+                            <label class="form-label required">C贸digo comercial</label>
                             <input type="text" class="form-control" name="code" required maxlength="10" placeholder="Ej: COM001">
-                            <div class="form-text">Código único para identificar al comercial</div>
+                            <div class="form-text">C贸digo 煤nico para identificar al comercial</div>
                         </div>
                         <?php endif; ?>
                         <div class="col-12">
                             <div class="alert alert-info py-2 mb-0">
-                                <small><i class="ki-outline ki-information-5 me-1"></i>El usuario recibirá un email para establecer su contraseña</small>
+                                <small><i class="ki-outline ki-information-5 me-1"></i>El usuario recibir谩 un email para establecer su contrase帽a</small>
                             </div>
                         </div>
                     </div>
@@ -121,7 +121,7 @@ $card_variant = (TYPE === "sales-rep") ? "info" : "warning";
     </div>
 </div>
 
-<!-- Modal de confirmación eliminar -->
+<!-- Modal de confirmaci贸n eliminar -->
 <div class="modal fade" id="modal-confirm-delete" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered mw-400px">
         <div class="modal-content">
@@ -135,8 +135,8 @@ $card_variant = (TYPE === "sales-rep") ? "info" : "warning";
                             <i class="ki-outline ki-trash fs-2x text-danger"></i>
                         </div>
                     </div>
-                    <h3 class="fw-bold text-gray-900 mb-2">¿Eliminar <?= $type_singular ?>?</h3>
-                    <p class="text-gray-600 mb-0">Se eliminará el usuario y perderá el acceso al sistema.</p>
+                    <h3 class="fw-bold text-gray-900 mb-2">驴Eliminar <?= $type_singular ?>?</h3>
+                    <p class="text-gray-600 mb-0">Se eliminar谩 el usuario y perder谩 el acceso al sistema.</p>
                 </div>
                 <div class="bg-light rounded p-3 mb-5" id="delete-modal-info" style="display: none;">
                     <span class="fw-semibold text-gray-800" id="delete-modal-item-name"></span>
@@ -229,7 +229,7 @@ $card_variant = (TYPE === "sales-rep") ? "info" : "warning";
             }
         } catch (error) {
             console.error('Error:', error);
-            showError('Error de conexión');
+            showError('Error de conexi贸n');
         } finally {
             state.isLoading = false;
         }
@@ -247,7 +247,7 @@ $card_variant = (TYPE === "sales-rep") ? "info" : "warning";
                     <p class="empty-state-text">
                         ${state.searchQuery 
                             ? `No se encontraron resultados para "${escapeHtml(state.searchQuery)}"` 
-                            : 'Los ' + CONFIG.typeLabel + ' registrados aparecerán aquí'}
+                            : 'Los ' + CONFIG.typeLabel + ' registrados aparecer谩n aqu铆'}
                     </p>
                 </div>`;
             paginationContainer.style.display = 'none';
@@ -262,13 +262,13 @@ $card_variant = (TYPE === "sales-rep") ? "info" : "warning";
                 <div class="list-card list-card-${CONFIG.cardVariant}">
                     <div class="list-card-content">
                         <div class="list-card-title">
+                            <span class="badge-status badge-status-neutral">#${user.id}</span>
                             <a href="/user?id=${user.id}" class="list-card-customer">
                                 ${escapeHtml(fullName)}
                             </a>
-                            <span class="badge-status badge-status-${CONFIG.cardVariant}">#${user.id}</span>
-${user.is_active 
-    ? '<span class="badge badge-light-success ms-2">Activo</span>' 
-    : '<span class="badge badge-light-warning ms-2">Pendiente</span>'}
+                            ${user.is_active
+                                ? '<span class="badge badge-light-success">Activo</span>'
+                                : '<span class="badge badge-light-warning">Pendiente</span>'}
                         </div>
                         <div class="list-card-meta">
                             <span>
@@ -305,7 +305,7 @@ ${user.is_active
         listContainer.scrollTop = 0;
     }
     
-    // === Añadir usuario ===
+    // === A帽adir usuario ===
     async function handleAddUser(e) {
         e.preventDefault();
         
@@ -337,7 +337,7 @@ ${user.is_active
                     Swal.fire({
                         icon: 'success',
                         title: 'Usuario creado',
-                        text: result.message || 'Se ha enviado un email de activación',
+                        text: result.message || 'Se ha enviado un email de activaci贸n',
                         toast: true,
                         position: 'top-end',
                         showConfirmButton: false,
@@ -360,7 +360,7 @@ ${user.is_active
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Error de conexión',
+                    text: 'Error de conexi贸n',
                     buttonsStyling: false,
                     customClass: { confirmButton: 'btn btn-primary' }
                 });
@@ -451,7 +451,7 @@ ${user.is_active
     
     function updatePaginationControls() {
         pageCurrent.textContent = `${state.currentPage} / ${state.totalPages}`;
-        pageInfo.textContent = `Página ${state.currentPage} de ${state.totalPages}`;
+        pageInfo.textContent = `P谩gina ${state.currentPage} de ${state.totalPages}`;
         prevBtn.disabled = state.currentPage <= 1;
         nextBtn.disabled = state.currentPage >= state.totalPages;
         paginationContainer.style.display = state.totalRecords > state.pageSize ? 'flex' : 'none';

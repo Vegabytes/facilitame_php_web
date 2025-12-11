@@ -470,12 +470,12 @@ if (!$advisory_id) {
             <div class="list-card" data-customer-id="${c.id}">
                 <div class="list-card-content">
                     <div class="list-card-title">
+                        <span class="badge-status badge-status-neutral">#${c.id}</span>
                         <a href="customer?id=${c.id}" class="list-card-customer">
                             ${escapeHtml(c.name)}
                         </a>
-                        <span class="badge-status badge-status-primary">#${c.id}</span>
-                        ${c.email_verified_at 
-                            ? '<span class="badge-status badge-status-success">Activo</span>' 
+                        ${c.email_verified_at
+                            ? '<span class="badge-status badge-status-success">Activo</span>'
                             : '<span class="badge-status badge-status-warning">Pendiente</span>'}
                     </div>
                     <div class="list-card-meta">
@@ -543,10 +543,10 @@ if (!$advisory_id) {
                 <div class="list-card">
                     <div class="list-card-content">
                         <div class="list-card-title">
-                            <span class="list-card-customer">
-                                <span class="text-muted">#${a.id}</span>
+                            <span class="badge-status badge-status-neutral">#${a.id}</span>
+                            <a href="/customer?id=${a.customer_id}" class="list-card-customer">
                                 ${escapeHtml(a.customer_name)}
-                            </span>
+                            </a>
                             <span class="${statusCfg.class}">${statusCfg.label}</span>
                         </div>
                         <div class="list-card-meta">

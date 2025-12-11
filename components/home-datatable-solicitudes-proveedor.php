@@ -171,7 +171,7 @@
                 <div class="list-card list-card-${statusClass}">
                     <div class="list-card-content">
                         <div class="list-card-title">
-                            <span class="badge badge-light-secondary me-2">#${item.id}</span>
+                            <span class="badge-status badge-status-neutral">#${item.id}</span>
                             <a href="/customer?id=${item.user_id}" class="list-card-customer">
                                 ${escapeHtml(item.customer_full_name || 'Sin nombre')}
                             </a>

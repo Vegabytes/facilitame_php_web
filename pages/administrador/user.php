@@ -1,6 +1,7 @@
 <?php
 $scripts = [
-    "salesrep"
+    "salesrep",
+    "bold-submit"
 ];
 ?>
 

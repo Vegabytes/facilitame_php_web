@@ -227,12 +227,12 @@ function copyLink() {
             html += '<div class="list-card list-card-primary">' +
                 '<div class="list-card-content">' +
                     '<div class="list-card-title">' +
+                        '<span class="badge-status badge-status-neutral">#' + client.id + '</span>' +
                         '<a href="/customer?id=' + client.id + '" class="list-card-customer">' + escapeHtml(fullName) + '</a>' +
                         '<span class="badge-status badge-status-info">' + escapeHtml(roleName) + '</span>' +
-                        '<span class="badge-status badge-status-muted">#' + client.id + '</span>' +
-                        (isVerified 
-                            ? '<span class="badge-status badge-status-success"><i class="ki-outline ki-check"></i> Verificado</span>'
-                            : '<span class="badge-status badge-status-warning"><i class="ki-outline ki-time"></i> Pendiente</span>') +
+                        (isVerified
+                            ? '<span class="badge-status badge-status-success">Verificado</span>'
+                            : '<span class="badge-status badge-status-warning">Pendiente</span>') +
                     '</div>' +
                     '<div class="list-card-meta">' +
                         '<span><i class="ki-outline ki-sms"></i> ' + escapeHtml(client.email) + '</span>' +

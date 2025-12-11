@@ -189,9 +189,9 @@ if ($customer_advisory_id) {
                     <!-- Tipo de cita -->
                     <div class="mb-4">
                         <label class="form-label fw-semibold">Tipo de Cita <span class="text-danger">*</span></label>
-                        <div class="type-selector type-selector-3">
+                        <div class="type-selector type-selector-3" id="type-selector">
                             <label class="type-option type-llamada">
-                                <input type="radio" name="type" value="llamada" required>
+                                <input type="radio" name="type" value="llamada">
                                 <span class="type-content">
                                     <i class="ki-outline ki-phone"></i>
                                     <span>Llamada</span>
@@ -765,11 +765,19 @@ if ($customer_advisory_id) {
     if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+
+            // Validar que se haya seleccionado tipo de cita
+            var typeSelected = form.querySelector('input[name="type"]:checked');
+            if (!typeSelected) {
+                FH.warning('Selecciona un tipo de cita');
+                return;
+            }
+
             var btn = form.querySelector('button[type="submit"]');
             var originalText = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
-            
+
             fetch('/api/customer-request-appointment', {method: 'POST', body: new FormData(form)})
                 .then(function(response) { return response.json(); })
                 .then(function(result) {
@@ -777,19 +785,14 @@ if ($customer_advisory_id) {
                         bootstrap.Modal.getInstance(document.getElementById('modal_request_appointment')).hide();
                         form.reset();
                         window.reloadAppointments();
-                        
-                        if (typeof Swal !== 'undefined') {
-                            Swal.fire({icon: 'success', title: 'Solicitud enviada', text: 'Tu asesoria revisara la fecha propuesta', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000});
-                        }
+                        FH.success('Tu asesoría revisará la fecha propuesta', 'Solicitud enviada');
                         setTimeout(function() { location.reload(); }, 1500);
                     } else {
                         throw new Error(result.message || 'Error');
                     }
                 })
                 .catch(function(error) {
-                    if (typeof Swal !== 'undefined') {
-                        Swal.fire({icon: 'error', title: 'Error', text: error.message});
-                    }
+                    FH.error(error.message);
                 })
                 .finally(function() {
                     btn.disabled = false;
@@ -802,17 +805,15 @@ if ($customer_advisory_id) {
 // Confirmar cita
 window.confirmAppointment = function(id) {
     if (!confirm('Confirmar esta cita con la fecha propuesta?')) return;
-    
+
     var fd = new FormData();
     fd.append('appointment_id', id);
-    
+
     fetch('/api/customer-confirm-appointment', {method: 'POST', body: fd})
         .then(function(response) { return response.json(); })
         .then(function(result) {
             if (result.status === 'ok') {
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({icon: 'success', title: 'Cita confirmada!', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000});
-                }
+                FH.success('Cita confirmada!');
                 window.reloadAppointments();
                 setTimeout(function() { location.reload(); }, 1000);
             } else {
@@ -820,9 +821,7 @@ window.confirmAppointment = function(id) {
             }
         })
         .catch(function(error) {
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({icon: 'error', title: 'Error', text: error.message});
-            }
+            FH.error(error.message);
         });
 };
 
@@ -851,18 +850,14 @@ window.openChangeModal = function(id) {
                 .then(function(result) {
                     if (result.status === 'ok') {
                         bootstrap.Modal.getInstance(document.getElementById('modal_request_change')).hide();
-                        if (typeof Swal !== 'undefined') {
-                            Swal.fire({icon: 'success', title: 'Solicitud enviada', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000});
-                        }
+                        FH.success('Solicitud enviada');
                         setTimeout(function() { window.location.href = '/appointment?id=' + appointmentId; }, 1000);
                     } else {
                         throw new Error(result.message || 'Error');
                     }
                 })
                 .catch(function(error) {
-                    if (typeof Swal !== 'undefined') {
-                        Swal.fire({icon: 'error', title: 'Error', text: error.message});
-                    }
+                    FH.error(error.message);
                 })
                 .finally(function() {
                     btn.disabled = false;

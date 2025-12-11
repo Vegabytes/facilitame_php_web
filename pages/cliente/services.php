@@ -130,6 +130,10 @@ $scripts = [];
 .service-arrow{font-size:.5rem;color:var(--f-text-light);transition:transform .2s}
 .service-card.open .service-arrow{transform:rotate(180deg)}
 
+/* Indicador de subcategorías */
+.service-card.has-options .service-card-inner::after{content:'';position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--f-primary);border-radius:50%;opacity:.7}
+.service-card.has-options .service-card-inner{position:relative}
+
 /* Dropdown */
 .service-dropdown{position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%) scale(.95);background:#fff;border:1px solid var(--f-border);border-radius:var(--f-radius);box-shadow:0 10px 40px rgba(0,0,0,.15);min-width:200px;max-width:260px;z-index:100;opacity:0;visibility:hidden;transition:all .15s ease;padding:.5rem}
 .service-card.open .service-dropdown{opacity:1;visibility:visible;transform:translateX(-50%) scale(1)}
@@ -499,12 +503,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (uploadedFiles.length > 0) {
             const missingType = uploadedFiles.some(f => !f.typeId);
             if (missingType) {
-                Swal.fire({ 
-                    icon: 'warning', 
-                    text: 'Selecciona el tipo de documento para cada archivo', 
-                    buttonsStyling: false, 
-                    customClass: { confirmButton: 'btn btn-warning' } 
-                });
+                FH.warning('Selecciona el tipo de documento para cada archivo');
                 return;
             }
         }
@@ -535,13 +534,13 @@ document.addEventListener('DOMContentLoaded', function() {
             if (typeof data === 'string') data = JSON.parse(data);
             
             if (data.status === 'ok') {
-                Swal.fire({ icon: 'success', html: data.message_html, showConfirmButton: false, buttonsStyling: false });
-                setTimeout(() => location.href = 'my-services', 3000);
+                FH.success(data.message_plain || 'Solicitud enviada correctamente');
+                setTimeout(() => location.href = 'my-services', 2000);
             } else {
-                Swal.fire({ icon: 'warning', html: data.message_html, buttonsStyling: false, customClass: { confirmButton: 'btn btn-warning' } });
+                FH.warning(data.message_plain || 'No se pudo procesar la solicitud');
             }
         } catch (err) {
-            Swal.fire({ icon: 'error', text: 'Ha ocurrido un error', buttonsStyling: false, customClass: { confirmButton: 'btn btn-danger' } });
+            FH.error('Ha ocurrido un error');
         } finally {
             btn.disabled = false;
             btn.classList.remove('loading');

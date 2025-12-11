@@ -182,10 +182,10 @@ $statuses = get_statuses_names();
                 <div class="list-card list-card-${statusClass}">
                     <div class="list-card-content">
                         <div class="list-card-title">
+                            <span class="badge-status badge-status-neutral">#${item.id}</span>
                             <a href="/request?id=${item.id}" class="list-card-customer">
                                 ${escapeHtml(item.category_name || 'Servicio')}
                             </a>
-                            <span class="badge-status badge-status-${statusClass}">#${item.id}</span>
                             <span class="badge-status badge-status-${statusClass}">${escapeHtml(item.status || '')}</span>
                         </div>
                         ${item.request_info ? `

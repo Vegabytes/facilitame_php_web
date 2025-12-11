@@ -301,11 +301,13 @@ function phone($phone_no)
 
 function fdate($date_string)
 {
+    if (empty($date_string)) return '-';
     return date("d/m/Y", strtotime($date_string));
 }
 
 function fdatetime($date_string)
 {
+    if (empty($date_string)) return '-';
     return date("d/m/Y H:i", strtotime($date_string));
 }
 

@@ -329,7 +329,7 @@ $proposedBy = $appointment['proposed_by'] ?? null;
                                         <div class="alert-modern-content">
                                             <div class="alert-modern-title">El cliente ha propuesto una fecha</div>
                                             <div class="alert-modern-text">
-                                                <strong><?php echo date('d/m/Y \a \l\a\s H:i', strtotime($appointment['proposed_date'])); ?></strong><br>
+                                                <strong><?php echo !empty($appointment['proposed_date']) ? date('d/m/Y \a \l\a\s H:i', strtotime($appointment['proposed_date'])) : '-'; ?></strong><br>
                                                 Acepta la propuesta o reprograma con otra fecha.
                                             </div>
                                             <button class="btn btn-success btn-accept-inline" onclick="acceptProposal()">
@@ -344,7 +344,7 @@ $proposedBy = $appointment['proposed_by'] ?? null;
                                         <div class="alert-modern-icon"><i class="ki-outline ki-calendar-tick fs-2x"></i></div>
                                         <div class="alert-modern-content">
                                             <div class="alert-modern-title">Cita Confirmada</div>
-                                            <div class="alert-modern-text"><?php echo date('d/m/Y \a \l\a\s H:i', strtotime($appointment['scheduled_date'])); ?></div>
+                                            <div class="alert-modern-text"><?php echo !empty($appointment['scheduled_date']) ? date('d/m/Y \a \l\a\s H:i', strtotime($appointment['scheduled_date'])) : '-'; ?></div>
                                         </div>
                                     </div>
                                     
@@ -355,7 +355,7 @@ $proposedBy = $appointment['proposed_by'] ?? null;
                                         <div class="alert-modern-content">
                                             <div class="alert-modern-title">Esperando confirmacion del cliente</div>
                                             <div class="alert-modern-text">
-                                                Propusiste: <strong><?php echo date('d/m/Y \a \l\a\s H:i', strtotime($appointment['proposed_date'])); ?></strong><br>
+                                                Propusiste: <strong><?php echo !empty($appointment['proposed_date']) ? date('d/m/Y \a \l\a\s H:i', strtotime($appointment['proposed_date'])) : '-'; ?></strong><br>
                                                 El cliente debe confirmar o negociar por chat.
                                             </div>
                                         </div>
@@ -380,7 +380,7 @@ $proposedBy = $appointment['proposed_by'] ?? null;
                                             <div class="alert-modern-text">
                                                 Por: <?php echo $appointment['cancelled_by'] === 'advisory' ? 'Asesoria' : 'Cliente'; ?>
                                                 <?php if (!empty($appointment['cancelled_at'])): ?>
-                                                    el <?php echo date('d/m/Y H:i', strtotime($appointment['cancelled_at'])); ?>
+                                                    el <?php echo fdatetime($appointment['cancelled_at']); ?>
                                                 <?php endif; ?>
                                                 <?php if (!empty($appointment['cancellation_reason'])): ?>
                                                     <br>Motivo: <?php echo htmlspecialchars($appointment['cancellation_reason']); ?>
@@ -404,13 +404,13 @@ $proposedBy = $appointment['proposed_by'] ?? null;
                                         <div class="detail-item detail-item-date confirmed">
                                             <span class="date-badge">Confirmada</span>
                                             <div class="detail-label"><i class="ki-outline ki-calendar-tick fs-6"></i> Fecha de la Cita</div>
-                                            <div class="detail-value"><?php echo date('d/m/Y H:i', strtotime($appointment['scheduled_date'])); ?></div>
+                                            <div class="detail-value"><?php echo fdatetime($appointment['scheduled_date']); ?></div>
                                         </div>
                                         <?php elseif ($hasProposedDate): ?>
                                         <div class="detail-item detail-item-date proposed">
                                             <span class="date-badge"><?php echo $proposedBy === 'advisory' ? 'Tu propuesta' : 'Propuesta cliente'; ?></span>
                                             <div class="detail-label"><i class="ki-outline ki-calendar fs-6"></i> Fecha Propuesta</div>
-                                            <div class="detail-value"><?php echo date('d/m/Y H:i', strtotime($appointment['proposed_date'])); ?></div>
+                                            <div class="detail-value"><?php echo fdatetime($appointment['proposed_date']); ?></div>
                                         </div>
                                         <?php else: ?>
                                         <div class="detail-item">
@@ -421,7 +421,7 @@ $proposedBy = $appointment['proposed_by'] ?? null;
                                         
                                         <div class="detail-item">
                                             <div class="detail-label"><i class="ki-outline ki-calendar fs-6"></i> Solicitada</div>
-                                            <div class="detail-value"><?php echo date('d/m/Y H:i', strtotime($appointment['created_at'])); ?></div>
+                                            <div class="detail-value"><?php echo fdatetime($appointment['created_at']); ?></div>
                                         </div>
                                         
                                         <?php if (!empty($appointment['reason'])): ?>
@@ -550,7 +550,7 @@ $proposedBy = $appointment['proposed_by'] ?? null;
                                             <div class="history-item-header">
                                                 <span class="history-action"><?php echo $actionLabels[$h['action']] ?? $h['action']; ?></span>
                                                 <span class="history-user">por <?php echo (isset($h['user_type']) && $h['user_type'] === 'advisory') ? 'Asesoria' : 'Cliente'; ?></span>
-                                                <span class="history-date"><?php echo date('d/m/Y H:i', strtotime($h['created_at'])); ?></span>
+                                                <span class="history-date"><?php echo fdatetime($h['created_at']); ?></span>
                                             </div>
                                             <?php if (!empty($h['field_changed']) || !empty($h['notes'])): ?>
                                             <div class="history-details">
@@ -626,7 +626,7 @@ $proposedBy = $appointment['proposed_by'] ?? null;
                     </div>
                     <?php if ($hasScheduledDate || $hasProposedDate): ?>
                     <p class="text-muted mb-3">
-                        Fecha actual: <strong><?php echo date('d/m/Y H:i', strtotime($appointment['scheduled_date'] ?? $appointment['proposed_date'])); ?></strong>
+                        Fecha actual: <strong><?php echo fdatetime($appointment['scheduled_date'] ?? $appointment['proposed_date']); ?></strong>
                     </p>
                     <?php endif; ?>
                     <div class="mb-3">

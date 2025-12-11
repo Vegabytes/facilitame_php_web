@@ -189,6 +189,7 @@ $salesCode = $stmtCode->fetchColumn() ?: 'N/A';
                 <div class="list-card list-card-success">
                     <div class="list-card-content">
                         <div class="list-card-title">
+                            <span class="badge-status badge-status-neutral">#${c.id}</span>
                             <a href="/customer?id=${c.id}" class="list-card-customer">
                                 ${escapeHtml(c.full_name)}
                             </a>

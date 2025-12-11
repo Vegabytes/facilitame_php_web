@@ -232,7 +232,7 @@
                 
                 return `
                     <tr class="${isPending ? 'table-warning' : ''}">
-                        <td><span class="badge-status badge-status-primary">#${req.id}</span></td>
+                        <td><span class="badge-status badge-status-neutral">#${req.id}</span></td>
                         <td class="fw-semibold">${escapeHtml(req.category_name)}</td>
                         <td>${getStatusBadge(req.status_name)}</td>
                         <td>${lastInvoice}</td>
@@ -245,6 +245,7 @@
                     <div class="list-card ${borderClass}">
                         <div class="list-card-content">
                             <div class="list-card-title">
+                                <span class="badge-status badge-status-neutral">#${customer.id}</span>
                                 <a href="/customer?id=${customer.id}" class="list-card-customer">
                                     ${escapeHtml((customer.name || '') + ' ' + (customer.lastname || ''))}
                                 </a>

@@ -33,7 +33,7 @@
         
         <!-- Paginador -->
         <div class="pagination-container" id="customers-pagination" style="display: none;">
-            <div class="pagination-info" id="customers-page-info">Página 1 de 1</div>
+            <div class="pagination-info" id="customers-page-info">PÃ¡gina 1 de 1</div>
             <div class="pagination-nav">
                 <button class="btn-pagination" id="customers-prev" disabled>
                     <i class="ki-outline ki-left"></i>
@@ -49,7 +49,7 @@
     
 </div>
 
-<!-- Modal de confirmación eliminar -->
+<!-- Modal de confirmaciÃ³n eliminar -->
 <div class="modal fade" id="modal-confirm-delete" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered mw-400px">
         <div class="modal-content">
@@ -63,8 +63,8 @@
                             <i class="ki-outline ki-trash fs-2x text-danger"></i>
                         </div>
                     </div>
-                    <h3 class="fw-bold text-gray-900 mb-2">¿Eliminar cliente?</h3>
-                    <p class="text-gray-600 mb-0">Se eliminarán todos sus servicios y datos asociados.</p>
+                    <h3 class="fw-bold text-gray-900 mb-2">Â¿Eliminar cliente?</h3>
+                    <p class="text-gray-600 mb-0">Se eliminarÃ¡n todos sus servicios y datos asociados.</p>
                 </div>
                 <div class="bg-light rounded p-3 mb-5" id="delete-modal-info" style="display: none;">
                     <span class="fw-semibold text-gray-800" id="delete-modal-item-name"></span>
@@ -87,7 +87,7 @@
     const API_URL = '/api/customers-paginated-admin';
     
     const ROLES = {
-        'autonomo': 'Autónomo',
+        'autonomo': 'AutÃ³nomo',
         'particular': 'Particular',
         'empresa': 'Empresa'
     };
@@ -153,7 +153,7 @@
             }
         } catch (error) {
             console.error('Error:', error);
-            showError('Error de conexión');
+            showError('Error de conexiÃ³n');
         } finally {
             state.isLoading = false;
         }
@@ -170,7 +170,7 @@
                     <p class="empty-state-text">
                         ${state.searchQuery 
                             ? `No se encontraron resultados para "${escapeHtml(state.searchQuery)}"` 
-                            : 'Los clientes registrados aparecerán aquí'}
+                            : 'Los clientes registrados aparecerÃ¡n aquÃ­'}
                     </p>
                 </div>`;
             paginationContainer.style.display = 'none';
@@ -186,14 +186,14 @@
                 <div class="list-card list-card-primary">
                     <div class="list-card-content">
                         <div class="list-card-title">
+                            <span class="badge-status badge-status-neutral">#${cus.id}</span>
                             <a href="/customer?id=${cus.id}" class="list-card-customer">
                                 ${escapeHtml(fullName)}
                             </a>
-                          <span class="badge-status badge-status-info">${escapeHtml(roleName)}</span>
-<span class="badge-status badge-status-neutral">#${cus.id}</span>
-${cus.is_active 
-    ? '<span class="badge badge-light-success ms-2">Activo</span>' 
-    : '<span class="badge badge-light-warning ms-2">Pendiente</span>'}
+                            <span class="badge-status badge-status-info">${escapeHtml(roleName)}</span>
+                            ${cus.is_active
+                                ? '<span class="badge badge-light-success">Activo</span>'
+                                : '<span class="badge badge-light-warning">Pendiente</span>'}
                         </div>
                         <div class="list-card-meta">
                             <span>
@@ -260,7 +260,7 @@ ${cus.is_active
     
     function updatePaginationControls() {
         pageCurrent.textContent = `${state.currentPage} / ${state.totalPages}`;
-        pageInfo.textContent = `Página ${state.currentPage} de ${state.totalPages}`;
+        pageInfo.textContent = `PÃ¡gina ${state.currentPage} de ${state.totalPages}`;
         prevBtn.disabled = state.currentPage <= 1;
         nextBtn.disabled = state.currentPage >= state.totalPages;
         paginationContainer.style.display = state.totalRecords > state.pageSize ? 'flex' : 'none';
@@ -324,7 +324,7 @@ ${cus.is_active
                 bootstrap.Modal.getInstance(document.getElementById('modal-confirm-delete')).hide();
                 loadData();
                 
-                // Toast de confirmación
+                // Toast de confirmaciÃ³n
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
                         icon: 'success',

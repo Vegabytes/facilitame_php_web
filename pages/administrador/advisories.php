@@ -131,10 +131,6 @@ $scripts = [];
                     <option value="premium">Premium</option>
                 </select>
             </div>
-            <button type="button" class="btn btn-light-primary btn-sm" id="btnClearFilters">
-                <i class="ki-outline ki-filter-search fs-4"></i>
-                Limpiar
-            </button>
         </div>
         
         <!-- Listado -->
@@ -174,12 +170,11 @@ $scripts = [];
     const STATUS_CONFIG = {
         'pendiente': { label: 'Pendiente', class: 'badge-status-warning' },
         'activo': { label: 'Activo', class: 'badge-status-success' },
-        'suspendido': { label: 'Suspendido', class: 'badge-status-danger' },
-        '': { label: 'Sin estado', class: 'badge-status-neutral' }
+        'suspendido': { label: 'Suspendido', class: 'badge-status-danger' }
     };
-    
+
     const PLAN_CONFIG = {
-        'gratuito': { label: 'Gratuito', class: 'badge-status-neutral' },
+        'gratuito': { label: 'Gratuito', class: 'badge-status-secondary' },
         'basic': { label: 'Basic', class: 'badge-status-info' },
         'estandar': { label: 'Estándar', class: 'badge-status-primary' },
         'pro': { label: 'Pro', class: 'badge-status-success' },
@@ -208,8 +203,8 @@ $scripts = [];
     const searchInput = document.getElementById('searchAdvisories');
     const filterStatus = document.getElementById('filterStatus');
     const filterPlan = document.getElementById('filterPlan');
-    const btnClearFilters = document.getElementById('btnClearFilters');
     const btnNewAdvisory = document.getElementById('btnNewAdvisory');
+    const headerSearch = document.getElementById('kt_header_search_input');
     
     let searchTimeout = null;
     
@@ -245,19 +240,19 @@ $scripts = [];
             });
         }
         
-        if (btnClearFilters) {
-            btnClearFilters.addEventListener('click', function() {
-                if (searchInput) searchInput.value = '';
-                if (filterStatus) filterStatus.value = '';
-                if (filterPlan) filterPlan.value = '';
-                state.searchQuery = '';
-                state.statusFilter = '';
-                state.planFilter = '';
-                state.currentPage = 1;
-                loadData();
+        // Conectar buscador del header con el de la página
+        if (headerSearch) {
+            headerSearch.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    if (searchInput) searchInput.value = this.value;
+                    state.searchQuery = this.value;
+                    state.currentPage = 1;
+                    loadData();
+                }, 300);
             });
         }
-        
+
         if (btnNewAdvisory) {
             btnNewAdvisory.addEventListener('click', function() {
                 showNotAvailable('Crear asesoría');
@@ -342,19 +337,18 @@ $scripts = [];
         }
         
         listContainer.innerHTML = data.map(adv => {
-            const status = STATUS_CONFIG[adv.estado] || STATUS_CONFIG[''];
+            const status = STATUS_CONFIG[adv.estado] || null;
             const plan = PLAN_CONFIG[adv.plan] || PLAN_CONFIG['gratuito'];
-            
+
             return `
                 <div class="list-card list-card-primary">
                     <div class="list-card-content">
-                        <div class="list-card-header">
-                            <a href="/advisory?id=${adv.id}" class="list-card-title">
-                                <span class="text-muted">#${adv.id}</span>
-                                <i class="ki-outline ki-chart"></i>
+                        <div class="list-card-title">
+                            <span class="badge-status badge-status-neutral">#${adv.id}</span>
+                            <a href="/advisory?id=${adv.id}" class="list-card-customer">
                                 ${escapeHtml(adv.razon_social || 'Sin nombre')}
                             </a>
-                            <span class="badge-status ${status.class}">${status.label}</span>
+                            ${status ? `<span class="badge-status ${status.class}">${status.label}</span>` : ''}
                             <span class="badge-status ${plan.class}">${plan.label}</span>
                         </div>
                         <div class="list-card-meta">

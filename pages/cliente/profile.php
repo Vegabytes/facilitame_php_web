@@ -81,7 +81,7 @@ $scripts = ["profile"];
                             </div>
                             <div>
                                 <div class="profile-info-label">Miembro desde</div>
-                                <div class="profile-info-value"><?php echo date("d/m/Y", strtotime($user["created_at"])) ?></div>
+                                <div class="profile-info-value"><?php echo fdate($user["created_at"]) ?></div>
                             </div>
                         </div>
                         <?php endif; ?>
@@ -118,7 +118,7 @@ $scripts = ["profile"];
                                 <i class="ki-outline ki-check-circle text-success"></i>
                                 <div>
                                     <div class="fw-bold text-dark" style="font-size: 0.8125rem;">Facturas autorizadas</div>
-                                    <div class="text-muted" style="font-size: 0.75rem;"><?php echo date("d/m/Y", strtotime($user["allow_invoice_access_granted_at"])) ?></div>
+                                    <div class="text-muted" style="font-size: 0.75rem;"><?php echo fdate($user["allow_invoice_access_granted_at"]) ?></div>
                                 </div>
                             </div>
                         </div>

@@ -81,7 +81,7 @@ if ($selected_customer_id > 0) {
                                         </div>
                                         <?php if ($conv['last_message_at']): ?>
                                             <div class="conversation-time">
-                                                <?php echo date('d/m H:i', strtotime($conv['last_message_at'])); ?>
+                                                <?php echo !empty($conv['last_message_at']) ? date('d/m H:i', strtotime($conv['last_message_at'])) : '-'; ?>
                                             </div>
                                         <?php endif; ?>
                                     </a>
@@ -120,7 +120,7 @@ if ($selected_customer_id > 0) {
                                                 <?php secho($msg['content']); ?>
                                             </div>
                                             <div class="message-time">
-                                                <?php echo date('d/m/Y H:i', strtotime($msg['created_at'])); ?>
+                                                <?php echo fdatetime($msg['created_at']); ?>
                                             </div>
                                         </div>
                                     <?php endforeach; ?>

@@ -94,7 +94,7 @@ $statusClass = $statusClasses[$appointment['status']] ?? 'muted';
                                     <span>Tu asesoría te ha propuesto una fecha</span>
                                 </div>
                                 <div class="list-card-meta">
-                                    <strong class="text-dark"><?php echo date('d/m/Y \a \l\a\s H:i', strtotime($appointment['proposed_date'])); ?></strong>
+                                    <strong class="text-dark"><?php echo !empty($appointment['proposed_date']) ? date('d/m/Y \a \l\a\s H:i', strtotime($appointment['proposed_date'])) : '-'; ?></strong>
                                 </div>
                                 <button class="btn btn-success btn-sm mt-2" onclick="confirmAppointment()">
                                     <i class="ki-outline ki-check me-1"></i> Confirmar esta fecha
@@ -110,7 +110,7 @@ $statusClass = $statusClasses[$appointment['status']] ?? 'muted';
                                     <span>Cita Confirmada</span>
                                 </div>
                                 <div class="list-card-meta">
-                                    <strong class="text-dark"><?php echo date('d/m/Y \a \l\a\s H:i', strtotime($appointment['scheduled_date'])); ?></strong>
+                                    <strong class="text-dark"><?php echo !empty($appointment['scheduled_date']) ? date('d/m/Y \a \l\a\s H:i', strtotime($appointment['scheduled_date'])) : '-'; ?></strong>
                                 </div>
                             </div>
                         </div>
@@ -123,7 +123,7 @@ $statusClass = $statusClasses[$appointment['status']] ?? 'muted';
                                     <span>Esperando confirmación</span>
                                 </div>
                                 <div class="list-card-meta">
-                                    Propusiste: <strong><?php echo date('d/m/Y \a \l\a\s H:i', strtotime($appointment['proposed_date'])); ?></strong>
+                                    Propusiste: <strong><?php echo !empty($appointment['proposed_date']) ? date('d/m/Y \a \l\a\s H:i', strtotime($appointment['proposed_date'])) : '-'; ?></strong>
                                 </div>
                             </div>
                         </div>
@@ -150,7 +150,7 @@ $statusClass = $statusClasses[$appointment['status']] ?? 'muted';
                                 <div class="list-card-meta">
                                     Por: <?php echo $appointment['cancelled_by'] === 'advisory' ? 'Asesoría' : 'Cliente'; ?>
                                     <?php if (!empty($appointment['cancelled_at'])): ?>
-                                        el <?php echo date('d/m/Y H:i', strtotime($appointment['cancelled_at'])); ?>
+                                        el <?php echo fdatetime($appointment['cancelled_at']); ?>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -180,21 +180,21 @@ $statusClass = $statusClasses[$appointment['status']] ?? 'muted';
                                 <div class="col-6">
                                     <div class="detail-box">
                                         <div class="detail-box-label">Fecha Solicitud</div>
-                                        <div class="detail-box-value"><?php echo date('d/m/Y H:i', strtotime($appointment['created_at'])); ?></div>
+                                        <div class="detail-box-value"><?php echo fdatetime($appointment['created_at']); ?></div>
                                     </div>
                                 </div>
                                 <?php if ($hasScheduledDate): ?>
                                 <div class="col-6">
                                     <div class="detail-box detail-box-success">
                                         <div class="detail-box-label">Fecha Confirmada</div>
-                                        <div class="detail-box-value"><?php echo date('d/m/Y H:i', strtotime($appointment['scheduled_date'])); ?></div>
+                                        <div class="detail-box-value"><?php echo fdatetime($appointment['scheduled_date']); ?></div>
                                     </div>
                                 </div>
                                 <?php elseif ($hasProposedDate): ?>
                                 <div class="col-6">
                                     <div class="detail-box detail-box-warning">
                                         <div class="detail-box-label">Fecha Propuesta</div>
-                                        <div class="detail-box-value"><?php echo date('d/m/Y H:i', strtotime($appointment['proposed_date'])); ?></div>
+                                        <div class="detail-box-value"><?php echo fdatetime($appointment['proposed_date']); ?></div>
                                     </div>
                                 </div>
                                 <?php endif; ?>

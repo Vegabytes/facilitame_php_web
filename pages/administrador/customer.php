@@ -38,20 +38,20 @@
                     
                     <hr class="customer-divider">
                     
-                    <!-- Información del cliente -->
+                    <!-- Informaciï¿½n del cliente -->
                     <div class="customer-info-section">
                         <h6 class="customer-info-title">
                             <i class="ki-outline ki-information-5"></i>
-                            Información del cliente
+                            Informaciï¿½n del cliente
                         </h6>
                         
                         <dl class="customer-details">
                             
-                            <!-- Estado de cuenta (Premium/Estándar) -->
+                            <!-- Estado de cuenta (Premium/Estï¿½ndar) -->
                             <div class="customer-detail-row">
                                 <dt>Tipo de cuenta</dt>
                                 <dd>
-                                    <?php if ($customer["is_premium"] == "1") : ?>
+                                    <?php if (!empty($customer["is_premium"]) && $customer["is_premium"] == "1") : ?>
                                         <span class="badge-status badge-status-warning">
                                             <i class="ki-outline ki-crown"></i>
                                             Premium
@@ -59,7 +59,7 @@
                                     <?php else : ?>
                                         <span class="badge-status badge-status-neutral">
                                             <i class="ki-outline ki-user"></i>
-                                            Estándar
+                                            Estï¿½ndar
                                         </span>
                                     <?php endif; ?>
                                 </dd>
@@ -83,10 +83,10 @@
                                 </dd>
                             </div>
                             
-                            <!-- Teléfono -->
+                            <!-- Telï¿½fono -->
                             <?php if (!empty($customer["phone"])): ?>
                             <div class="customer-detail-row">
-                                <dt>Teléfono</dt>
+                                <dt>Telï¿½fono</dt>
                                 <dd>
                                     <a href="tel:<?php secho($customer['phone']); ?>" class="customer-phone">
                                         <?php secho($customer["phone"]); ?>
@@ -136,7 +136,7 @@
                                             Autorizado
                                         </span>
                                         <small class="customer-detail-note">
-                                            Desde <?php echo date("d/m/Y", strtotime($customer["allow_invoice_access_granted_at"])); ?>
+                                            Desde <?php echo fdate($customer["allow_invoice_access_granted_at"]); ?>
                                         </small>
                                     <?php else : ?>
                                         <span class="badge-status badge-status-danger">
@@ -161,7 +161,7 @@
                     
                 </div>
                 
-                <!-- Acciones rápidas -->
+                <!-- Acciones rï¿½pidas -->
                 <div class="card-footer" style="flex-shrink: 0; padding: 1rem; border-top: 1px solid var(--f-border);">
                     <div class="d-flex gap-2">
                         <a href="mailto:<?php secho($customer['email']); ?>" class="btn btn-sm btn-light-primary flex-fill">
@@ -200,7 +200,7 @@
                                     <i class="ki-outline ki-folder"></i>
                                 </div>
                                 <div class="empty-state-title">No hay solicitudes</div>
-                                <p class="empty-state-text">Este cliente aún no tiene solicitudes registradas</p>
+                                <p class="empty-state-text">Este cliente aï¿½n no tiene solicitudes registradas</p>
                             </div>
                         <?php else: ?>
                             <?php foreach ($requests as $request): ?>
@@ -230,7 +230,7 @@
                                             <a href="request?id=<?php echo $request['id']; ?>" class="list-card-customer">
                                                 Solicitud #<?php echo $request['id']; ?>
                                             </a>
-                                            <span class="text-muted">›</span>
+                                            <span class="text-muted">ï¿½</span>
                                             <span class="text-muted"><?php secho($request['category_name']); ?></span>
                                         </div>
                                         <div class="list-card-meta">
@@ -305,7 +305,7 @@ function showNoResultsCustomer(show) {
         noResults.innerHTML = `
             <div class="empty-state-icon"><i class="ki-outline ki-magnifier"></i></div>
             <div class="empty-state-title">Sin resultados</div>
-            <p class="empty-state-text">Intenta con otros términos de búsqueda</p>
+            <p class="empty-state-text">Intenta con otros tï¿½rminos de bï¿½squeda</p>
         `;
         document.getElementById('customer-requests-list').appendChild(noResults);
     } else if (!show && noResults) {

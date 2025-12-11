@@ -139,7 +139,7 @@ if ($customer_advisory_id) {
             <div class="appointment-item">
                 <?php if ($apt['status'] === 'agendado' && $apt['scheduled_date']): ?>
                 <span class="appointment-badge appointment-badge-scheduled">
-                    <?php echo date('d M H:i', strtotime($apt['scheduled_date'])); ?>h
+                    <?php echo !empty($apt['scheduled_date']) ? date('d M H:i', strtotime($apt['scheduled_date'])) . 'h' : '-'; ?>
                 </span>
                 <?php else: ?>
                 <span class="appointment-badge appointment-badge-pending">Pendiente</span>

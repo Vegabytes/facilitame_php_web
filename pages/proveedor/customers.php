@@ -143,6 +143,7 @@
                 <div class="list-card list-card-primary">
                     <div class="list-card-content">
                         <div class="list-card-title">
+                            <span class="badge-status badge-status-neutral">#${cus.id}</span>
                             <a href="/customer?id=${cus.id}" class="list-card-customer">
                                 ${escapeHtml(fullName || 'Sin nombre')}
                             </a>

@@ -531,13 +531,14 @@ $statusLabels = ['solicitado' => 'Pendiente', 'agendado' => 'Confirmada', 'final
             html += '<div class="' + cardClass + '">' +
                 '<div class="list-card-content">' +
                     '<div class="list-card-title">' +
-                        '<a href="/appointment?id=' + apt.id + '" class="list-card-customer">Cita #' + apt.id + '</a>' +
+                        '<span class="badge-status badge-status-neutral">#' + apt.id + '</span>' +
+                        '<a href="/appointment?id=' + apt.id + '" class="list-card-customer">Cita</a>' +
                         '<span class="badge-status badge-status-' + statusClass + '">' + (statusLabels[apt.status] || apt.status) + '</span>' +
                         extraBadges +
                         '<span class="badge-status badge-status-muted">' + (typeLabels[apt.type] || apt.type) + '</span>' +
                     '</div>' +
                     '<div class="list-card-meta">' +
-                        '<span><i class="ki-outline ki-profile-user"></i> ' + customerName + '</span>' +
+                        '<span><i class="ki-outline ki-profile-user"></i> <a href="/customer?id=' + apt.customer_id + '" class="text-muted">' + customerName + '</a></span>' +
                         '<span><i class="ki-outline ki-briefcase"></i> ' + (deptLabels[apt.department] || apt.department) + '</span>' +
                         '<span class="' + (isConfirmed ? 'text-info fw-semibold' : 'text-warning') + '">' +
                             '<i class="ki-outline ki-calendar"></i> ' + dateDisplay + ' ' + dateLabel +

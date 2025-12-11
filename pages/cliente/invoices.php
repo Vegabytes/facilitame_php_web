@@ -204,10 +204,10 @@
                     <div class="list-card ${borderClass}">
                         <div class="list-card-content">
                             <div class="list-card-title">
+                                <span class="badge-status badge-status-neutral">#${req.id}</span>
                                 <a href="/request?id=${req.id}" class="list-card-customer">
                                     ${escapeHtml(req.category_name)}
                                 </a>
-                                <span class="badge-status badge-status-primary">#${req.id}</span>
                                 ${verifiedBadge}
                                 ${invoicesBadge}
                             </div>
