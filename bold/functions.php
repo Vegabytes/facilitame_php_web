@@ -69,7 +69,13 @@ function controller($target = "")
     $target = str_replace('/api/', '/api-', $target);
     // Quitar extensión .php si ya la tiene para evitar doble extensión
     $target = preg_replace('/\.php$/', '', $target);
-    require CONTROLLER . $target . ".php";
+
+    $controller_file = CONTROLLER . $target . ".php";
+    if (!file_exists($controller_file)) {
+        header("Location: /login");
+        exit;
+    }
+    require $controller_file;
     return json_encode($info);
 }
 
