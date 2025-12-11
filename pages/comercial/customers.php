@@ -211,7 +211,7 @@ $salesCode = $stmtCode->fetchColumn() ?: 'N/A';
                         </div>
                     </div>
                     <div class="list-card-actions">
-                        <a href="/customer?id=${c.id}" class="btn-icon" title="Ver perfil">
+                        <a href="/customer?id=${c.id}" class="btn-icon btn-icon-info" title="Ver perfil">
                             <i class="ki-outline ki-eye"></i>
                         </a>
                         <button type="button" class="btn-icon btn-icon-success" title="Copiar email" onclick="copyEmail('${escapeHtml(c.email)}', this)">

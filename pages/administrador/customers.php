@@ -217,7 +217,7 @@
                         </div>
                     </div>
                     <div class="list-card-actions">
-                        <a href="/customer?id=${cus.id}" class="btn-icon" title="Ver perfil">
+                        <a href="/customer?id=${cus.id}" class="btn-icon btn-icon-info" title="Ver perfil">
                             <i class="ki-outline ki-eye"></i>
                         </a>
                         <button type="button" 

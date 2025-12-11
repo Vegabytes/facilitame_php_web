@@ -185,7 +185,7 @@ $scripts = [];
                         </div>
                     </div>
                     <div class="list-card-actions">
-                        <a href="/customer?id=${n.sender_id || ''}" class="btn-icon" title="Ver cliente">
+                        <a href="/customer?id=${n.sender_id || ''}" class="btn-icon btn-icon-info" title="Ver cliente">
                             <i class="ki-outline ki-eye"></i>
                         </a>
                     </div>

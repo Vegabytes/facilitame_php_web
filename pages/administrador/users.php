@@ -288,7 +288,7 @@ $card_variant = (TYPE === "sales-rep") ? "info" : "warning";
                         </div>
                     </div>
                     <div class="list-card-actions">
-                        <a href="/user?id=${user.id}" class="btn-icon" title="Ver perfil">
+                        <a href="/user?id=${user.id}" class="btn-icon btn-icon-info" title="Ver perfil">
                             <i class="ki-outline ki-eye"></i>
                         </a>
                         <button type="button" 

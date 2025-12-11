@@ -51,7 +51,7 @@
                             <div class="customer-detail-row">
                                 <dt>Estado de cuenta</dt>
                                 <dd>
-                                    <?php if ($customer["is_premium"] == "1") : ?>
+                                    <?php if (($customer["is_premium"] ?? "0") == "1") : ?>
                                         <span class="badge-status badge-status-warning">
                                             <i class="ki-outline ki-crown"></i>
                                             Premium

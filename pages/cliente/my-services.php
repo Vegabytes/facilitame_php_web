@@ -207,14 +207,14 @@ $statuses = get_statuses_names();
                     </div>
                     <div class="list-card-actions">
                         ${showExtraButtons ? `
-                            <a href="/request?id=${item.id}&review" class="btn-icon" title="Solicitar revisión">
+                            <a href="/request?id=${item.id}&review" class="btn-icon btn-icon-warning" title="Solicitar revisión">
                                 <i class="ki-outline ki-magnifier"></i>
                             </a>
-                            <a href="/request?id=${item.id}&incident" class="btn-icon" title="Reportar incidencia">
+                            <a href="/request?id=${item.id}&incident" class="btn-icon btn-icon-danger" title="Reportar incidencia">
                                 <i class="ki-outline ki-information-2"></i>
                             </a>
                         ` : ''}
-                        <a href="/request?id=${item.id}" class="btn-icon" title="Ver detalle">
+                        <a href="/request?id=${item.id}" class="btn-icon btn-icon-info" title="Ver detalle">
                             <i class="ki-outline ki-eye"></i>
                         </a>
                     </div>

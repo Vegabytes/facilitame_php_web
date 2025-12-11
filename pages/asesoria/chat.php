@@ -208,10 +208,10 @@ async function sendMessage() {
             input.value = '';
             scrollToBottom();
         } else {
-            toastr.error(result.message_html || 'Error al enviar mensaje');
+            Swal.fire({ icon: 'error', title: result.message_html || 'Error al enviar mensaje', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
         }
     } catch (error) {
-        toastr.error('Error de conexión');
+        Swal.fire({ icon: 'error', title: 'Error de conexión', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
     } finally {
         btn.disabled = false;
     }

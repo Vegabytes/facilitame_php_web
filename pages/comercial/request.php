@@ -97,7 +97,7 @@ $isDeleted = ((int)$request["status_id"] === 9 || !is_null($request["deleted_at"
                                         </div>
                                         <?php if (!empty($offer['file'])) : ?>
                                         <div class="list-card-actions">
-                                            <a href="<?php echo MEDIA_DIR . '/' . $offer['file']; ?>" target="_blank" class="btn-icon" title="Ver documento">
+                                            <a href="<?php echo MEDIA_DIR . '/' . $offer['file']; ?>" target="_blank" class="btn-icon btn-icon-info" title="Ver documento">
                                                 <i class="ki-outline ki-file"></i>
                                             </a>
                                         </div>

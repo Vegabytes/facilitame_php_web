@@ -217,7 +217,7 @@ $TRANSLATIONS = [
                     </div>
                     ${hasLink ? `
                         <div class="list-card-actions">
-                            <a href="/${log.link_type}?id=${log.link_id}" class="btn-icon" title="Ver ${linkText.toLowerCase()}">
+                            <a href="/${log.link_type}?id=${log.link_id}" class="btn-icon btn-icon-info" title="Ver ${linkText.toLowerCase()}">
                                 <i class="ki-outline ki-eye"></i>
                             </a>
                         </div>

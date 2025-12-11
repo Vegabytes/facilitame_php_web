@@ -280,7 +280,7 @@ $importanceClasses = [
                         </div>
                     </div>
                     <div class="list-card-actions">
-                        <button class="btn-icon" title="Ver completo">
+                        <button class="btn-icon btn-icon-info" title="Ver completo">
                             <i class="ki-outline ki-eye"></i>
                         </button>
                     </div>

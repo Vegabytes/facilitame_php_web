@@ -202,7 +202,7 @@ document.getElementById('form_create_customer').addEventListener('submit', funct
     if (clientType) {
         const subtypeSelect = document.querySelector('[name="' + clientType + '_subtype"]');
         if (subtypeSelect && !subtypeSelect.value) {
-            toastr.error('Debes seleccionar el subtipo de cliente');
+            Swal.fire({ icon: 'error', title: 'Debes seleccionar el subtipo de cliente', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
             return;
         }
     }
@@ -220,23 +220,23 @@ document.getElementById('form_create_customer').addEventListener('submit', funct
     .then(function(r) { return r.json(); })
     .then(function(data) {
         if (data.status === 'ok') {
-            toastr.success(data.message_html || 'Cliente creado correctamente');
+            Swal.fire({ icon: 'success', title: data.message_html || 'Cliente creado correctamente', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
             setTimeout(function() { location.reload(); }, 1500);
-        } 
+        }
         else if (data.status === 'exists') {
             btn.removeAttribute('data-kt-indicator');
             btn.disabled = false;
             showLinkCustomerModal(data.data, formData);
         }
         else {
-            toastr.error(data.message_html || 'Error al crear el cliente');
+            Swal.fire({ icon: 'error', title: data.message_html || 'Error al crear el cliente', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
             btn.removeAttribute('data-kt-indicator');
             btn.disabled = false;
         }
     })
     .catch(function(err) {
         console.error('Error:', err);
-        toastr.error('Error de conexión');
+        Swal.fire({ icon: 'error', title: 'Error de conexión', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
         btn.removeAttribute('data-kt-indicator');
         btn.disabled = false;
     });
@@ -288,17 +288,17 @@ document.getElementById('btn_confirm_link').addEventListener('click', function()
     .then(function(r) { return r.json(); })
     .then(function(data) {
         if (data.status === 'ok') {
-            toastr.success('Cliente vinculado correctamente');
+            Swal.fire({ icon: 'success', title: 'Cliente vinculado correctamente', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
             setTimeout(function() { location.reload(); }, 1500);
         } else {
-            toastr.error(data.message_html || 'Error al vincular el cliente');
+            Swal.fire({ icon: 'error', title: data.message_html || 'Error al vincular el cliente', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
             btn.removeAttribute('data-kt-indicator');
             btn.disabled = false;
         }
     })
     .catch(function(err) {
         console.error('Error:', err);
-        toastr.error('Error de conexión');
+        Swal.fire({ icon: 'error', title: 'Error de conexión', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
         btn.removeAttribute('data-kt-indicator');
         btn.disabled = false;
     });

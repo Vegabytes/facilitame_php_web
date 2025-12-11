@@ -215,7 +215,7 @@ $scripts = [];
                     </div>
                     <div class="list-card-actions">
                         <span class="badge-status badge-status-${badgeColor}">${escapeHtml(n.status || 'Sin estado')}</span>
-                        <a href="/request?id=${n.request_id || n.id}" class="btn-icon" title="Ver solicitud">
+                        <a href="/request?id=${n.request_id || n.id}" class="btn-icon btn-icon-info" title="Ver solicitud">
                             <i class="ki-outline ki-eye"></i>
                         </a>
                     </div>

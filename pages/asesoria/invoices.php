@@ -124,7 +124,7 @@ $tagLabels = [
                         <option value="pending">Pendiente</option>
                         <option value="processed">Procesada</option>
                     </select>
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal_upload_invoices">
+                    <button type="button" class="btn btn-sm btn-primary-facilitame" data-bs-toggle="modal" data-bs-target="#modal_upload_invoices">
                         <i class="ki-outline ki-plus fs-4 me-1"></i>Subir Facturas
                     </button>
                 </div>

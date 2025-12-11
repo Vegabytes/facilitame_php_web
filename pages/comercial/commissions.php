@@ -11,32 +11,30 @@ window.commissionTypes = <?php echo json_encode($commission_types ?? []); ?>;
         <div class="row gx-5 gx-xl-10">
             <div class="col-xl-12 py-6">
                 <div class="card card-flush">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <div class="results-info">
-                                <span id="commissions-results-count">Cargando...</span>
-                            </div>
+                    <!-- Controles -->
+                    <div class="list-controls">
+                        <div class="results-info">
+                            <span id="commissions-results-count">Cargando...</span>
                         </div>
-                        <div class="card-toolbar d-flex flex-wrap gap-2 align-items-end">
-                            <div class="form-group mb-0">
-                                <label class="form-label fs-7 mb-1">Año</label>
-                                <select id="filter-year" class="form-select form-select-sm form-select-solid w-100px">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="pagination-size">
+                                <label for="filter-year">Año:</label>
+                                <select id="filter-year" class="form-select form-select-sm">
                                     <?php for ($y = 2024; $y <= intval(date("Y") + 1); $y++) : ?>
                                         <option value="<?php echo $y ?>" <?php echo $y == date("Y") ? "selected" : "" ?>><?php echo $y ?></option>
                                     <?php endfor; ?>
                                 </select>
                             </div>
-                            <div class="form-group mb-0">
-                                <label class="form-label fs-7 mb-1">Mes</label>
-                                <select id="filter-month" class="form-select form-select-sm form-select-solid w-120px">
-                                    <?php 
+                            <div class="pagination-size">
+                                <label for="filter-month">Mes:</label>
+                                <select id="filter-month" class="form-select form-select-sm">
+                                    <?php
                                     $meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
                                     for ($m = 1; $m <= 12; $m++) : ?>
                                         <option value="<?php echo $m ?>" <?php echo $m == intval(date("m")) ? "selected" : "" ?>><?php echo $meses[$m-1] ?></option>
                                     <?php endfor; ?>
                                 </select>
                             </div>
-                            
                             <div class="pagination-size">
                                 <label for="commissions-limit">Mostrar:</label>
                                 <select id="commissions-limit" class="form-select form-select-sm">

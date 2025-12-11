@@ -162,7 +162,7 @@
                         </div>
                     </div>
                     <div class="list-card-actions">
-                        <a href="/appointment?id=${c.id}" class="btn-icon" title="Ver cita">
+                        <a href="/appointment?id=${c.id}" class="btn-icon btn-icon-info" title="Ver cita">
                             <i class="ki-outline ki-eye"></i>
                         </a>
                         ${c.unread_messages > 0 ? `

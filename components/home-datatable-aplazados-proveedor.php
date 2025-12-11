@@ -1,5 +1,5 @@
 <!-- ============================================
-     APLAZADAS PROVEEDOR - PAGINACIÓN SERVER-SIDE
+     APLAZADAS PROVEEDOR - PAGINACIï¿½N SERVER-SIDE
      ============================================ -->
 
 <div class="list-controls" style="padding: 0.75rem 1.25rem; border-bottom: 1px solid var(--f-border);">
@@ -24,7 +24,7 @@
 </div>
 
 <div class="pagination-container" id="aplazadas-pagination" style="display: none;">
-    <div class="pagination-info" id="aplazadas-page-info">Página 1 de 1</div>
+    <div class="pagination-info" id="aplazadas-page-info">Pï¿½gina 1 de 1</div>
     <div class="pagination-nav">
         <button class="btn-pagination" id="aplazadas-prev" disabled>
             <i class="ki-outline ki-left"></i>
@@ -99,7 +99,7 @@
             }
         } catch (error) {
             console.error('Error:', error);
-            showError('Error de conexión');
+            showError('Error de conexiï¿½n');
         } finally {
             state.isLoading = false;
         }
@@ -111,7 +111,7 @@
                 <div class="empty-state">
                     <div class="empty-state-icon"><i class="ki-outline ki-time"></i></div>
                     <div class="empty-state-title">${state.searchQuery ? 'Sin resultados' : 'No hay aplazadas'}</div>
-                    <p class="empty-state-text">${state.searchQuery ? `No se encontraron resultados para "${escapeHtml(state.searchQuery)}"` : 'Todas las solicitudes están al día'}</p>
+                    <p class="empty-state-text">${state.searchQuery ? `No se encontraron resultados para "${escapeHtml(state.searchQuery)}"` : 'Todas las solicitudes estï¿½n al dï¿½a'}</p>
                 </div>`;
             paginationContainer.style.display = 'none';
             return;
@@ -130,7 +130,7 @@
                                 ${escapeHtml(item.customer_name || 'Sin nombre')}
                             </a>
                             ${newBadge}
-                            <span class="text-muted">›</span>
+                            <span class="text-muted">ï¿½</span>
                             <span class="text-muted">${escapeHtml(item.category_name || '')}</span>
                         </div>
                         <div class="list-card-meta">
@@ -139,7 +139,7 @@
                         </div>
                     </div>
                     <div class="list-card-actions">
-                        <a href="/request?id=${item.id}" class="btn-icon" title="Ver solicitud">
+                        <a href="/request?id=${item.id}" class="btn-icon btn-icon-info" title="Ver solicitud">
                             <i class="ki-outline ki-eye"></i>
                         </a>
                     </div>
@@ -165,7 +165,7 @@
     
     function updatePaginationControls() {
         pageCurrent.textContent = `${state.currentPage} / ${state.totalPages}`;
-        pageInfo.innerHTML = `Mostrando página ${state.currentPage} de ${state.totalPages}`;
+        pageInfo.innerHTML = `Mostrando pï¿½gina ${state.currentPage} de ${state.totalPages}`;
         prevBtn.disabled = state.currentPage <= 1;
         nextBtn.disabled = state.currentPage >= state.totalPages;
         paginationContainer.style.display = state.totalRecords > state.pageSize ? 'flex' : 'none';

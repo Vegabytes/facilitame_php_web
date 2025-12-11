@@ -746,10 +746,10 @@ function sendMessage(e) {
                 inp.value = '';
                 loadMessages();
             } else {
-                toastr.error(d.message || 'Error al enviar mensaje');
+                Swal.fire({ icon: 'error', title: d.message || 'Error al enviar mensaje', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
             }
         })
-        .catch(function() { toastr.error('Error al enviar mensaje'); })
+        .catch(function() { Swal.fire({ icon: 'error', title: 'Error al enviar mensaje', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 }); })
         .finally(function() {
             btn.disabled = false;
             btn.innerHTML = '<i class="ki-outline ki-send fs-4 text-white"></i>';
@@ -791,13 +791,13 @@ window.acceptProposal = function() {
             .then(function(r) { return r.json(); })
             .then(function(res) {
                 if (res.status === 'ok') {
-                    Swal.fire({ title: 'Confirmada', text: 'La cita ha sido agendada', icon: 'success', iconColor: '#00c2cb', timer: 1500, showConfirmButton: false });
+                    Swal.fire({ icon: 'success', title: 'Confirmada', text: 'La cita ha sido agendada', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
                     setTimeout(function() { location.reload(); }, 1500);
                 } else {
-                    Swal.fire('Error', res.message || 'No se pudo confirmar', 'error');
+                    Swal.fire({ icon: 'error', title: 'Error', text: res.message || 'No se pudo confirmar', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
                 }
             })
-            .catch(function() { Swal.fire('Error', 'Error de conexion', 'error'); });
+            .catch(function() { Swal.fire({ icon: 'error', title: 'Error de conexión', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 }); });
         }
     });
 };
@@ -814,15 +814,15 @@ document.getElementById('form_edit_appointment')?.addEventListener('submit', fun
     .then(function(r) { return r.json(); })
     .then(function(result) {
         if (result.status === 'ok') {
-            toastr.success('Cambios guardados');
+            Swal.fire({ icon: 'success', title: 'Cambios guardados', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
             setTimeout(function() { location.reload(); }, 1000);
         } else {
-            toastr.error(result.message || 'Error al guardar');
+            Swal.fire({ icon: 'error', title: result.message || 'Error al guardar', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
             btn.disabled = false;
             btn.innerHTML = originalText;
         }
     })
-    .catch(function() { toastr.error('Error de conexion'); btn.disabled = false; btn.innerHTML = originalText; });
+    .catch(function() { Swal.fire({ icon: 'error', title: 'Error de conexión', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 }); btn.disabled = false; btn.innerHTML = originalText; });
 });
 
 // Reprogramar / Proponer fecha
@@ -837,15 +837,15 @@ document.getElementById('form_reschedule')?.addEventListener('submit', function(
     .then(function(r) { return r.json(); })
     .then(function(result) {
         if (result.status === 'ok') {
-            toastr.success('Propuesta enviada al cliente');
+            Swal.fire({ icon: 'success', title: 'Propuesta enviada al cliente', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
             setTimeout(function() { location.reload(); }, 1000);
         } else {
-            toastr.error(result.message || 'Error');
+            Swal.fire({ icon: 'error', title: result.message || 'Error', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
             btn.disabled = false;
             btn.innerHTML = originalText;
         }
     })
-    .catch(function() { toastr.error('Error de conexion'); btn.disabled = false; btn.innerHTML = originalText; });
+    .catch(function() { Swal.fire({ icon: 'error', title: 'Error de conexión', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 }); btn.disabled = false; btn.innerHTML = originalText; });
 });
 
 // Cancelar
@@ -860,15 +860,15 @@ document.getElementById('form_cancel')?.addEventListener('submit', function(e) {
     .then(function(r) { return r.json(); })
     .then(function(result) {
         if (result.status === 'ok') {
-            toastr.success('Cita cancelada');
+            Swal.fire({ icon: 'success', title: 'Cita cancelada', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
             setTimeout(function() { location.reload(); }, 1000);
         } else {
-            toastr.error(result.message || 'Error');
+            Swal.fire({ icon: 'error', title: result.message || 'Error', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
             btn.disabled = false;
             btn.innerHTML = originalText;
         }
     })
-    .catch(function() { toastr.error('Error de conexion'); btn.disabled = false; btn.innerHTML = originalText; });
+    .catch(function() { Swal.fire({ icon: 'error', title: 'Error de conexión', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 }); btn.disabled = false; btn.innerHTML = originalText; });
 });
 
 // Finalizar
@@ -893,13 +893,13 @@ window.finalizeAppointment = function() {
             .then(function(r) { return r.json(); })
             .then(function(res) {
                 if (res.status === 'ok') {
-                    Swal.fire({ title: 'Finalizada', text: 'La cita ha sido completada', icon: 'success', iconColor: '#00c2cb', timer: 1500, showConfirmButton: false });
+                    Swal.fire({ icon: 'success', title: 'Finalizada', text: 'La cita ha sido completada', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
                     setTimeout(function() { location.reload(); }, 1500);
                 } else {
-                    Swal.fire('Error', res.message || 'No se pudo finalizar', 'error');
+                    Swal.fire({ icon: 'error', title: 'Error', text: res.message || 'No se pudo finalizar', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
                 }
             })
-            .catch(function() { Swal.fire('Error', 'Error de conexion', 'error'); });
+            .catch(function() { Swal.fire({ icon: 'error', title: 'Error de conexión', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 }); });
         }
     });
 };
@@ -926,13 +926,13 @@ window.reactivateAppointment = function() {
             .then(function(r) { return r.json(); })
             .then(function(res) {
                 if (res.status === 'ok') {
-                    Swal.fire({ title: 'Reactivada', text: 'La cita esta nuevamente activa', icon: 'success', iconColor: '#00c2cb', timer: 1500, showConfirmButton: false });
+                    Swal.fire({ icon: 'success', title: 'Reactivada', text: 'La cita está nuevamente activa', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
                     setTimeout(function() { location.reload(); }, 1500);
                 } else {
-                    Swal.fire('Error', res.message || 'No se pudo reactivar', 'error');
+                    Swal.fire({ icon: 'error', title: 'Error', text: res.message || 'No se pudo reactivar', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
                 }
             })
-            .catch(function() { Swal.fire('Error', 'Error de conexion', 'error'); });
+            .catch(function() { Swal.fire({ icon: 'error', title: 'Error de conexión', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 }); });
         }
     });
 };

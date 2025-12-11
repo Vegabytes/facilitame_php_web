@@ -166,7 +166,7 @@ $DOCUMENTS_URL = ROOT_URL . '/' . DOCUMENTS_DIR;
                         </div>
                     </div>
                     <div class="list-card-actions">
-                        <a href="${downloadUrl}" class="btn-icon" title="Ver" target="_blank">
+                        <a href="${downloadUrl}" class="btn-icon btn-icon-info" title="Ver" target="_blank">
                             <i class="ki-outline ki-eye"></i>
                         </a>
                         ${!f.is_processed ? `
@@ -303,7 +303,7 @@ $DOCUMENTS_URL = ROOT_URL . '/' . DOCUMENTS_DIR;
             const result = await response.json();
             
             if (result.status === 'ok') {
-                toastr.success('Factura marcada como procesada');
+                Swal.fire({ icon: 'success', title: 'Factura marcada como procesada', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
                 loadData();
                 
                 const badge = document.getElementById('badge-facturas');
@@ -318,13 +318,13 @@ $DOCUMENTS_URL = ROOT_URL . '/' . DOCUMENTS_DIR;
                     kpi.textContent = Math.max(0, current - 1);
                 }
             } else {
-                toastr.error(result.message || 'Error al procesar');
+                Swal.fire({ icon: 'error', title: result.message || 'Error al procesar', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
                 icon.className = originalClass;
                 btn.disabled = false;
             }
         } catch (e) {
             console.error(e);
-            toastr.error('Error de conexión');
+            Swal.fire({ icon: 'error', title: 'Error de conexión', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
             icon.className = originalClass;
             btn.disabled = false;
         }

@@ -260,13 +260,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Copiar código
     document.getElementById('btn-copy-code').addEventListener('click', function() {
         const code = document.getElementById('advisory-code-input').value;
-        navigator.clipboard.writeText(code).then(() => toastr.success('Código copiado'));
+        navigator.clipboard.writeText(code).then(() => Swal.fire({ icon: 'success', title: 'Código copiado', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 }));
     });
-    
+
     // Copiar link
     document.getElementById('btn-copy-link').addEventListener('click', function() {
         const link = document.getElementById('advisory-link').value;
-        navigator.clipboard.writeText(link).then(() => toastr.success('Link de registro copiado'));
+        navigator.clipboard.writeText(link).then(() => Swal.fire({ icon: 'success', title: 'Link de registro copiado', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 }));
     });
 });
 </script>

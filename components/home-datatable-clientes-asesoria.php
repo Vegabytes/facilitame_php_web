@@ -127,7 +127,7 @@
                         </div>
                     </div>
                     <div class="list-card-actions">
-                        <a href="/customer?id=${c.id}" class="btn-icon" title="Ver cliente">
+                        <a href="/customer?id=${c.id}" class="btn-icon btn-icon-info" title="Ver cliente">
                             <i class="ki-outline ki-eye"></i>
                         </a>
                         <a href="/chat?customer=${c.id}" class="btn-icon btn-icon-info" title="Enviar mensaje">

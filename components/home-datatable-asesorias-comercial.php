@@ -128,7 +128,7 @@
                         ${a.direccion ? `<div class="list-card-address"><i class="ki-outline ki-geolocation"></i> ${escapeHtml(a.direccion)}</div>` : ''}
                     </div>
                     <div class="list-card-actions">
-                        <a href="/advisory?id=${a.id}" class="btn-icon" title="Ver asesoría">
+                        <a href="/advisory?id=${a.id}" class="btn-icon btn-icon-info" title="Ver asesoría">
                             <i class="ki-outline ki-eye"></i>
                         </a>
                     </div>
