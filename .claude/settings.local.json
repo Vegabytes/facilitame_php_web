@@ -30,7 +30,12 @@
       "Bash(/mnt/c/Users/acast/Documents/Facilitame/partials/general )",
       "Bash(/mnt/c/Users/acast/Documents/Facilitame/layout/partials/_content.php )",
       "Bash(/mnt/c/Users/acast/Documents/Facilitame/account )",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(du:*)",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/assets/media/stock )",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/assets/js/custom/landing.js )",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/assets/plugins/custom/fslightbox )",
+      "Bash(/mnt/c/Users/acast/Documents/Facilitame/assets/plugins/custom/typedjs )"
     ]
   }
 }
