@@ -59,7 +59,7 @@ $importanceClasses = [
                         </select>
                     </div>
                     <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modal_new_communication">
-                        <i class="ki-outline ki-plus me-1"></i>Nuevo
+                        <i class="ki-outline ki-plus fs-4 me-1"></i>NUEVO AVISO
                     </button>
                 </div>
             </div>

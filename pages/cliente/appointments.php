@@ -119,7 +119,7 @@ if ($customer_advisory_id) {
                         </select>
                     </div>
                     <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modal_request_appointment">
-                        <i class="ki-outline ki-plus me-1"></i>Solicitar
+                        <i class="ki-outline ki-plus fs-4 me-1"></i>SOLICITAR CITA
                     </button>
                 </div>
             </div>
@@ -642,7 +642,7 @@ if ($customer_advisory_id) {
             
             if (!state.status) {
                 emptyHtml += '<button class="btn btn-sm btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#modal_request_appointment">' +
-                    '<i class="ki-outline ki-plus me-1"></i>Solicitar cita</button>';
+                    '<i class="ki-outline ki-plus me-1"></i>SOLICITAR CITA</button>';
             }
             emptyHtml += '</div>';
             

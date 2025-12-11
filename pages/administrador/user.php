@@ -1,8 +1,5 @@
 <?php
-$scripts = [
-    "salesrep",
-    "bold-submit"
-];
+$scripts = ["bold-submit"];
 ?>
 
 <div class="salesrep-detail-page" style="height: calc(100vh - 160px); display: flex; flex-direction: column;">

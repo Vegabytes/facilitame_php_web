@@ -36,7 +36,7 @@ $card_variant = (TYPE === "sales-rep") ? "info" : "warning";
                     </select>
                 </div>
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-add-user">
-                    <i class="ki-outline ki-plus me-1"></i>Añadir <?= $type_singular ?>
+                    <i class="ki-outline ki-plus me-1"></i>AÑADIR <?= strtoupper($type_singular) ?>
                 </button>
             </div>
         </div>

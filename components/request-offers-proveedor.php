@@ -18,8 +18,8 @@ $statusConfig = [
 <div class="tab-toolbar">
     <div class="toolbar-actions">
         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-offer-upload">
-            <i class="ki-outline ki-add-files"></i>
-            Cargar oferta
+            <i class="ki-outline ki-plus fs-4 me-1"></i>
+            CARGAR OFERTA
         </button>
         
         <?php if (!in_array($request["status_id"], [10])): ?>
@@ -89,7 +89,7 @@ $statusConfig = [
                         <?php endif; ?>
                     </div>
                     
-                    <!-- Descripci¨®n colapsable -->
+                    <!-- Descripciï¿½ï¿½n colapsable -->
                     <?php if ($has_desc): ?>
                         <div class="collapse" id="offer-desc-<?= $o['id'] ?>">
                             <div class="offer-description">

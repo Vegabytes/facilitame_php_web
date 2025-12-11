@@ -58,7 +58,7 @@ try {
         $stmt = $pdo->prepare("SELECT id FROM sales_codes WHERE user_id = ?");
         $stmt->execute([$comercial_id]);
         $sales_code_ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
-        
+
         if (empty($sales_code_ids)) {
             $result = [
                 'data' => [],
@@ -66,11 +66,11 @@ try {
             ];
             json_response("ok", "", 9200002003, $result);
         }
-        
+
         $in_codes = implode(",", array_map("intval", $sales_code_ids));
         $stmt = $pdo->query("SELECT DISTINCT customer_id FROM customers_sales_codes WHERE sales_code_id IN ($in_codes)");
         $customer_ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
-        
+
         if (empty($customer_ids)) {
             $result = [
                 'data' => [],
@@ -78,10 +78,23 @@ try {
             ];
             json_response("ok", "", 9200002004, $result);
         }
-        
+
+        // Obtener las solicitudes de los clientes del comercial
         $in_customers = implode(",", array_map("intval", $customer_ids));
-        $joinConditions .= " JOIN requests ON requests.id = log.target_id";
-        $whereConditions[] = "requests.user_id IN ($in_customers)";
+        $stmt = $pdo->query("SELECT id FROM requests WHERE user_id IN ($in_customers)");
+        $request_ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+        if (empty($request_ids)) {
+            $result = [
+                'data' => [],
+                'pagination' => ['current_page' => 1, 'total_pages' => 1, 'total_records' => 0, 'per_page' => $limit, 'from' => 0, 'to' => 0]
+            ];
+            json_response("ok", "", 9200002005, $result);
+        }
+
+        $in_requests = implode(",", array_map("intval", $request_ids));
+        $whereConditions[] = "log.target_type IN ('request','message','message_provider','offer','incident','invoice','notification','document')";
+        $whereConditions[] = "log.target_id IN ($in_requests)";
     }
     // Admin no necesita filtros adicionales
     

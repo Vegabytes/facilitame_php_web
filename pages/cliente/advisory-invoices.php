@@ -98,7 +98,7 @@ $tags = [
                     </select>
                 </div>
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal_send_invoice">
-                    <i class="ki-outline ki-add-files me-1"></i>Nueva
+                    <i class="ki-outline ki-plus fs-4 me-1"></i>NUEVA FACTURA
                 </button>
             </div>
         </div>

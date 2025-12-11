@@ -6,8 +6,8 @@
 <div class="tab-toolbar">
     <div class="toolbar-actions">
         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-offer-commissions-new">
-            <i class="ki-outline ki-plus"></i>
-            Nueva comisión
+            <i class="ki-outline ki-plus fs-4 me-1"></i>
+            NUEVA COMISIÓN
         </button>
     </div>
 </div>

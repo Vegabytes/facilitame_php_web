@@ -101,8 +101,8 @@ $scripts = [];
                     </select>
                 </div>
                 <button type="button" class="btn btn-primary btn-sm" id="btnNewAdvisory">
-                    <i class="ki-outline ki-plus fs-4"></i>
-                    Nueva Asesoría
+                    <i class="ki-outline ki-plus me-1"></i>
+                    NUEVA ASESORÍA
                 </button>
             </div>
         </div>
@@ -204,7 +204,7 @@ $scripts = [];
     const filterStatus = document.getElementById('filterStatus');
     const filterPlan = document.getElementById('filterPlan');
     const btnNewAdvisory = document.getElementById('btnNewAdvisory');
-    const headerSearch = document.getElementById('kt_header_search_input');
+    const headerSearch = document.getElementById('header-search-input');
     
     let searchTimeout = null;
     
@@ -495,7 +495,18 @@ $scripts = [];
     };
     
     window.reloadAdvisories = () => loadData();
-    
+
+    // Función global para el buscador del header
+    window.filterAdvisories = function(query) {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            if (searchInput) searchInput.value = query;
+            state.searchQuery = query;
+            state.currentPage = 1;
+            loadData();
+        }, 300);
+    };
+
     // Init
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
