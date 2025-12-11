@@ -309,3 +309,51 @@ $isDeleted = ((int)$request["status_id"] === 9 || !is_null($request["deleted_at"
         </div>
     </div>
 </div>
+
+<!-- Modal nueva comisión -->
+<div class="modal fade" id="modal-offer-commissions-new" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nueva Comisión</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form action="api/offer-commissions-new" data-reload="1">
+                <input type="hidden" name="request_id" value="<?php echo $request["id"] ?>" readonly>
+
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Importe (€)</label>
+                            <input type="number" name="value" class="form-control" min="0" step="0.01" required placeholder="0.00">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Recurrente</label>
+                            <select name="recurring" class="form-select" required>
+                                <option value="0">No</option>
+                                <option value="1">Sí</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Activo desde</label>
+                            <input type="date" name="activated_at" class="form-control" required value="<?php echo date('Y-m-d'); ?>">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Desactivado el <span class="text-muted">(opcional)</span></label>
+                            <input type="date" name="deactivated_at" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary bold-submit">Crear Comisión</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

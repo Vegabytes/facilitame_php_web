@@ -14,11 +14,11 @@
                 <?php secho(USER["email"]) ?>
             </p>
             <span class="user-role-badge">
-                <?php 
+                <?php
                 if (admin()) echo 'Administrador';
                 elseif (proveedor()) echo 'Proveedor';
                 elseif (comercial()) echo 'Comercial';
-                elseif (asesoria()) echo 'Asesoría';
+                elseif (asesoria()) echo 'AsesorÃ­a';
                 else echo 'Cliente';
                 ?>
             </span>
@@ -44,7 +44,7 @@
             <div class="user-menu-icon icon-logout">
                 <i class="ki-outline ki-exit-right"></i>
             </div>
-            <span class="user-menu-text">Cerrar Sesión</span>
+            <span class="user-menu-text">Cerrar SesiÃ³n</span>
             <i class="ki-outline ki-right fs-6 ms-auto"></i>
         </button>
     </div>

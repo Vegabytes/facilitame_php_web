@@ -1452,6 +1452,32 @@ function get_sales_rep($user_id)
     return $customer ?: [];
 }
 
+function get_user_profile($user_id)
+{
+    global $pdo;
+    $stmt = $pdo->prepare("SELECT users.*, rol.name AS role_name, mhr.role_id, pic.filename AS profile_picture
+        FROM users
+        JOIN model_has_roles mhr ON mhr.model_id = users.id
+        JOIN roles rol ON rol.id = mhr.role_id
+        LEFT JOIN user_pictures pic ON pic.user_id = users.id
+        WHERE users.id = :user_id AND mhr.role_id IN (2, 7) AND users.deleted_at IS NULL
+        ORDER BY users.created_at DESC");
+    $stmt->bindValue(":user_id", $user_id);
+    $stmt->execute();
+    $user = $stmt->fetch();
+
+    if ($user && $user['role_id'] == 7) {
+        // Si es comercial, obtener su código
+        $stmt2 = $pdo->prepare("SELECT code FROM sales_codes WHERE user_id = :user_id AND deleted_at IS NULL LIMIT 1");
+        $stmt2->bindValue(":user_id", $user_id);
+        $stmt2->execute();
+        $code = $stmt2->fetchColumn();
+        $user['code'] = $code ?: '';
+    }
+
+    return $user ?: [];
+}
+
 function make_pdf($template, $filename, $data = [])
 {
     ob_start();

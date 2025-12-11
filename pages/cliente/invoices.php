@@ -32,7 +32,7 @@
         
         <!-- Paginador -->
         <div class="pagination-container" id="invoices-pagination" style="display: none;">
-            <div class="pagination-info" id="invoices-page-info">Pagina 1 de 1</div>
+            <div class="pagination-info" id="invoices-page-info">Página 1 de 1</div>
             <div class="pagination-nav">
                 <button class="btn-pagination" id="invoices-prev" disabled>
                     <i class="ki-outline ki-left"></i>
@@ -125,7 +125,7 @@
             }
         } catch (error) {
             console.error('Error:', error);
-            showError('Error de conexion');
+            showError('Error de conexión');
         } finally {
             state.isLoading = false;
         }
@@ -140,9 +140,9 @@
                     </div>
                     <div class="empty-state-title">${state.searchQuery ? 'Sin resultados' : 'No hay facturas'}</div>
                     <p class="empty-state-text">
-                        ${state.searchQuery 
-                            ? `No se encontraron resultados para "${escapeHtml(state.searchQuery)}"` 
-                            : 'Las facturas de tus servicios apareceran aqui'}
+                        ${state.searchQuery
+                            ? `No se encontraron resultados para "${escapeHtml(state.searchQuery)}"`
+                            : 'Las facturas de tus servicios aparecerán aquí'}
                     </p>
                 </div>`;
             paginationContainer.style.display = 'none';
@@ -173,15 +173,18 @@
                     return `
                         <tr>
                             <td style="padding: 0.5rem 1rem;">
+                                <span class="badge-status badge-status-neutral">#${inv.id}</span>
+                            </td>
+                            <td style="padding: 0.5rem 1rem;">
                                 <span class="text-muted">
                                     <i class="ki-outline ${iconClass} me-1"></i>
                                     ${inv.invoice_date_formatted}
                                 </span>
                             </td>
-                            <td class="fw-medium">${escapeHtml(inv.description || 'Sin descripci�n')}</td>
+                            <td class="fw-medium">${escapeHtml(inv.description || 'Sin descripción')}</td>
                             <td class="text-end" style="padding-right: 1rem;">
-                                <a href="/uploads/invoices/${encodeURIComponent(inv.filename)}" 
-                                   target="_blank" 
+                                <a href="/uploads/invoices/${encodeURIComponent(inv.filename)}"
+                                   target="_blank"
                                    class="btn btn-sm btn-light-primary"
                                    title="Descargar factura">
                                     <i class="ki-outline ki-cloud-download me-1"></i> Descargar
@@ -192,7 +195,7 @@
             } else {
                 invoicesRows = `
                     <tr>
-                        <td colspan="3" class="text-center text-muted py-4">
+                        <td colspan="4" class="text-center text-muted py-4">
                             <i class="ki-outline ki-document fs-2 d-block mb-2 opacity-50"></i>
                             No hay facturas disponibles para este servicio
                         </td>
@@ -221,7 +224,7 @@
                                 ${req.last_invoice_formatted ? `
                                     <span>
                                         <i class="ki-outline ki-calendar"></i>
-                                        �ltima: ${req.last_invoice_formatted}
+                                        Última: ${req.last_invoice_formatted}
                                     </span>
                                 ` : ''}
                             </div>
@@ -237,8 +240,9 @@
                         <table class="table table-sm align-middle mb-0" style="font-size: 0.8125rem;">
                             <thead>
                                 <tr class="text-muted" style="background: rgba(0,0,0,0.02);">
+                                    <th style="padding: 0.5rem 1rem; width: 70px;">ID</th>
                                     <th style="padding: 0.5rem 1rem; width: 140px;">Fecha</th>
-                                    <th>Descripci�n</th>
+                                    <th>Descripción</th>
                                     <th class="text-end" style="padding-right: 1rem; width: 140px;">Acciones</th>
                                 </tr>
                             </thead>
@@ -267,7 +271,7 @@
     
     function updatePaginationControls() {
         pageCurrent.textContent = `${state.currentPage} / ${state.totalPages}`;
-        pageInfo.textContent = `Pagina ${state.currentPage} de ${state.totalPages}`;
+        pageInfo.textContent = `Página ${state.currentPage} de ${state.totalPages}`;
         prevBtn.disabled = state.currentPage <= 1;
         nextBtn.disabled = state.currentPage >= state.totalPages;
         paginationContainer.style.display = state.totalRecords > state.pageSize ? 'flex' : 'none';

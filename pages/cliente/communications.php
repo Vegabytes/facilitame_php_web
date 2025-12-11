@@ -264,6 +264,7 @@ $importanceClasses = [
                 <div class="list-card list-card-${colorClass}" style="cursor: pointer;" onclick="viewCommunication(${index})">
                     <div class="list-card-content">
                         <div class="list-card-title">
+                            <span class="badge-status badge-status-neutral">#${item.id}</span>
                             <span class="fw-semibold">${escapeHtml(item.subject)}</span>
                             <span class="badge-status badge-status-${colorClass}">${label}</span>
                         </div>

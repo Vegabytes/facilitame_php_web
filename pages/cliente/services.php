@@ -101,7 +101,7 @@ $scripts = [];
     <div class="panel-footer">
         <button type="button" class="btn-secondary" id="btn-cancel">Cancelar</button>
         <button type="submit" form="service-form" class="btn-primary" id="btn-submit">
-            <span class="btn-text">Enviar solicitud</span>
+            <span class="btn-text">Enviar Solicitud</span>
             <span class="btn-loading"><span class="spinner"></span> Enviando...</span>
         </button>
     </div>

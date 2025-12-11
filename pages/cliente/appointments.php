@@ -253,7 +253,7 @@ if ($customer_advisory_id) {
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">
                         <i class="ki-outline ki-send me-1"></i>
-                        Enviar solicitud
+                        Enviar Solicitud
                     </button>
                 </div>
             </form>
@@ -301,7 +301,7 @@ if ($customer_advisory_id) {
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-warning">
                         <i class="ki-outline ki-send me-1"></i>
-                        Enviar solicitud
+                        Enviar Solicitud
                     </button>
                 </div>
             </form>

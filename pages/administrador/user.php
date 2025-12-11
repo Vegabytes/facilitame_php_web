@@ -1,16 +1,18 @@
 <?php
 $scripts = ["bold-submit"];
+$role_label = $is_comercial ? "comercial" : "proveedor";
+$role_label_cap = $is_comercial ? "Comercial" : "Proveedor";
 ?>
 
 <div class="salesrep-detail-page" style="height: calc(100vh - 160px); display: flex; flex-direction: column;">
-    
+
     <div class="salesrep-detail-layout" style="flex: 1; display: flex; gap: 1.5rem; min-height: 0;">
-        
-        <!-- SIDEBAR COMERCIAL -->
+
+        <!-- SIDEBAR USUARIO -->
         <aside class="salesrep-sidebar" style="width: 320px; flex-shrink: 0; display: flex; flex-direction: column;">
             <div class="card" style="flex: 1; display: flex; flex-direction: column;">
                 <div class="card-body" style="flex: 1; overflow-y: auto;">
-                    
+
                     <!-- Avatar y datos principales -->
                     <div class="customer-profile">
                         <div class="customer-avatar">
@@ -22,33 +24,40 @@ $scripts = ["bold-submit"];
                                      alt="Foto de perfil por defecto" loading="lazy">
                             <?php endif; ?>
                         </div>
-                        
+
                         <h3 class="customer-name">
                             <?php secho($sales_rep["name"] . " " . $sales_rep["lastname"]); ?>
                         </h3>
-                        
+
                         <span class="badge-status badge-status-info">
                             <i class="ki-outline ki-briefcase"></i>
                             <?php echo display_role($sales_rep["role_name"]); ?>
                         </span>
-                        
+
+                        <?php if ($is_comercial): ?>
                         <div class="customer-stat">
                             <span class="customer-stat-value"><?php echo count($customers); ?></span>
                             <span class="customer-stat-label">Clientes asignados</span>
                         </div>
+                        <?php elseif ($is_proveedor): ?>
+                        <div class="customer-stat">
+                            <span class="customer-stat-value"><?php echo count($requests); ?></span>
+                            <span class="customer-stat-label">Solicitudes asignadas</span>
+                        </div>
+                        <?php endif; ?>
                     </div>
-                    
+
                     <hr class="customer-divider">
-                    
-                    <!-- Información del comercial -->
+
+                    <!-- Información del usuario -->
                     <div class="customer-info-section">
                         <h6 class="customer-info-title">
                             <i class="ki-outline ki-information-5"></i>
-                            Información del comercial
+                            Información del <?php echo $role_label; ?>
                         </h6>
-                        
+
                         <dl class="customer-details">
-                            
+
                             <!-- ID Usuario -->
                             <div class="customer-detail-row">
                                 <dt>ID de usuario</dt>
@@ -56,7 +65,7 @@ $scripts = ["bold-submit"];
                                     <span class="badge-status badge-status-primary">#<?php echo $sales_rep["id"]; ?></span>
                                 </dd>
                             </div>
-                            
+
                             <!-- Email -->
                             <div class="customer-detail-row">
                                 <dt>Email</dt>
@@ -66,7 +75,7 @@ $scripts = ["bold-submit"];
                                     </a>
                                 </dd>
                             </div>
-                            
+
                             <!-- Teléfono -->
                             <?php if (!empty($sales_rep["phone"])): ?>
                             <div class="customer-detail-row">
@@ -78,8 +87,9 @@ $scripts = ["bold-submit"];
                                 </dd>
                             </div>
                             <?php endif; ?>
-                            
-                            <!-- Código comercial -->
+
+                            <!-- Código comercial (solo para comerciales) -->
+                            <?php if ($is_comercial && !empty($sales_rep["code"])): ?>
                             <div class="customer-detail-row">
                                 <dt>Código comercial</dt>
                                 <dd>
@@ -88,7 +98,8 @@ $scripts = ["bold-submit"];
                                     </a>
                                 </dd>
                             </div>
-                            
+                            <?php endif; ?>
+
                             <!-- NIF/CIF -->
                             <?php if (!empty($sales_rep["nif_cif"])): ?>
                             <div class="customer-detail-row">
@@ -96,12 +107,12 @@ $scripts = ["bold-submit"];
                                 <dd><?php secho($sales_rep["nif_cif"]); ?></dd>
                             </div>
                             <?php endif; ?>
-                            
+
                         </dl>
                     </div>
-                    
+
                 </div>
-                
+
                 <!-- Acciones -->
                 <div class="card-footer" style="flex-shrink: 0; padding: 1rem; border-top: 1px solid var(--f-border);">
                     <div class="d-flex gap-2 flex-column">
@@ -109,27 +120,27 @@ $scripts = ["bold-submit"];
                             <i class="ki-outline ki-sms me-1"></i>
                             Enviar email
                         </a>
-                        <button class="btn btn-sm btn-light-danger" data-bs-toggle="modal" data-bs-target="#modal-delete-salesrep">
+                        <button class="btn btn-sm btn-light-danger" data-bs-toggle="modal" data-bs-target="#modal-delete-user">
                             <i class="ki-outline ki-trash me-1"></i>
-                            Eliminar comercial
+                            Eliminar <?php echo $role_label; ?>
                         </button>
                     </div>
                 </div>
             </div>
         </aside>
-        <!-- /SIDEBAR COMERCIAL -->
+        <!-- /SIDEBAR USUARIO -->
         
         <!-- CONTENIDO PRINCIPAL: TABS -->
         <main class="salesrep-main" style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
             <div class="card" style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
-                
+
                 <!-- Header con tabs -->
                 <div class="card-header" style="flex-shrink: 0; padding: 0;">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" 
-                                    data-bs-toggle="tab" 
-                                    data-bs-target="#tab-overview" 
+                            <button class="nav-link active"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#tab-overview"
                                     type="button"
                                     role="tab"
                                     aria-selected="true">
@@ -137,10 +148,11 @@ $scripts = ["bold-submit"];
                                 General
                             </button>
                         </li>
+                        <?php if ($is_comercial): ?>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" 
-                                    data-bs-toggle="tab" 
-                                    data-bs-target="#tab-customers" 
+                            <button class="nav-link"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#tab-customers"
                                     type="button"
                                     role="tab"
                                     aria-selected="false">
@@ -149,9 +161,9 @@ $scripts = ["bold-submit"];
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" 
-                                    data-bs-toggle="tab" 
-                                    data-bs-target="#tab-excluded" 
+                            <button class="nav-link"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#tab-excluded"
                                     type="button"
                                     role="tab"
                                     aria-selected="false">
@@ -160,9 +172,9 @@ $scripts = ["bold-submit"];
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" 
-                                    data-bs-toggle="tab" 
-                                    data-bs-target="#tab-commissions" 
+                            <button class="nav-link"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#tab-commissions"
                                     type="button"
                                     role="tab"
                                     aria-selected="false">
@@ -170,64 +182,80 @@ $scripts = ["bold-submit"];
                                 Comisiones
                             </button>
                         </li>
+                        <?php elseif ($is_proveedor): ?>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#tab-requests"
+                                    type="button"
+                                    role="tab"
+                                    aria-selected="false">
+                                <i class="ki-outline ki-document"></i>
+                                Solicitudes
+                            </button>
+                        </li>
+                        <?php endif; ?>
                     </ul>
                 </div>
                 
                 <!-- Body con contenido de tabs -->
                 <div class="tab-content" style="flex: 1; overflow-y: auto; min-height: 0;">
-                    
+
                     <!-- Tab: General -->
                     <div class="tab-pane fade show active" id="tab-overview" role="tabpanel">
                         <div class="tab-pane-content" style="padding: 1.5rem;">
                             <div class="details-section">
                                 <h6 class="details-section-title">
                                     <i class="ki-outline ki-user-edit"></i>
-                                    Detalles del comercial
+                                    Detalles del <?php echo $role_label; ?>
                                 </h6>
-                                
-                                <form action="api/sales-rep-update" data-reload="1">
-                                    <input type="hidden" name="sales_rep_id" readonly value="<?php echo $sales_rep["id"] ?>">
-                                    
+
+                                <form action="api/user-update" data-reload="1">
+                                    <input type="hidden" name="user_id" readonly value="<?php echo $sales_rep["id"] ?>">
+                                    <input type="hidden" name="role_id" readonly value="<?php echo $sales_rep["role_id"] ?>">
+
                                     <div class="row g-4">
                                         <div class="col-md-6">
                                             <label class="form-label">Nombre</label>
                                             <input type="text" name="name" required class="form-control" value="<?php secho($sales_rep["name"]); ?>"/>
                                         </div>
-                                        
+
                                         <div class="col-md-6">
                                             <label class="form-label">Apellidos</label>
                                             <input type="text" name="lastname" required class="form-control" value="<?php secho($sales_rep["lastname"]); ?>"/>
                                         </div>
-                                        
+
                                         <div class="col-md-6">
                                             <label class="form-label">Email</label>
                                             <input type="email" name="email" required class="form-control" value="<?php secho($sales_rep["email"]); ?>"/>
                                         </div>
-                                        
+
                                         <div class="col-md-6">
                                             <label class="form-label">Teléfono</label>
                                             <input type="text" name="phone" required class="form-control" value="<?php secho($sales_rep["phone"]); ?>"/>
                                         </div>
-                                        
+
                                         <div class="col-md-6">
                                             <label class="form-label">NIF / CIF</label>
                                             <input type="text" name="nif_cif" required class="form-control" value="<?php secho($sales_rep["nif_cif"]); ?>"/>
                                         </div>
-                                        
+
+                                        <?php if ($is_comercial): ?>
                                         <div class="col-md-6">
                                             <label class="form-label">Código</label>
-                                            <input type="text" name="code" maxlength="10" required class="form-control salesrep-code-input" value="<?php secho($sales_rep["code"]); ?>"/>
+                                            <input type="text" name="code" maxlength="10" required class="form-control salesrep-code-input" value="<?php secho($sales_rep["code"] ?? ''); ?>"/>
                                         </div>
-                                        
+                                        <?php endif; ?>
+
                                         <div class="col-12">
                                             <label class="form-label">
-                                                Nueva contraseña 
+                                                Nueva contraseña
                                                 <span class="text-muted">(dejar vacío para no cambiar)</span>
                                             </label>
                                             <input type="text" name="new_password" class="form-control" placeholder="Nueva contraseña"/>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="d-flex justify-content-end mt-4">
                                         <button type="submit" class="btn btn-primary bold-submit">
                                             <i class="ki-outline ki-check me-1"></i>
@@ -238,8 +266,9 @@ $scripts = ["bold-submit"];
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Tab: Clientes -->
+
+                    <?php if ($is_comercial): ?>
+                    <!-- Tab: Clientes (solo comerciales) -->
                     <div class="tab-pane fade" id="tab-customers" role="tabpanel">
                         <div class="tab-pane-content" style="padding: 1.5rem;">
                             <div class="details-section">
@@ -247,13 +276,13 @@ $scripts = ["bold-submit"];
                                     <i class="ki-outline ki-people"></i>
                                     Clientes asignados
                                 </h6>
-                                
+
                                 <!-- Buscador -->
                                 <div class="search-box mb-4">
                                     <i class="ki-outline ki-magnifier"></i>
                                     <input type="text" class="form-control" placeholder="Buscar clientes..." id="datatables-sales-rep-customers-search">
                                 </div>
-                                
+
                                 <?php if (empty($customers)): ?>
                                     <div class="empty-state">
                                         <div class="empty-state-icon">
@@ -291,8 +320,8 @@ $scripts = ["bold-submit"];
                                                     </div>
                                                 </div>
                                                 <div class="list-card-actions">
-                                                    <a href="customer?id=<?php echo $c['id']; ?>" 
-                                                       class="btn-icon" 
+                                                    <a href="customer?id=<?php echo $c['id']; ?>"
+                                                       class="btn-icon"
                                                        title="Ver cliente">
                                                         <i class="ki-outline ki-eye"></i>
                                                     </a>
@@ -304,18 +333,18 @@ $scripts = ["bold-submit"];
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Tab: Servicios excluidos -->
+
+                    <!-- Tab: Servicios excluidos (solo comerciales) -->
                     <div class="tab-pane fade" id="tab-excluded" role="tabpanel">
                         <div class="tab-pane-content" style="padding: 1.5rem;">
                             <div class="alert alert-warning mb-4">
                                 <i class="ki-outline ki-information-2 me-2"></i>
                                 <strong>Importante:</strong> Los servicios marcados NO estarán disponibles para clientes que accedan con el código de este comercial.
                             </div>
-                            
+
                             <form action="api/sales-rep-update-excluded-services" data-reload="1">
                                 <input type="hidden" readonly name="sales_rep_id" value="<?php echo $sales_rep["id"] ?>">
-                                
+
                                 <div class="excluded-services-list">
                                     <?php foreach ($services as $service) : ?>
                                         <?php $checked = (in_array($service["id"], $excluded_services)) ? "checked" : "" ?>
@@ -329,7 +358,7 @@ $scripts = ["bold-submit"];
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
-                                
+
                                 <div class="d-flex justify-content-end mt-4">
                                     <button type="submit" class="btn btn-primary bold-submit">
                                         <i class="ki-outline ki-check me-1"></i>
@@ -339,8 +368,8 @@ $scripts = ["bold-submit"];
                             </form>
                         </div>
                     </div>
-                    
-                    <!-- Tab: Comisiones -->
+
+                    <!-- Tab: Comisiones (solo comerciales) -->
                     <div class="tab-pane fade" id="tab-commissions" role="tabpanel">
                         <div class="tab-pane-content" style="padding: 1.5rem;">
                             <div class="empty-state">
@@ -352,7 +381,70 @@ $scripts = ["bold-submit"];
                             </div>
                         </div>
                     </div>
-                    
+                    <?php endif; ?>
+
+                    <?php if ($is_proveedor): ?>
+                    <!-- Tab: Solicitudes (solo proveedores) -->
+                    <div class="tab-pane fade" id="tab-requests" role="tabpanel">
+                        <div class="tab-pane-content" style="padding: 1.5rem;">
+                            <div class="details-section">
+                                <h6 class="details-section-title">
+                                    <i class="ki-outline ki-document"></i>
+                                    Solicitudes asignadas
+                                </h6>
+
+                                <?php if (empty($requests)): ?>
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon">
+                                            <i class="ki-outline ki-document"></i>
+                                        </div>
+                                        <div class="empty-state-title">Sin solicitudes asignadas</div>
+                                        <p class="empty-state-text">Este proveedor aún no tiene solicitudes asignadas</p>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="tab-list-container" id="proveedor-requests-list">
+                                        <?php foreach ($requests as $r): ?>
+                                            <div class="list-card" data-request-id="<?php echo $r["id"]; ?>">
+                                                <div class="list-card-content">
+                                                    <div class="list-card-title">
+                                                        <a href="request?id=<?php echo $r['id']; ?>" class="list-card-customer">
+                                                            Solicitud #<?php echo $r["id"]; ?>
+                                                        </a>
+                                                        <?php if (!empty($r["customer_name"])): ?>
+                                                        <span class="badge-status badge-status-info">
+                                                            <?php secho($r["customer_name"] . " " . ($r["customer_lastname"] ?? '')); ?>
+                                                        </span>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                    <div class="list-card-meta">
+                                                        <?php if (!empty($r["customer_email"])): ?>
+                                                        <span>
+                                                            <i class="ki-outline ki-sms"></i>
+                                                            <?php secho($r["customer_email"]); ?>
+                                                        </span>
+                                                        <?php endif; ?>
+                                                        <span>
+                                                            <i class="ki-outline ki-calendar"></i>
+                                                            <?php echo date("d/m/Y", strtotime($r["created_at"])); ?>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="list-card-actions">
+                                                    <a href="request?id=<?php echo $r['id']; ?>"
+                                                       class="btn-icon"
+                                                       title="Ver solicitud">
+                                                        <i class="ki-outline ki-eye"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+
                 </div>
                 
             </div>
@@ -363,28 +455,29 @@ $scripts = ["bold-submit"];
     
 </div>
 
-<!-- Modal: Eliminar comercial -->
-<div class="modal fade" id="modal-delete-salesrep" tabindex="-1">
+<!-- Modal: Eliminar usuario -->
+<div class="modal fade" id="modal-delete-user" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Eliminar comercial</h5>
+                <h5 class="modal-title">Eliminar <?php echo $role_label; ?></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            
-            <form action="api/sales-rep-delete" data-reload="0" data-redirect="salesreps" data-confirm-message="¿Estás seguro?<br>Esta acción no se puede deshacer">
-                <input type="hidden" name="sales_rep_id" value="<?php echo $sales_rep["id"] ?>">
-                
+
+            <form action="api/user-delete" data-reload="0" data-redirect="<?php echo $is_comercial ? 'salesreps' : 'users'; ?>" data-confirm-message="¿Estás seguro?<br>Esta acción no se puede deshacer">
+                <input type="hidden" name="user_id" value="<?php echo $sales_rep["id"] ?>">
+                <input type="hidden" name="role_id" value="<?php echo $sales_rep["role_id"] ?>">
+
                 <div class="modal-body">
                     <div class="alert alert-danger">
                         <i class="ki-outline ki-information-2 me-2"></i>
-                        <strong>Atención:</strong> Esta acción eliminará permanentemente el comercial y no se puede deshacer.
+                        <strong>Atención:</strong> Esta acción eliminará permanentemente el <?php echo $role_label; ?> y no se puede deshacer.
                     </div>
                 </div>
-                
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-danger bold-submit">Eliminar comercial</button>
+                    <button type="submit" class="btn btn-danger bold-submit">Eliminar <?php echo $role_label; ?></button>
                 </div>
             </form>
         </div>
