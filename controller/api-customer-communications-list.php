@@ -76,22 +76,15 @@ $total_pages = ceil($total_records / $limit);
 
 // Obtener registros
 $stmt = $pdo->prepare("
-    SELECT ac.id, ac.subject, ac.message, ac.importance, ac.created_at, 
+    SELECT ac.id, ac.subject, ac.message, ac.importance, ac.created_at,
            acr.is_read, acr.read_at
     FROM advisory_communications ac
     INNER JOIN advisory_communication_recipients acr ON acr.communication_id = ac.id
     WHERE $where_clause
     ORDER BY ac.created_at DESC
-    LIMIT :pagination_limit OFFSET :pagination_offset
+    LIMIT $limit OFFSET $offset
 ");
-// Bind los parámetros de WHERE
-foreach ($params as $i => $param) {
-    $stmt->bindValue($i + 1, $param);
-}
-// Bind LIMIT y OFFSET como enteros
-$stmt->bindValue(':pagination_limit', $limit, PDO::PARAM_INT);
-$stmt->bindValue(':pagination_offset', $offset, PDO::PARAM_INT);
-$stmt->execute();
+$stmt->execute($params);
 $communications = $stmt->fetchAll();
 
 $from = $total_records > 0 ? $offset + 1 : 0;

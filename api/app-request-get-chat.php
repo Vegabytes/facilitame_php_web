@@ -1,4 +1,9 @@
 <?php
+if (!IS_MOBILE_APP) {
+    header("HTTP/1.1 404");
+    exit;
+}
+
 if (user_can_access_request($_POST["request_id"]) !== true)
 {
     json_response("ko", "No se puede acceder a los mensajes", 2074368994);
@@ -6,8 +11,6 @@ if (user_can_access_request($_POST["request_id"]) !== true)
 
 try
 {
-    $pdo->beginTransaction();
-    
     $messages = get_messages($_POST["request_id"]);
 
     $parsed = [];
@@ -27,12 +30,10 @@ try
     $data["current_user_id"] = USER["id"];
     $data["current_user_name"] = USER["name"];
 
-
     json_response("ok", "", 1628766346, $data);
 }
 catch (Exception $e)
 {
-    $pdo->rollBack();
     if (DEBUG === true)
     {
         json_response("ko", $e->getMessage(), 1308734381);
@@ -42,5 +43,3 @@ catch (Exception $e)
         json_response("ko", "", 1758810952);
     }
 }
-
-?>

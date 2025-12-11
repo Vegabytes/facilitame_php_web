@@ -66,6 +66,14 @@ class User implements jsonSerializable {
 
     public function jsonSerialize(): array
     {
+        $profile_picture = null;
+        if (!empty($this->profile_picture)) {
+            $picture_path = ROOT_DIR . "/" . MEDIA_DIR . "/" . $this->profile_picture;
+            if (file_exists($picture_path)) {
+                $profile_picture = "data:image/jpeg;base64," . base64_encode(file_get_contents($picture_path));
+            }
+        }
+
         return [
             "id" => $this->id,
             "role" => $this->role,
@@ -74,7 +82,7 @@ class User implements jsonSerializable {
             "name" => $this->name,
             "lastname" => $this->lastname,
             "email" => $this->email,
-            "profile_picture" => "data:image/jpeg;base64," . base64_encode(file_get_contents(ROOT_DIR . "/" . MEDIA_DIR . "/" . $this->profile_picture)),
+            "profile_picture" => $profile_picture,
             "phone" => $this->phone,
             "allow_invoice_access" => $this->allow_invoice_access,
             "allow_invoice_access_granted_at" => $this->allow_invoice_access_granted_at,

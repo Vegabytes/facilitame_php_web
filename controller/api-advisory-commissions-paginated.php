@@ -82,17 +82,10 @@ $dataQuery = "SELECT
                 END as status
               " . $baseQuery . "
               ORDER BY ca.activated_at DESC, ca.id DESC
-              LIMIT :pagination_limit OFFSET :pagination_offset";
+              LIMIT $limit OFFSET $offset";
 
 $stmt = $pdo->prepare($dataQuery);
-// Bind los parámetros de WHERE
-foreach ($params as $i => $param) {
-    $stmt->bindValue($i + 1, $param);
-}
-// Bind LIMIT y OFFSET como enteros
-$stmt->bindValue(':pagination_limit', $limit, PDO::PARAM_INT);
-$stmt->bindValue(':pagination_offset', $offset, PDO::PARAM_INT);
-$stmt->execute();
+$stmt->execute($params);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Formatear fechas

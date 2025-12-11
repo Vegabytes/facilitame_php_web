@@ -56,16 +56,9 @@ $stmt = $pdo->prepare("
     FROM advisory_communications ac
     WHERE $where_clause
     ORDER BY ac.created_at DESC
-    LIMIT :pagination_limit OFFSET :pagination_offset
+    LIMIT $limit OFFSET $offset
 ");
-// Bind los parámetros de WHERE
-foreach ($params as $i => $param) {
-    $stmt->bindValue($i + 1, $param);
-}
-// Bind LIMIT y OFFSET como enteros
-$stmt->bindValue(':pagination_limit', $limit, PDO::PARAM_INT);
-$stmt->bindValue(':pagination_offset', $offset, PDO::PARAM_INT);
-$stmt->execute();
+$stmt->execute($params);
 $communications = $stmt->fetchAll();
 // Formatear datos
 $importance_labels = [

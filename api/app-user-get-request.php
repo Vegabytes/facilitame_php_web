@@ -1,15 +1,15 @@
 <?php
+if (!IS_MOBILE_APP) {
+    header("HTTP/1.1 404");
+    exit;
+}
+
 try
 {
-    // $pdo->beginTransaction();
-    // $pdo->commit();
-
     require ROOT_DIR . "/controller/request.php";
 
-    $request = $info["request"]; // viene del require anterior
-
+    $request = $info["request"];
     $category = get_category($request["category_id"]);
-
 
     $request["category_img_url"] = app_get_category_image_uri($request["category_id"]);
     $request["info"] = get_request_category_info($request);
@@ -22,6 +22,5 @@ try
 }
 catch (Throwable $e)
 {
-    // $pdo->rollBack();
     json_response("ko", $e->getMessage(), 1013918141);
 }

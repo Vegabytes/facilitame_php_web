@@ -1,16 +1,13 @@
 <?php
-$user = new User();
-
-$file_name_dir = __DIR__ . "/app-offer-fetch.log";
-file_put_contents($file_name_dir, date("d/m/Y H:i:s") . " : " . json_encode($_POST) . "\n", FILE_APPEND | LOCK_EX);
-
-
-
+if (!IS_MOBILE_APP) {
+    header("HTTP/1.1 404");
+    exit;
+}
 
 try
 {
     $pdo->beginTransaction();
-    
+
     $query = "SELECT * FROM `offers` WHERE id = :offer_id";
     $stmt = $pdo->prepare($query);
     $stmt->bindValue(":offer_id", $_POST["file_id"]);
@@ -32,8 +29,6 @@ try
         "b64" => $b64,
         "filename" => $offer["offer_file"]
     ];
-
-    file_put_contents($file_name_dir, date("d/m/Y H:i:s") . " : " . json_encode($offer["offer_file"]) . "\n", FILE_APPEND | LOCK_EX);
 
     $pdo->commit();
 

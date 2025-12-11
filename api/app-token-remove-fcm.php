@@ -1,17 +1,21 @@
 <?php
+if (!IS_MOBILE_APP) {
+    header("HTTP/1.1 404");
+    exit;
+}
+
 try
 {
-    $pdo->beginTransaction();
+    global $pdo;
 
-    $file_name_dir = __DIR__ . "/app-token-remove-fcm.log";
-    file_put_contents($file_name_dir, date("d/m/Y H:i:s") . " : " . json_encode($_REQUEST) . "\n", FILE_APPEND | LOCK_EX);    
+    $query = "UPDATE `users` SET firebase_token = NULL WHERE id = :user_id";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindValue(":user_id", USER["id"]);
+    $stmt->execute();
 
-    $pdo->commit();
-
-    json_response("ko", "", 1140438821);
+    json_response("ok", "", 1140438821);
 }
 catch (Throwable $e)
 {
-    $pdo->rollBack();
     json_response("ko", MSG, 1330312505);
 }

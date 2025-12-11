@@ -2358,4 +2358,84 @@ display:none}
 
 }
 
+/* Profile Card Compact - Cliente Home */
+.profile-card-compact{
+margin-bottom:0}
+
+.profile-card-compact .card-body{
+padding:1rem 1.25rem}
+
+.profile-content{
+display:flex;
+align-items:center;
+gap:1rem}
+
+.profile-avatar{
+position:relative;
+flex-shrink:0;
+width:64px;
+height:64px}
+
+.profile-avatar img,
+.profile-avatar-img{
+width:64px;
+height:64px;
+border-radius:50%;
+object-fit:cover;
+border:2px solid var(--f-border);
+background:var(--f-bg-light)}
+
+.profile-status{
+position:absolute;
+bottom:2px;
+right:2px;
+width:12px;
+height:12px;
+background:#16a34a;
+border:2px solid #fff;
+border-radius:50%}
+
+.profile-info{
+flex:1;
+min-width:0}
+
+.profile-name{
+font-size:1.125rem;
+font-weight:600;
+color:var(--f-text-dark);
+margin:0 0 .25rem;
+display:flex;
+align-items:center;
+gap:.5rem;
+flex-wrap:wrap}
+
+.profile-role{
+font-size:.8125rem;
+color:var(--f-text-medium)}
+
+.profile-actions{
+flex-shrink:0}
+
+.badge-sales-code{
+display:inline-flex;
+align-items:center;
+gap:.25rem;
+font-size:.75rem;
+font-weight:500;
+color:var(--f-primary);
+background:rgba(0,194,203,.1);
+padding:.125rem .5rem;
+border-radius:var(--f-radius-sm)}
+
+@media (max-width:576px){
+.profile-content{
+flex-direction:column;
+text-align:center}
+
+.profile-actions{
+width:100%}
+
+.profile-actions .btn{
+width:100%}
+}
 

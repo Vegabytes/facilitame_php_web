@@ -64,6 +64,17 @@ $isPublicPage = !isset(USER['role']) || USER['role'] === null;
     <link href="/assets/css/dashboard-common.css?v=<?= $v ?>" rel="stylesheet" />
     <link href="/assets/css/buttons.css?v=<?= $v ?>" rel="stylesheet" />
     <link href="/assets/css/modals.css?v=<?= $v ?>" rel="stylesheet" />
+    <?php if (admin()): ?>
+    <link href="/assets/css/admin.css?v=<?= $v ?>" rel="stylesheet" />
+    <?php elseif (cliente()): ?>
+    <link href="/assets/css/cliente.css?v=<?= $v ?>" rel="stylesheet" />
+    <?php elseif (comercial()): ?>
+    <link href="/assets/css/comercial.css?v=<?= $v ?>" rel="stylesheet" />
+    <?php elseif (proveedor()): ?>
+    <link href="/assets/css/proveedor.css?v=<?= $v ?>" rel="stylesheet" />
+    <?php elseif (asesoria()): ?>
+    <link href="/assets/css/asesoria.css?v=<?= $v ?>" rel="stylesheet" />
+    <?php endif; ?>
     <?php endif; ?>
 
     <!-- JSON-LD -->
@@ -136,8 +147,8 @@ $isPublicPage = !isset(USER['role']) || USER['role'] === null;
     <!-- JS -->
     <script>var hostUrl="/assets/";</script>
     <script src="/assets/plugins/global/plugins.bundle.js"></script>
-    <script src="/assets/js/scripts.bundle.js" defer></script>
-    
+    <script src="/assets/js/scripts.bundle.js"></script>
+
     <?php if (!$isPublicPage): ?>
     <script src="/assets/js/bold/_helpers.js?v=<?= $v ?>"></script>
     <script src="/assets/js/bold/logout.js?v=<?= $v ?>"></script>

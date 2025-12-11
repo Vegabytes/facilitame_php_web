@@ -48,10 +48,11 @@
     
     // Mapeo status_id incidencias → clase CSS
     const STATUS_CLASS = {
-        1: 'danger',    // Abierta
-        2: 'warning',   // Gestionando
-        3: 'info',      // Validada
-        10: 'muted'     // Cerrada
+        1: 'warning',   // Pendiente
+        2: 'info',      // Gestionando
+        3: 'success',   // Validada
+        4: 'muted',     // Cerrada
+        10: 'muted'     // Cerrada (legacy)
     };
     
     const state = {

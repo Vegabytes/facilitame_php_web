@@ -234,7 +234,7 @@ elseif (cliente()) $currentRole = 'client';
         <?php endif; ?>
         
         <div class="app-navbar-item">
-            <button class="header-icon-btn" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" 
+            <button class="header-icon-btn" data-kt-menu-trigger="click"
                     data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end" aria-label="Notificaciones">
                 <i class="ki-outline ki-notification fs-2"></i>
                 <?php if (!empty(NOTIFICATIONS) && isset(NOTIFICATIONS["unread"]) && intval(NOTIFICATIONS["unread"]) > 0): ?>
@@ -245,7 +245,7 @@ elseif (cliente()) $currentRole = 'client';
         </div>
         
         <div class="app-navbar-item" id="kt_header_user_menu_toggle">
-            <div class="user-menu cursor-pointer" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" 
+            <div class="user-menu cursor-pointer" data-kt-menu-trigger="click"
                  data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
                 <img src="<?= e(MEDIA_DIR . '/' . USER['profile_picture']) ?>" class="user-avatar" alt="Usuario">
                 <div class="user-info d-none d-md-flex">

@@ -59,18 +59,11 @@ try {
             (aa.needs_confirmation_from = 'customer') DESC,
             FIELD(aa.status, 'solicitado', 'agendado', 'finalizado', 'cancelado'),
             aa.updated_at DESC
-        LIMIT :pagination_limit OFFSET :pagination_offset
+        LIMIT $limit OFFSET $offset
     ";
 
     $stmt = $pdo->prepare($sql);
-    // Bind los parámetros de WHERE
-    foreach ($params as $i => $param) {
-        $stmt->bindValue($i + 1, $param);
-    }
-    // Bind LIMIT y OFFSET como enteros
-    $stmt->bindValue(':pagination_limit', $limit, PDO::PARAM_INT);
-    $stmt->bindValue(':pagination_offset', $offset, PDO::PARAM_INT);
-    $stmt->execute();
+    $stmt->execute($params);
     $appointments = $stmt->fetchAll();
     
     // Total con FOUND_ROWS

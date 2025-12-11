@@ -78,7 +78,7 @@ $total_records = $stmt->fetchColumn();
 
 // Obtener registros
 $stmt = $pdo->prepare("
-    SELECT 
+    SELECT
         ai.id,
         ai.filename,
         ai.original_name,
@@ -91,16 +91,9 @@ $stmt = $pdo->prepare("
     FROM advisory_invoices ai
     WHERE $where_clause
     ORDER BY ai.created_at DESC
-    LIMIT :pagination_limit OFFSET :pagination_offset
+    LIMIT $limit OFFSET $offset
 ");
-// Bind los parámetros de WHERE
-foreach ($params as $i => $param) {
-    $stmt->bindValue($i + 1, $param);
-}
-// Bind LIMIT y OFFSET como enteros
-$stmt->bindValue(':pagination_limit', $limit, PDO::PARAM_INT);
-$stmt->bindValue(':pagination_offset', $offset, PDO::PARAM_INT);
-$stmt->execute();
+$stmt->execute($params);
 $invoices = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 json_response("ok", "Facturas obtenidas correctamente", 2001, [

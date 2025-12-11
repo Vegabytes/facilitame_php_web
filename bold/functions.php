@@ -242,7 +242,12 @@ function set_toastr($status, $message_html)
 
 function secho($txt)
 {
-    echo htmlspecialchars($txt, ENT_QUOTES, "UTF-8");
+    echo esc($txt);
+}
+
+function esc($txt)
+{
+    return htmlspecialchars($txt ?? '', ENT_QUOTES, "UTF-8");
 }
 
 function display_role($role = null)
@@ -1867,7 +1872,9 @@ function commission_get_detail($request)
 
     // Process admin commissions
     if (!empty($request["commissions_admin"])) {
-        $selected_year_month = date("Ym", strtotime($_SESSION["commissions_selected_year"] . "-" . $_SESSION["commissions_selected_month"]));
+        $selected_year = $_SESSION["commissions_selected_year"] ?? date("Y");
+        $selected_month = $_SESSION["commissions_selected_month"] ?? date("m");
+        $selected_year_month = date("Ym", strtotime($selected_year . "-" . $selected_month));
         
         foreach ($request["commissions_admin"] as $commission_admin) {
             $deactivated_at = $commission_admin["deactivated_at"] ? date("Ym", strtotime($commission_admin["deactivated_at"])) : null;
@@ -1888,7 +1895,9 @@ function commission_get_detail($request)
 
 function activated_current_month($offer)
 {
-    $current_year_month = date("Y-m", strtotime($_SESSION["commissions_selected_year"] . "-" . $_SESSION["commissions_selected_month"]));
+    $selected_year = $_SESSION["commissions_selected_year"] ?? date("Y");
+    $selected_month = $_SESSION["commissions_selected_month"] ?? date("m");
+    $current_year_month = date("Y-m", strtotime($selected_year . "-" . $selected_month));
     return $current_year_month === date("Y-m", strtotime($offer["activated_at"]));
 }
 

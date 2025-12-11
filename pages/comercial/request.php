@@ -86,7 +86,7 @@ $isDeleted = ((int)$request["status_id"] === 9 || !is_null($request["deleted_at"
                                     <div class="list-card list-card-<?php echo $offer['status_id'] == 1 ? 'warning' : ($offer['status_id'] == 2 ? 'success' : 'muted'); ?> mb-2">
                                         <div class="list-card-content">
                                             <div class="list-card-title">
-                                                <?php secho($offer['title']); ?>
+                                                <?php secho($offer['title'] ?? 'Sin título'); ?>
                                             </div>
                                             <div class="list-card-meta">
                                                 <span><i class="ki-outline ki-calendar"></i> <?php echo fdate($offer['created_at']); ?></span>

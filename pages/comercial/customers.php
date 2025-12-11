@@ -261,15 +261,13 @@ $salesCode = $stmtCode->fetchColumn() ?: 'N/A';
             
             if (result.status === 'ok') {
                 emailInput.value = '';
-                btn.innerHTML = '<i class="ki-outline ki-check me-1"></i>¡Enviado!';
-                btn.classList.remove('btn-primary');
-                btn.classList.add('btn-success');
-                
-                setTimeout(() => {
-                    btn.innerHTML = '<i class="ki-outline ki-send me-1"></i>Enviar';
-                    btn.classList.remove('btn-success');
-                    btn.classList.add('btn-primary');
-                }, 2000);
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Invitación enviada!',
+                    html: result.message_html || `Se ha enviado la invitación a <b>${escapeHtml(email)}</b>`,
+                    buttonsStyling: false,
+                    customClass: { confirmButton: 'btn btn-primary' }
+                });
             } else {
                 throw new Error(result.message || 'Error al enviar');
             }
