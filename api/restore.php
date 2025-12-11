@@ -61,8 +61,7 @@ try
 catch (\Throwable $th)
 {
     $pdo->rollBack();
-    // $data = $th->getMessage();
-    json_response("ko", "Ha ocurrido un error.", 1403333717, $data);
+    json_response("ko", "Ha ocurrido un error.", 1403333717);
 }
 
 json_response("ok", "", 1785599604);

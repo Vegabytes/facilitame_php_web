@@ -49,7 +49,7 @@
                 <?php if ((int)$request["status_id"] === 9 || !is_null($request["deleted_at"])) : ?>
                     <div class="details-item details-item-alert">
                         <dt class="text-danger">Motivo de eliminación</dt>
-                        <dd><?php echo nl2br(htmlspecialchars($request["delete_reason"])) ?></dd>
+                        <dd><?php echo nl2br(esc($request["delete_reason"])) ?></dd>
                     </div>
                 <?php endif; ?>
                 
