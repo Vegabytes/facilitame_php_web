@@ -3,6 +3,20 @@ use \Firebase\JWT\JWT;
 
 sleep(1);
 
+// Aceptar datos de POST o JSON body (no GET por seguridad)
+$input = $_POST;
+if (empty($input['email'])) {
+    $json = json_decode(file_get_contents('php://input'), true);
+    if ($json) $input = $json;
+}
+
+$email = $input['email'] ?? '';
+$password = $input['password'] ?? '';
+
+if (empty($email) || empty($password)) {
+    json_response("ko", "Email y contraseña son requeridos", 400);
+}
+
 $query = "SELECT users.*, roles.name AS role_name
 FROM `users`, `roles`, `model_has_roles`
 WHERE 1
@@ -12,7 +26,7 @@ AND model_has_roles.role_id = roles.id
 AND users.deleted_at IS NULL";
 
 $stmt = $pdo->prepare($query);
-$stmt->bindValue(":email", $_POST["email"]);
+$stmt->bindValue(":email", $email);
 $stmt->execute();
 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -25,7 +39,7 @@ else
     $user = $res[0];
     
 
-    if (!password_verify($_POST["password"], $user["password"]))
+    if (!password_verify($password, $user["password"]))
     {
         json_response("ko", "Las credenciales no son válidas", 4090484573);
     }
