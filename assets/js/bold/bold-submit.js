@@ -3,8 +3,7 @@
     $(document).ready(function ()
     {
 
-        console.log(`%c  bold-submit  `, `background: #222; color: #bada55`);
-
+        
         $(".bold-submit").on("click", function (e)
         {
             bold_form_submit.call(this, e);
@@ -12,7 +11,6 @@
         async function bold_form_submit(e)
         {
             e.preventDefault();
-            console.log(`%c  bold_form_submit()  `, `background: #004080; color: white`);
 
             // Para formularios que pueden desencadenar diferentes acciones, primero se evalúa si el botón que ha hecho submit tiene data-action. Si es así, todas las variables se tomarán del <button>, y no del <form> :: inicio
 
@@ -72,21 +70,19 @@
             try
             {
                 response = await $.post(ajaxurl, data).fail(() => { return; });
-                response = JSON.parse(response);
+                if (typeof response === 'string') {
+                    response = JSON.parse(response);
+                }
                 if (response.status == "ok")
                 {
                     Swal.fire({
                         icon: "success",
-                        html: response.message_html,
-                        buttonsStyling: false,
-                        confirmButtonText: "Cerrar",
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        },
-                        showConfirmButton: (reload || redirect) ? false : true,
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
-                        allowEnterKey: false
+                        title: response.message_html,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true
                     });
 
                     if (reload === true)
@@ -146,7 +142,6 @@
         async function bold_fetch(e)
         {
             e.preventDefault();
-            console.log(`%c  ${arguments.callee.name}()  `, `background: #004080; color: white`); // Blue / White
 
             let response;
             const data = {
@@ -177,8 +172,6 @@
 
             } catch (error)
             {
-                console.log(`%c  2436901306  `, `background: #CC0000; color: white`); // Red / White
-
                 Swal.fire({
                     icon: "warning",
                     html: "Ha ocurrido un error",

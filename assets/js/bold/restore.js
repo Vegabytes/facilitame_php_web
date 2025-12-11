@@ -1,7 +1,5 @@
 "use strict";
 
-console.log(`%c  restore  `, `background: #CC0000; color: white`); // Red / White // DEV
-
 // Class definition
 var KTSignupGeneral = function ()
 {
@@ -93,7 +91,6 @@ var KTSignupGeneral = function ()
                     // Check axios library docs: https://axios-http.com/docs/intro
                     axios.post(submitButton.closest('form').getAttribute('action'), new FormData(form)).then(function (response)
                     {
-                        console.log(`%c  ajax()  `, `background: #004080; color: white`); // Blue / White // DEV
                         if (response)
                         {
                             // form.reset();

@@ -200,7 +200,7 @@ $isDeleted = ((int)$request["status_id"] === 9 || !is_null($request["deleted_at"
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Cargar oferta</h5>
+                <h5 class="modal-title">Cargar Oferta</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
@@ -225,7 +225,7 @@ $isDeleted = ((int)$request["status_id"] === 9 || !is_null($request["deleted_at"
 
             <div class="modal-footer">
                 <button type="button" id="modal-offer-upload-close" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" id="modal-offer-upload-send" class="btn btn-primary" data-request-id="<?php echo $request["id"] ?>">Cargar oferta</button>
+                <button type="button" id="modal-offer-upload-send" class="btn btn-primary" data-request-id="<?php echo $request["id"] ?>">Cargar Oferta</button>
             </div>
         </div>
     </div>

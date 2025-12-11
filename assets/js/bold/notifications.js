@@ -3,8 +3,6 @@
     $(document).ready(function ()
     {
 
-        console.log(`%c  notifications()  `, `background: #004080; color: white`); // Blue / White // DEV
-
         let notifications = $(".notification-link");
         notifications.on("click", function (e)
         {

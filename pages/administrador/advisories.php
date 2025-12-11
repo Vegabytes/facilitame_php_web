@@ -102,7 +102,7 @@ $scripts = [];
                 </div>
                 <button type="button" class="btn btn-primary btn-sm" id="btnNewAdvisory">
                     <i class="ki-outline ki-plus me-1"></i>
-                    NUEVA ASESORÍA
+                    Nueva Asesoría
                 </button>
             </div>
         </div>

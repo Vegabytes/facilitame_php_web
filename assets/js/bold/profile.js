@@ -1,7 +1,5 @@
 (function ($) {
     $(document).ready(function () {
-        console.log(`%c  profile  `, `background: #222; color: #bada55`);
-        
         // Configuración global de SweetAlert para esta página
         const SwalCustom = Swal.mixin({
             buttonsStyling: false,
@@ -192,7 +190,6 @@
 
         // Envío del formulario
         async function bold_form_submit(e) {
-            console.log(`%c  bold_form_submit()  `, `background: #004080; color: white`);
             e.preventDefault();
 
             let form = $(this).closest("form");
@@ -259,7 +256,6 @@
         });
 
         async function bold_form_submit_file(e) {
-            console.log(`%c  bold_form_submit_file()  `, `background: #004080; color: white`);
             e.preventDefault();
 
             let form = $(this).closest("form")[0];

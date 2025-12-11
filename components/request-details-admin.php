@@ -74,7 +74,7 @@
                     <div class="details-item details-item-highlight">
                         <dt class="text-primary">Comercial</dt>
                         <dd>
-                            <a href="#" class="details-link"><?php echo ucwords($sales_rep["name"] . " " . $sales_rep["lastname"]) ?></a>
+                            <a href="#" class="details-link"><?php echo ucwords(($sales_rep["name"] ?? '') . " " . ($sales_rep["lastname"] ?? '')) ?></a>
                         </dd>
                     </div>
                 <?php endif; ?>

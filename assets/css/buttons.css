@@ -887,3 +887,81 @@
 .request-page .list-card-actions .btn-light-info:hover i {
     color: var(--btn-info) !important;
 }
+
+/* ===================================
+   13. OVERRIDES GLOBALES - Sidebar y Card Footer
+   Corrige hover de botones en sidebars de perfiles
+   =================================== */
+
+/* Sidebar buttons - asegurar hover coherente */
+.card-footer .btn-light-primary,
+.customer-sidebar .btn-light-primary,
+.salesrep-sidebar .btn-light-primary {
+    background: var(--btn-primary-light) !important;
+    color: var(--btn-primary) !important;
+}
+
+.card-footer .btn-light-primary:hover,
+.customer-sidebar .btn-light-primary:hover,
+.salesrep-sidebar .btn-light-primary:hover {
+    background: var(--btn-primary-light-hover) !important;
+    color: var(--btn-primary) !important;
+    transform: translateY(-1px);
+}
+
+.card-footer .btn-light-primary i,
+.customer-sidebar .btn-light-primary i,
+.salesrep-sidebar .btn-light-primary i,
+.card-footer .btn-light-primary:hover i,
+.customer-sidebar .btn-light-primary:hover i,
+.salesrep-sidebar .btn-light-primary:hover i {
+    color: var(--btn-primary) !important;
+}
+
+.card-footer .btn-light-danger,
+.customer-sidebar .btn-light-danger,
+.salesrep-sidebar .btn-light-danger {
+    background: var(--btn-danger-light) !important;
+    color: var(--btn-danger) !important;
+}
+
+.card-footer .btn-light-danger:hover,
+.customer-sidebar .btn-light-danger:hover,
+.salesrep-sidebar .btn-light-danger:hover {
+    background: var(--btn-danger-light-hover) !important;
+    color: var(--btn-danger) !important;
+    transform: translateY(-1px);
+}
+
+.card-footer .btn-light-danger i,
+.customer-sidebar .btn-light-danger i,
+.salesrep-sidebar .btn-light-danger i,
+.card-footer .btn-light-danger:hover i,
+.customer-sidebar .btn-light-danger:hover i,
+.salesrep-sidebar .btn-light-danger:hover i {
+    color: var(--btn-danger) !important;
+}
+
+.card-footer .btn-light-success,
+.customer-sidebar .btn-light-success,
+.salesrep-sidebar .btn-light-success {
+    background: var(--btn-success-light) !important;
+    color: var(--btn-success) !important;
+}
+
+.card-footer .btn-light-success:hover,
+.customer-sidebar .btn-light-success:hover,
+.salesrep-sidebar .btn-light-success:hover {
+    background: var(--btn-success-light-hover) !important;
+    color: var(--btn-success) !important;
+    transform: translateY(-1px);
+}
+
+.card-footer .btn-light-success i,
+.customer-sidebar .btn-light-success i,
+.salesrep-sidebar .btn-light-success i,
+.card-footer .btn-light-success:hover i,
+.customer-sidebar .btn-light-success:hover i,
+.salesrep-sidebar .btn-light-success:hover i {
+    color: var(--btn-success) !important;
+}

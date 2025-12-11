@@ -69,7 +69,7 @@ $ROLES = [
                         </select>
                     </div>
                     <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modal_create_customer">
-                        <i class="ki-outline ki-plus fs-4 me-1"></i>NUEVO CLIENTE
+                        <i class="ki-outline ki-plus fs-4 me-1"></i>Nuevo Cliente
                     </button>
                 </div>
             </div>

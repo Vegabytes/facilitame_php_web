@@ -1,7 +1,5 @@
 "use strict";
 
-console.log(`%c  sign-up  `, `background: #CC0000; color: white`);
-
 var KTSignupGeneral = function ()
 {
     var form;

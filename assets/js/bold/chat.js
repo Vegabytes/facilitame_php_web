@@ -2,8 +2,6 @@
 {
     $(document).ready(function ()
     {
-        console.log(`%c  chat  `, `background: #CC0000; color: white`); // Red / White
-
         let btn_send = $("#btn-send-chat-message");
         btn_send.on("click", send_message_full);
 

@@ -1,7 +1,5 @@
 "use strict";
 
-console.log(`%c  login  `, `background: #222; color: #bada55`); // Black / Green // DEV
-
 // Class definition
 var KTSigninGeneral = function ()
 {
@@ -132,7 +130,6 @@ var KTSigninGeneral = function ()
                     });
                 } else
                 {
-                    console.log(`%c  c8  `, `background: #222; color: #bada55`); // Black / Green // DEV
                     // Show error popup. For more info check the plugin's official documentation: https://sweetalert2.github.io/
                     Swal.fire({
                         html: "Ha ocurrido un error.<br>Inténtalo de nuevo, por favor.",

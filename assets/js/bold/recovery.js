@@ -4,8 +4,6 @@
 // Class definition
 var KTSigninGeneral = function ()
 {
-    console.log(`%c  recovery  `, `background: #222; color: #bada55`); // Black / Green // DEV
-
     // Elements
     var form;
     var submitButton;
@@ -81,7 +79,6 @@ var KTSigninGeneral = function ()
                                 });
 
                                 setTimeout(() => {
-                                    console.log(`%c  redirect  `, `background: #222; color: #bada55`); // Black / Green // DEV
                                     // location.href = "login";
                                 }, 8000);
                             }

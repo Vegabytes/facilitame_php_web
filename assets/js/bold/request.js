@@ -80,8 +80,6 @@
     }
 
     $(function () {
-        console.log("%c  request  ", "background: #222; color: #bada55");
-
         // =====================================================================
         // RESTAURAR TAB ACTIVO DESPUÉS DE RELOAD
         // =====================================================================
@@ -722,62 +720,63 @@
         if (urlParams.has("incident")) {
             document.querySelector('[data-bs-target="#modal-incident-report"]')?.click();
         }
-    });
 
-    // =========================================================================
-    // REAGENDAR
-    // =========================================================================
-    $("#btn-reschedule-save").on("click", async function () {
-        const rescheduledAt = $("#reschedule-date").val();
-        const requestId = $("input[name='request_id']").val();
+        // =========================================================================
+        // REAGENDAR
+        // =========================================================================
+        $("#btn-reschedule-save").on("click", async function () {
+            const rescheduledAt = $("#reschedule-date").val();
+            const requestId = $("input[name='request_id']").val();
 
-        if (!rescheduledAt) {
-            showError("Debes seleccionar una fecha para la revisión.");
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append("request_id", requestId);
-        formData.append("rescheduled_at", rescheduledAt);
-
-        try {
-            const response = await postFormData("api/request-reschedule", formData);
-            if (response.status === "ok") {
-                location.reload();
-            } else {
-                showError(response.message_html);
+            if (!rescheduledAt) {
+                showError("Debes seleccionar una fecha para la revisión.");
+                return;
             }
-        } catch (error) {
-            showError("Ha ocurrido un error. Inténtalo de nuevo, por favor.");
-        }
-    });
 
-    // =========================================================================
-    // REACTIVAR SOLICITUD
-    // =========================================================================
-    $("#btn-request-reactivate-send").on("click", async function () {
-        const requestId = $(this).data("request-id") || $("input[name='request_id']").val();
-        const reason = ($("#reactivation-reason").val() || "").trim();
+            const formData = new FormData();
+            formData.append("request_id", requestId);
+            formData.append("rescheduled_at", rescheduledAt);
 
-        if (reason.length < 10) {
-            showError("El motivo debe tener al menos 10 caracteres.");
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append("request_id", requestId);
-        formData.append("reactivation_reason", reason);
-
-        try {
-            const response = await postFormData("api/request-reactivate", formData);
-            if (response.status === "ok") {
-                showSuccess(response.message_html || "Solicitud reactivada.", 3000);
-            } else {
-                showError(response.message_html || "No se ha podido reactivar.");
+            try {
+                const response = await postFormData("api/request-reschedule", formData);
+                if (response.status === "ok") {
+                    location.reload();
+                } else {
+                    showError(response.message_html);
+                }
+            } catch (error) {
+                showError("Ha ocurrido un error. Inténtalo de nuevo, por favor.");
             }
-        } catch (error) {
-            showError("Ha ocurrido un error.");
-        }
-    });
+        });
+
+        // =========================================================================
+        // REACTIVAR SOLICITUD
+        // =========================================================================
+        $("#btn-request-reactivate-send").on("click", async function () {
+            const requestId = $(this).data("request-id") || $("input[name='request_id']").val();
+            const reason = ($("#reactivation-reason").val() || "").trim();
+
+            if (reason.length < 10) {
+                showError("El motivo debe tener al menos 10 caracteres.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("request_id", requestId);
+            formData.append("reactivation_reason", reason);
+
+            try {
+                const response = await postFormData("api/request-reactivate", formData);
+                if (response.status === "ok") {
+                    showSuccess(response.message_html || "Solicitud reactivada.", 3000);
+                } else {
+                    showError(response.message_html || "No se ha podido reactivar.");
+                }
+            } catch (error) {
+                showError("Ha ocurrido un error.");
+            }
+        });
+
+    }); // Cierre de $(function())
 
 })(jQuery);

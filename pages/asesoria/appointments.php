@@ -158,7 +158,7 @@ $statusLabels = ['solicitado' => 'Pendiente', 'agendado' => 'Confirmada', 'final
                         </select>
                     </div>
                     <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modal_create_appointment">
-                        <i class="ki-outline ki-plus me-1"></i>NUEVA CITA
+                        <i class="ki-outline ki-plus me-1"></i>Nueva Cita
                     </button>
                 </div>
             </div>

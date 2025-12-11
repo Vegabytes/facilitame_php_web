@@ -49,7 +49,7 @@ window.commissionTypes = <?php echo json_encode($commission_types ?? []); ?>;
                             
                             <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-offer-commissions-new">
                                 <i class="ki-outline ki-plus fs-4 me-1"></i>
-                                AÑADIR COMISIÓN
+                                Añadir Comisión
                             </button>
                         </div>
                     </div>

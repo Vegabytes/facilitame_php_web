@@ -15,9 +15,9 @@ if ($user_id <= 0) {
 $user = new User();
 $sales_rep = get_sales_rep($user_id);
 
-// Si no se encuentra el usuario, redirigir
+// Si no se encuentra el usuario como comercial, redirigir con mensaje
 if (empty($sales_rep)) {
-    header("Location:home");
+    header("Location:home?error=user_not_found");
     exit;
 }
 
