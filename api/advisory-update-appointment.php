@@ -407,6 +407,13 @@ try {
         }
     }
 
+    // Sincronizar con Google Calendar
+    if ($action === 'cancel') {
+        syncAppointmentToGoogleCalendar($appointment_id, USER['id'], 'delete');
+    } else {
+        syncAppointmentToGoogleCalendar($appointment_id, USER['id'], 'update');
+    }
+
     json_response("ok", "Cita actualizada correctamente", 200, [
         'changes' => count($changes),
         'email_sent' => $email_type !== null

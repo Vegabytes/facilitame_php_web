@@ -16,7 +16,15 @@ $plan = $advisory['plan'];
 
 // Verificar si el plan incluye Inmatic
 $planesConInmatic = ['pro', 'premium', 'enterprise'];
-$hasInmatic = in_array($plan, $planesConInmatic);
+$hasInmaticByPlan = in_array($plan, $planesConInmatic);
+
+// Verificar si tiene modo prueba activado
+$stmt = $pdo->prepare("SELECT inmatic_trial FROM advisories WHERE id = ?");
+$stmt->execute([$advisory_id]);
+$inmaticTrial = (bool) $stmt->fetchColumn();
+
+// Tiene acceso a Inmatic si: tiene plan compatible O tiene modo prueba
+$hasInmatic = $hasInmaticByPlan || $inmaticTrial;
 
 // Obtener configuración actual
 $stmt = $pdo->prepare("SELECT * FROM advisory_inmatic_config WHERE advisory_id = ?");
@@ -246,7 +254,13 @@ $tagLabels = [
                     </div>
                 </div>
                 <?php if ($hasInmatic): ?>
-                <div>
+                <div class="d-flex align-items-center gap-2">
+                    <?php if ($inmaticTrial && !$hasInmaticByPlan): ?>
+                    <span class="inmatic-status-badge" style="background: rgba(255, 199, 0, 0.2); color: #ffc700;">
+                        <i class="ki-outline ki-flask"></i>
+                        Modo prueba
+                    </span>
+                    <?php endif; ?>
                     <?php if ($isConfigured && $isActive): ?>
                     <span class="inmatic-status-badge connected">
                         <i class="ki-outline ki-check-circle"></i>
@@ -269,23 +283,89 @@ $tagLabels = [
         </div>
 
         <?php if (!$hasInmatic): ?>
-        <!-- Plan no compatible -->
+        <!-- Plan no compatible - Mostrar opción de prueba -->
         <div class="card">
             <div class="card-body text-center py-10">
                 <div class="mb-5">
                     <img src="/assets/media/logos/inmatic-logo-color.png" alt="Inmatic" style="height: 50px; opacity: 0.5;">
                 </div>
                 <h4 class="mb-3">Inmatic no disponible en tu plan</h4>
-                <p class="text-muted mb-5">
+                <p class="text-muted mb-4">
                     La integración con Inmatic está disponible en los planes <strong>Pro</strong>, <strong>Premium</strong> y <strong>Enterprise</strong>.<br>
                     Tu plan actual es: <strong><?php echo ucfirst($plan); ?></strong>
                 </p>
+
+                <!-- Opción de prueba -->
+                <div class="bg-light-warning rounded p-4 mb-5 text-start" style="max-width: 500px; margin: 0 auto;">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="form-check form-switch form-check-custom form-check-solid">
+                            <input class="form-check-input" type="checkbox" id="inmatic_trial_toggle" style="width: 50px; height: 25px;">
+                        </div>
+                        <div>
+                            <label class="form-check-label fw-semibold text-gray-800" for="inmatic_trial_toggle">
+                                Activar modo prueba gratuito
+                            </label>
+                            <p class="text-muted fs-7 mb-0 mt-1">
+                                Prueba Inmatic sin compromiso. Podrás probar las funcionalidades básicas de la integración.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="separator my-5"></div>
+
                 <a href="/pricing" class="btn btn-primary">
                     <i class="ki-outline ki-arrow-up me-1"></i>
-                    Mejorar plan
+                    Mejorar plan para acceso completo
                 </a>
             </div>
         </div>
+
+        <script>
+        document.getElementById('inmatic_trial_toggle').addEventListener('change', function() {
+            var checkbox = this;
+            if (checkbox.checked) {
+                Swal.fire({
+                    title: '¿Activar modo prueba?',
+                    html: 'Podrás probar la integración con Inmatic.<br><br><small class="text-muted">Algunas funcionalidades pueden estar limitadas en modo prueba.</small>',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, activar',
+                    cancelButtonText: 'Cancelar'
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        var formData = new FormData();
+                        formData.append('action', 'enable_trial');
+
+                        fetch('/api/advisory-inmatic-config', { method: 'POST', body: formData })
+                        .then(function(r) { return r.json(); })
+                        .then(function(res) {
+                            if (res.status === 'ok') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Modo prueba activado',
+                                    text: 'Ya puedes configurar tu integración con Inmatic',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                }).then(function() {
+                                    window.location.reload();
+                                });
+                            } else {
+                                Swal.fire({ icon: 'error', title: 'Error', text: res.message });
+                                checkbox.checked = false;
+                            }
+                        })
+                        .catch(function() {
+                            Swal.fire({ icon: 'error', title: 'Error', text: 'Error de conexión' });
+                            checkbox.checked = false;
+                        });
+                    } else {
+                        checkbox.checked = false;
+                    }
+                });
+            }
+        });
+        </script>
 
         <?php else: ?>
 

@@ -123,6 +123,9 @@ try {
         'Tu asesoría te ha propuesto una cita para ' . date('d/m/Y H:i', $proposed_timestamp) . '. Accede para confirmar o proponer otra fecha.'
     );
 
+    // Sincronizar con Google Calendar (si está conectado)
+    syncAppointmentToGoogleCalendar($appointment_id, USER['id'], 'create');
+
     json_response("ok", "Cita creada. El cliente recibira la propuesta de fecha.", 200, [
         'appointment_id' => $appointment_id,
         'status' => 'solicitado',

@@ -15,8 +15,8 @@ if (!asesoria()) {
 
 global $pdo;
 
-// Obtener advisory_id y plan
-$stmt = $pdo->prepare("SELECT id, plan FROM advisories WHERE user_id = ? AND deleted_at IS NULL");
+// Obtener advisory_id, plan y estado de trial
+$stmt = $pdo->prepare("SELECT id, plan, inmatic_trial FROM advisories WHERE user_id = ? AND deleted_at IS NULL");
 $stmt->execute([USER['id']]);
 $advisory = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -24,16 +24,25 @@ if (!$advisory) {
     json_response("ko", "Asesoría no encontrada", 404);
 }
 
-// Verificar plan - solo Pro, Premium y Enterprise tienen Inmatic
+$action = $_POST['action'] ?? $_GET['action'] ?? '';
+
+// Acción especial: habilitar modo prueba (no requiere plan compatible)
+if ($action === 'enable_trial') {
+    $stmt = $pdo->prepare("UPDATE advisories SET inmatic_trial = 1 WHERE id = ?");
+    $stmt->execute([$advisory['id']]);
+    json_response("ok", "Modo prueba de Inmatic activado", 200);
+}
+
+// Verificar plan - solo Pro, Premium, Enterprise, o modo trial tienen Inmatic
 $planesConInmatic = ['pro', 'premium', 'enterprise'];
-if (!in_array($advisory['plan'], $planesConInmatic)) {
-    json_response("ko", "Tu plan no incluye integración con Inmatic. Actualiza a Pro o superior.", 403, [
+$hasAccess = in_array($advisory['plan'], $planesConInmatic) || $advisory['inmatic_trial'];
+
+if (!$hasAccess) {
+    json_response("ko", "Tu plan no incluye integración con Inmatic. Actualiza a Pro o superior, o activa el modo prueba.", 403, [
         'current_plan' => $advisory['plan'],
         'required_plans' => $planesConInmatic
     ]);
 }
-
-$action = $_POST['action'] ?? $_GET['action'] ?? '';
 
 switch ($action) {
     case 'save':

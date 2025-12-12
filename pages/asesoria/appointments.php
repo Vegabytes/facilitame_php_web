@@ -69,7 +69,10 @@ $statusLabels = ['solicitado' => 'Pendiente', 'agendado' => 'Confirmada', 'final
 
 <div id="facilita-app">
     <div class="dashboard-asesoria-home">
-        
+
+        <!-- Google Calendar Integration -->
+        <?php include COMPONENTS_DIR . '/google-calendar-connect.php'; ?>
+
         <?php if ($counts['pendiente_confirmacion'] > 0): ?>
         <div class="appointments-alert appointments-alert-warning">
             <i class="ki-outline ki-notification-bing"></i>

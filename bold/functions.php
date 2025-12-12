@@ -2791,3 +2791,159 @@ function syncSupplierFromOcr($advisory_id, $ocr_data)
 
     return false;
 }
+
+// ============================================================
+// GOOGLE CALENDAR FUNCTIONS
+// ============================================================
+
+/**
+ * Sincroniza una cita de asesoría con Google Calendar
+ * Crea o actualiza el evento en el calendario del usuario
+ *
+ * @param int $appointment_id ID de la cita
+ * @param int $user_id ID del usuario (puede ser asesoría o cliente)
+ * @param string $action 'create', 'update', 'delete'
+ * @return string|null ID del evento de Google Calendar o null si no está conectado
+ */
+function syncAppointmentToGoogleCalendar($appointment_id, $user_id, $action = 'create')
+{
+    global $pdo;
+
+    // Verificar si el usuario tiene Google Calendar conectado
+    if (!defined('GOOGLE_CLIENT_ID')) {
+        return null;
+    }
+
+    require_once ROOT_DIR . '/bold/classes/GoogleCalendarClient.php';
+
+    try {
+        $gcal = new GoogleCalendarClient($user_id);
+
+        if (!$gcal->isConnected()) {
+            return null;
+        }
+
+        // Obtener datos de la cita
+        $stmt = $pdo->prepare("
+            SELECT aa.*,
+                   a.razon_social as advisory_name,
+                   u.name as customer_name, u.lastname as customer_lastname, u.email as customer_email
+            FROM advisory_appointments aa
+            JOIN advisories a ON aa.advisory_id = a.id
+            JOIN users u ON aa.customer_id = u.id
+            WHERE aa.id = ?
+        ");
+        $stmt->execute([$appointment_id]);
+        $appointment = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$appointment) {
+            return null;
+        }
+
+        // Determinar la fecha a usar
+        $eventDate = $appointment['scheduled_date'] ?? $appointment['proposed_date'];
+        if (!$eventDate) {
+            return null;
+        }
+
+        // DELETE
+        if ($action === 'delete') {
+            if (!empty($appointment['google_event_id'])) {
+                try {
+                    $gcal->deleteEvent($appointment['google_event_id']);
+                } catch (Exception $e) {
+                    // Ignorar error si el evento ya no existe
+                }
+            }
+            return null;
+        }
+
+        // Construir datos del evento
+        $typeLabels = [
+            'llamada' => 'Llamada telefónica',
+            'reunion_presencial' => 'Reunión presencial',
+            'reunion_virtual' => 'Reunión virtual'
+        ];
+        $deptLabels = [
+            'contabilidad' => 'Contabilidad',
+            'fiscalidad' => 'Fiscalidad',
+            'laboral' => 'Laboral',
+            'gestion' => 'Gestión'
+        ];
+
+        $typeLabel = $typeLabels[$appointment['type']] ?? $appointment['type'];
+        $deptLabel = $deptLabels[$appointment['department']] ?? $appointment['department'];
+        $customerFullName = trim($appointment['customer_name'] . ' ' . $appointment['customer_lastname']);
+
+        $summary = "[Facilitame] {$typeLabel} - {$customerFullName}";
+        $description = "Cita de {$deptLabel}\n\n";
+        $description .= "Cliente: {$customerFullName}\n";
+        $description .= "Email: {$appointment['customer_email']}\n";
+        $description .= "Asesoría: {$appointment['advisory_name']}\n\n";
+        $description .= "Motivo: {$appointment['reason']}\n";
+
+        if (!empty($appointment['notes_advisory'])) {
+            $description .= "\nNotas asesoría: {$appointment['notes_advisory']}";
+        }
+        if (!empty($appointment['notes_customer'])) {
+            $description .= "\nNotas cliente: {$appointment['notes_customer']}";
+        }
+
+        // Calcular hora fin (1 hora por defecto)
+        $startDateTime = $eventDate;
+        $endDateTime = date('Y-m-d H:i:s', strtotime($eventDate) + 3600);
+
+        // CREATE o UPDATE
+        if ($action === 'update' && !empty($appointment['google_event_id'])) {
+            $eventId = $gcal->updateEvent(
+                $appointment['google_event_id'],
+                $summary,
+                $description,
+                $startDateTime,
+                $endDateTime
+            );
+        } else {
+            $eventId = $gcal->createEvent(
+                $summary,
+                $description,
+                $startDateTime,
+                $endDateTime
+            );
+
+            // Guardar el event_id en la BD
+            if ($eventId) {
+                $stmt = $pdo->prepare("UPDATE advisory_appointments SET google_event_id = ? WHERE id = ?");
+                $stmt->execute([$eventId, $appointment_id]);
+            }
+        }
+
+        return $eventId;
+
+    } catch (Exception $e) {
+        // Log del error pero no interrumpir el flujo
+        error_log("Google Calendar sync error: " . $e->getMessage());
+        return null;
+    }
+}
+
+/**
+ * Verifica si un usuario tiene Google Calendar conectado
+ *
+ * @param int $user_id
+ * @return bool
+ */
+function isGoogleCalendarConnected($user_id)
+{
+    if (!defined('GOOGLE_CLIENT_ID')) {
+        return false;
+    }
+
+    require_once ROOT_DIR . '/bold/classes/GoogleCalendarClient.php';
+
+    try {
+        $gcal = new GoogleCalendarClient($user_id);
+        return $gcal->isConnected();
+    } catch (Exception $e) {
+        return false;
+    }
+}
