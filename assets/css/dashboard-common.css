@@ -94,11 +94,29 @@ font-size:.8125rem;
     color:var(--f-text-medium);
     margin:0}
 
-#facilita-app .pagination-size .form-select{
+#facilita-app .pagination-size .form-select,
+#facilita-app .list-controls .form-select{
 width:auto;
-    padding:.25rem 2rem .25rem .5rem;
+    padding:.375rem 2rem .375rem .75rem;
     font-size:.8125rem;
-    border-radius:var(--f-radius-sm)}
+    font-weight:500;
+    color:var(--f-text-dark);
+    background-color:#fff;
+    border:1px solid var(--f-border);
+    border-radius:var(--f-radius-sm);
+    transition:border-color .15s ease,box-shadow .15s ease;
+    cursor:pointer;
+    min-height:32px}
+
+#facilita-app .pagination-size .form-select:hover,
+#facilita-app .list-controls .form-select:hover{
+border-color:var(--f-primary)}
+
+#facilita-app .pagination-size .form-select:focus,
+#facilita-app .list-controls .form-select:focus{
+border-color:var(--f-primary);
+    box-shadow:0 0 0 3px rgba(0,194,203,.15);
+    outline:none}
 
 #facilita-app .tab-list-container{
 flex:1;
@@ -315,18 +333,20 @@ flex:1;
     min-width:0}
 
 #facilita-app .kpi-label{
-font-size:.6875rem;
+font-size:.75rem;
     color:var(--f-text-medium);
     text-transform:uppercase;
     letter-spacing:.5px;
     font-weight:600;
-    margin-bottom:.125rem}
+    margin-bottom:.25rem;
+    font-family:inherit}
 
 #facilita-app .kpi-value{
-font-size:1.5rem;
+font-size:1.75rem;
     font-weight:700;
     color:var(--f-text-dark);
-    line-height:1}
+    line-height:1;
+    font-family:inherit}
 
 #facilita-app .kpi-card-primary .kpi-icon .ki-duotone span::before{
 color:var(--f-primary)!important;
@@ -416,6 +436,16 @@ color:var(--f-primary);
 #facilita-app .list-card-title a:hover,.request-page .list-card-title a:hover{
 text-decoration:underline}
 
+#facilita-app .list-card-link,.request-page .list-card-link{
+color:var(--f-primary);
+    font-weight:600;
+    text-decoration:none;
+    transition:color .15s ease}
+
+#facilita-app .list-card-link:hover,.request-page .list-card-link:hover{
+color:var(--f-primary-dark);
+    text-decoration:underline}
+
 #facilita-app .list-card-title i,.request-page .list-card-title i{
 font-size:1.1rem;
     color:var(--f-primary);
@@ -450,13 +480,14 @@ display:flex;
     flex-direction:row}
 
 #facilita-app .list-card-customer,.request-page .list-card-customer{
-color:var(--f-text-dark);
+color:var(--f-primary);
     font-weight:600;
     text-decoration:none;
     transition:color .15s ease}
 
 #facilita-app .list-card-customer:hover,.request-page .list-card-customer:hover{
-color:var(--f-primary)}
+color:var(--f-primary-dark);
+    text-decoration:underline}
 
 #facilita-app .list-card-icon{
 width:40px;

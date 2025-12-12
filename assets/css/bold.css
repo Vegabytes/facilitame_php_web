@@ -651,10 +651,26 @@ select::placeholder {
     box-shadow: 0 4px 8px rgba(16, 185, 129, 0.25);
 }
 
-.btn-sm-facilitame {
+.btn-sm-facilitame,
+.btn-sm.btn-primary-facilitame,
+.btn-sm.btn-outline-facilitame,
+.btn-sm.btn-success-facilitame,
+.btn-sm.btn-danger-facilitame,
+.btn-sm.btn-secondary-facilitame {
     padding: 0.375rem 0.75rem !important;
     font-size: 0.8125rem !important;
     height: 32px !important;
+    min-width: 32px;
+}
+
+/* Botones solo icono (cuadrados) */
+.btn-primary-facilitame.btn-icon-only,
+.btn-outline-facilitame.btn-icon-only,
+.btn-sm.btn-primary-facilitame:not(:has(span)),
+.btn-sm.btn-outline-facilitame:not(:has(span)) {
+    width: 32px;
+    padding: 0 !important;
+    justify-content: center;
 }
 
 .btn-add-commission {

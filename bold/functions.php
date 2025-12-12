@@ -219,15 +219,23 @@ function toastr()
     $type = $_SESSION["toastr"]["type"];
     $message = htmlspecialchars($_SESSION["toastr"]["message_html"]);
     unset($_SESSION["toastr"]);
-    
+
+    // Usar SweetAlert2 toast en lugar de toastr
+    $icon = $type == "success" ? "success" : "warning";
     echo "<script>
-        toastr.options = {
-            'closeButton': true, 'debug': false, 'newestOnTop': false, 'progressBar': true,
-            'positionClass': 'toastr-top-center', 'preventDuplicates': false, 'onclick': null,
-            'showDuration': '300', 'hideDuration': '1000', 'timeOut': '10000', 'extendedTimeOut': '10000',
-            'showEasing': 'swing', 'hideEasing': 'linear', 'showMethod': 'fadeIn', 'hideMethod': 'fadeOut'
-        };
-        toastr." . ($type == "success" ? "success" : "warning") . "('{$message}', '');
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: '{$icon}',
+                    title: '{$message}',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true
+                });
+            }
+        });
     </script>";
 }
 

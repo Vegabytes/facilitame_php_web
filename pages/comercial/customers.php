@@ -63,8 +63,8 @@ $salesCode = $stmtCode->fetchColumn() ?: 'N/A';
                 <div class="card h-100">
                     <div class="card-header">
                         <h3 class="card-title">
-                            <i class="ki-outline ki-send me-2 text-primary"></i>
-                            Invitar cliente
+                            <i class="ki-outline ki-send me-2 text-facilitame"></i>
+                            Invitar Cliente
                         </h3>
                     </div>
                     <div class="card-body">
@@ -82,7 +82,7 @@ $salesCode = $stmtCode->fetchColumn() ?: 'N/A';
                             <input type="email" id="invite-email" class="form-control form-control-sm" placeholder="cliente@email.com">
                         </div>
                         
-                        <button type="button" class="btn btn-sm btn-primary w-100" id="btn-send-invite-sales">
+                        <button type="button" class="btn btn-sm btn-primary-facilitame w-100" id="btn-send-invite-sales">
                             <i class="ki-outline ki-send me-1"></i>
                             Enviar
                         </button>

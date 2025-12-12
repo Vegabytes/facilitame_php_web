@@ -110,12 +110,15 @@
     color: var(--btn-primary) !important;
 }
 
-.btn-light-primary:hover {
+.btn-light-primary:hover,
+.btn-light-primary:hover:not(.btn-active) {
     background: var(--btn-primary-light-hover) !important;
+    color: var(--btn-primary) !important;
     transform: translateY(-1px);
 }
 
-.btn-light-primary:hover i {
+.btn-light-primary:hover i,
+.btn-light-primary:hover:not(.btn-active) i {
     color: var(--btn-primary) !important;
 }
 
@@ -129,12 +132,15 @@
     color: var(--btn-success) !important;
 }
 
-.btn-light-success:hover {
+.btn-light-success:hover,
+.btn-light-success:hover:not(.btn-active) {
     background: var(--btn-success-light-hover) !important;
+    color: var(--btn-success) !important;
     transform: translateY(-1px);
 }
 
-.btn-light-success:hover i {
+.btn-light-success:hover i,
+.btn-light-success:hover:not(.btn-active) i {
     color: var(--btn-success) !important;
 }
 
@@ -148,12 +154,15 @@
     color: var(--btn-danger) !important;
 }
 
-.btn-light-danger:hover {
+.btn-light-danger:hover,
+.btn-light-danger:hover:not(.btn-active) {
     background: var(--btn-danger-light-hover) !important;
+    color: var(--btn-danger) !important;
     transform: translateY(-1px);
 }
 
-.btn-light-danger:hover i {
+.btn-light-danger:hover i,
+.btn-light-danger:hover:not(.btn-active) i {
     color: var(--btn-danger) !important;
 }
 
@@ -167,12 +176,15 @@
     color: var(--btn-warning) !important;
 }
 
-.btn-light-warning:hover {
+.btn-light-warning:hover,
+.btn-light-warning:hover:not(.btn-active) {
     background: var(--btn-warning-light-hover) !important;
+    color: var(--btn-warning) !important;
     transform: translateY(-1px);
 }
 
-.btn-light-warning:hover i {
+.btn-light-warning:hover i,
+.btn-light-warning:hover:not(.btn-active) i {
     color: var(--btn-warning) !important;
 }
 
@@ -186,12 +198,15 @@
     color: var(--btn-info) !important;
 }
 
-.btn-light-info:hover {
+.btn-light-info:hover,
+.btn-light-info:hover:not(.btn-active) {
     background: var(--btn-info-light-hover) !important;
+    color: var(--btn-info) !important;
     transform: translateY(-1px);
 }
 
-.btn-light-info:hover i {
+.btn-light-info:hover i,
+.btn-light-info:hover:not(.btn-active) i {
     color: var(--btn-info) !important;
 }
 
@@ -205,12 +220,15 @@
     color: var(--btn-muted) !important;
 }
 
-.btn-light-muted:hover {
+.btn-light-muted:hover,
+.btn-light-muted:hover:not(.btn-active) {
     background: var(--btn-muted-light-hover) !important;
+    color: var(--btn-muted) !important;
     transform: translateY(-1px);
 }
 
-.btn-light-muted:hover i {
+.btn-light-muted:hover i,
+.btn-light-muted:hover:not(.btn-active) i {
     color: var(--btn-muted) !important;
 }
 

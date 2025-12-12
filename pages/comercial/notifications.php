@@ -28,13 +28,13 @@ $scripts = [];
                         <option value="50">50</option>
                     </select>
                 </div>
-                <a href="javascript:void(0)" 
-                   class="btn btn-sm btn-light text-success" 
-                   id="notifications-page-btn-mark-all" 
+                <button type="button"
+                   class="btn btn-sm btn-success-facilitame"
+                   id="notifications-page-btn-mark-all"
                    title="Marcar todas como leídas">
                     <i class="ki-outline ki-double-check"></i>
                     <span class="d-none d-md-inline ms-1">Marcar leídas</span>
-                </a>
+                </button>
             </div>
         </div>
         

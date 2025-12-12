@@ -5,7 +5,7 @@
  */
 
 if (!asesoria()) {
-    json_response("ko", "No autorizado", 4031358202);
+    json_response("ko", "No autorizado", 403);
 }
 
 // Helper para tiempo relativo si no existe

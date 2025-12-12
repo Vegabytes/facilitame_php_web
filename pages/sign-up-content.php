@@ -19,13 +19,13 @@ body {
 }
 
 .signup-logo-icon {
-	width: 100px;
-	height: 100px;
+	width: 70px;
+	height: 70px;
 	filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
 
 .signup-logo-text {
-	max-width: 280px;
+	max-width: 220px;
 }
 
 .signup-tagline {

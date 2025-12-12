@@ -118,7 +118,7 @@ $role_label_cap = $is_comercial ? "Comercial" : "Proveedor";
                     <div class="d-flex gap-2 flex-column">
                         <a href="mailto:<?php secho($sales_rep['email']); ?>" class="btn btn-sm btn-light-primary">
                             <i class="ki-outline ki-sms me-1"></i>
-                            Enviar email
+                            Enviar Email
                         </a>
                         <button class="btn btn-sm btn-light-danger" data-bs-toggle="modal" data-bs-target="#modal-delete-user">
                             <i class="ki-outline ki-trash me-1"></i>

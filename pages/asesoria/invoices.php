@@ -398,7 +398,8 @@ $tagLabels = [
             html += '<div class="list-card ' + borderClass + '">' +
                 '<div class="list-card-content">' +
                     '<div class="list-card-title">' +
-                        '<span class="fw-semibold">' + escapeHtml(inv.customer_name) + '</span>' +
+                        '<span class="badge-status badge-status-neutral">#' + inv.id + '</span>' +
+                        '<a href="/customer?id=' + inv.customer_id + '" class="list-card-customer">' + escapeHtml(inv.customer_name) + '</a>' +
                         '<span class="badge-status badge-status-muted">' + escapeHtml(inv.nif_cif || '-') + '</span>' +
                         typeBadge +
                         '<span class="badge-status badge-status-info">' + (tagLabels[inv.tag] || inv.tag) + '</span>' +

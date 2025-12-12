@@ -35,14 +35,14 @@ body.app-blank {
 }
 
 .login-logo-icon {
-    width: 100px;
-    height: 100px;
+    width: 70px;
+    height: 70px;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
     animation: float 3s ease-in-out infinite;
 }
 
 .login-logo-text {
-    max-width: 280px;
+    max-width: 220px;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
@@ -322,14 +322,14 @@ body.app-blank {
     .login-aside-facilitame {
         min-height: 300px;
     }
-    
+
     .login-logo-icon {
-        width: 70px;
-        height: 70px;
+        width: 55px;
+        height: 55px;
     }
-    
+
     .login-logo-text {
-        max-width: 200px;
+        max-width: 180px;
     }
     
     .login-tagline {
@@ -373,18 +373,15 @@ body.app-blank {
    ========================================================== */
 
 @media (prefers-reduced-motion: reduce) {
-.login-logo-icon,
-img.login-logo-icon {
-    width: 100px;
-    height: 100px;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-     animation: float 3s ease-in-out infinite !important;
-}
-    
+    .login-logo-icon,
+    img.login-logo-icon {
+        animation: none !important;
+    }
+
     #kt_sign_in_submit:hover {
         transform: none;
     }
-    
+
     * {
         transition-duration: 0.01ms !important;
     }

@@ -158,7 +158,7 @@ $DOCUMENTS_URL = ROOT_URL . '/' . DOCUMENTS_DIR;
                             ${processedBadge}
                         </div>
                         <div class="list-card-meta">
-                            <span><i class="ki-outline ki-profile-user"></i> ${escapeHtml(f.customer_name)}</span>
+                            <span><i class="ki-outline ki-profile-user"></i> <a href="/customer?id=${f.customer_id}" class="text-facilitame">${escapeHtml(f.customer_name)}</a></span>
                             ${f.tag ? `<span><i class="ki-outline ki-tag"></i> ${escapeHtml(f.tag)}</span>` : ''}
                             ${periodStr ? `<span><i class="ki-outline ki-calendar"></i> ${periodStr}</span>` : ''}
                             <span><i class="ki-outline ki-file"></i> ${fileSize}</span>
