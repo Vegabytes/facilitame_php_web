@@ -191,12 +191,7 @@ function send_mail($to_address, $to_name, $subject, $body, $mid, $attachments = 
 
     $mail->setFrom(SMTP_USERNAME, $from);
     
-    if (ENVIRONMENT === "DEMO") {
-        $mail->addAddress("erlantz@facilitame.es", $to_name);
-        $subject = "DEMO: " . $subject;
-    } else {
-        $mail->addAddress($to_address, $to_name);
-    }
+    $mail->addAddress($to_address, $to_name);
     
     $mail->Subject = $subject;
     $mail->Body = $body . "<p style='font-size:5px;margin-top:2rem;'>MID:" . $mid . "</p>";
