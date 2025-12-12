@@ -1,7 +1,8 @@
 <?php
 // Eliminar/desactivar solicitud con notificaciones POST-COMMIT (cliente, admin, comercial, proveedor único)
 
-if (!user_can_access_request($_POST["request_id"])) {
+$request_id = $_POST["request_id"] ?? null;
+if (!$request_id || !user_can_access_request($request_id)) {
     json_response("ko", MSG, 1039333056);
 }
 

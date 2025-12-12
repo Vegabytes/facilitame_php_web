@@ -11,7 +11,8 @@ if (!cliente() && !admin()) {
     json_response("ko", "No tienes permisos para comunicar incidencias.", 1598357390);
 }
 
-if (!user_can_access_request($_POST["request_id"])) {
+$request_id = $_POST["request_id"] ?? null;
+if (!$request_id || !user_can_access_request($request_id)) {
     json_response("ko", "No puedes comunicar una incidencia en esta solicitud.", 1598357393);
 }
 
