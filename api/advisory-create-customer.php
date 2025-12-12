@@ -27,11 +27,11 @@ foreach ($required as $field) {
     }
 }
 
-$name = trim($_POST['name']);
-$lastname = trim($_POST['lastname']);
+$name = htmlspecialchars(trim($_POST['name']), ENT_QUOTES, 'UTF-8');
+$lastname = htmlspecialchars(trim($_POST['lastname']), ENT_QUOTES, 'UTF-8');
 $email = trim($_POST['email']);
-$phone = trim($_POST['phone'] ?? '');
-$nif_cif = trim($_POST['nif_cif'] ?? '');
+$phone = htmlspecialchars(trim($_POST['phone'] ?? ''), ENT_QUOTES, 'UTF-8');
+$nif_cif = htmlspecialchars(trim($_POST['nif_cif'] ?? ''), ENT_QUOTES, 'UTF-8');
 $client_type = $_POST['client_type'];
 
 // Validar NIF/CIF obligatorio
@@ -93,8 +93,8 @@ $role_map = [
     'autonomo' => 4,
     'empresa' => 5,
     'particular' => 6,
-    'comunidad' => 6,
-    'asociacion' => 6
+    'comunidad' => 9,
+    'asociacion' => 10
 ];
 
 $role_id = $role_map[$client_type] ?? 6;
@@ -149,6 +149,15 @@ try {
 
     $pdo->commit();
 
+    // Sincronizar cliente con Inmatic si está configurado
+    syncCustomerToInmatic($advisory_id, $customer_id, [
+        'name' => $name . ' ' . $lastname,
+        'email' => $email,
+        'phone' => $phone,
+        'nif_cif' => $nif_cif,
+        'client_type' => $client_type
+    ]);
+
     // Obtener nombre de la asesoría
     $query = "SELECT razon_social FROM advisories WHERE id = :advisory_id";
     $stmt = $pdo->prepare($query);
@@ -171,6 +180,22 @@ try {
 
     $subject = "Activa tu cuenta de Facilítame";
     send_mail($email, $name, $subject, $body, 8844552211);
+
+    // Notificar a la asesoría (confirmación in-app)
+    notification_v2(
+        $customer_id,
+        USER['id'],
+        null,
+        'Cliente creado',
+        "Has creado el cliente {$name} {$lastname} ({$email})",
+        'Cliente creado correctamente',
+        'notification-advisory-customer-created',
+        [
+            'customer_name' => $name . ' ' . $lastname,
+            'customer_email' => $email,
+            'client_type' => $client_type
+        ]
+    );
 
     json_response('ok', 'Cliente creado correctamente. Se ha enviado un email de activación.', 200, [
         'customer_id' => $customer_id

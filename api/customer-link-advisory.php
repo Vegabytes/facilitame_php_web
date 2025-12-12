@@ -88,6 +88,21 @@ try {
 
     $pdo->commit();
 
+    // Sincronizar con Inmatic si la asesoría lo tiene configurado
+    $stmt = $pdo->prepare("SELECT name, lastname, email, phone, nif_cif FROM users WHERE id = ?");
+    $stmt->execute([$customer_id]);
+    $customer_full = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($customer_full) {
+        syncCustomerToInmatic($advisory_id, $customer_id, [
+            'name' => $customer_full['name'] . ' ' . $customer_full['lastname'],
+            'email' => $customer_full['email'],
+            'phone' => $customer_full['phone'] ?? '',
+            'nif_cif' => $customer_full['nif_cif'] ?? '',
+            'client_type' => $client_type
+        ]);
+    }
+
     // Log
     app_log('customer', $customer_id, 'customer_link_advisory', 'advisory', $advisory_id, $customer_id, [
         'advisory_name' => $advisory_name,

@@ -64,7 +64,23 @@ try {
         VALUES (?, ?, ?, ?, NOW())
     ");
     $stmt->execute([$customer_id, $advisory_id, $client_type, $subtype]);
-    
+
+    // Obtener datos completos del cliente para Inmatic
+    $stmt = $pdo->prepare("SELECT name, lastname, email, phone, nif_cif FROM users WHERE id = ?");
+    $stmt->execute([$customer_id]);
+    $customer_data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Sincronizar cliente con Inmatic si está configurado
+    if ($customer_data) {
+        syncCustomerToInmatic($advisory_id, $customer_id, [
+            'name' => $customer_data['name'] . ' ' . $customer_data['lastname'],
+            'email' => $customer_data['email'],
+            'phone' => $customer_data['phone'] ?? '',
+            'nif_cif' => $customer_data['nif_cif'] ?? '',
+            'client_type' => $client_type
+        ]);
+    }
+
     // Enviar notificación al cliente
     $data = [
         'name' => $customer['name'],

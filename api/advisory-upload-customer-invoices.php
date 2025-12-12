@@ -82,44 +82,45 @@ $current_year = date('Y');
 $current_quarter = ceil($current_month / 3);
 
 $uploaded_count = 0;
+$uploaded_invoice_ids = [];
 $errors = [];
 
 $file_count = is_array($files['name']) ? count($files['name']) : 1;
 
 try {
     $pdo->beginTransaction();
-    
+
     for ($i = 0; $i < $file_count; $i++) {
         $name = is_array($files['name']) ? $files['name'][$i] : $files['name'];
         $tmp = is_array($files['tmp_name']) ? $files['tmp_name'][$i] : $files['tmp_name'];
         $size = is_array($files['size']) ? $files['size'][$i] : $files['size'];
         $mime_type = is_array($files['type']) ? $files['type'][$i] : $files['type'];
         $error = is_array($files['error']) ? $files['error'][$i] : $files['error'];
-        
+
         if (empty($name)) continue;
-        
+
         if ($error !== UPLOAD_ERR_OK) {
             $errors[] = "Error al subir $name";
             continue;
         }
-        
+
         if (!in_array($mime_type, $allowed_types)) {
             $errors[] = "$name: Tipo no permitido";
             continue;
         }
-        
+
         if ($size > $max_size) {
             $errors[] = "$name: Máximo 10MB";
             continue;
         }
-        
+
         $uuid = Uuid::uuid4();
         $new_name = $uuid . '-' . $name;
         $file_size_mb = $size / (1024 * 1024);
-        
+
         if (move_uploaded_file($tmp, $upload_dir . $new_name)) {
             $stmt = $pdo->prepare("
-                INSERT INTO advisory_invoices 
+                INSERT INTO advisory_invoices
                 (advisory_id, customer_id, filename, original_name, mime_type, file_size, type, tag, notes, month, year, quarter)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
@@ -137,6 +138,7 @@ try {
                 $current_year,
                 $current_quarter
             ]);
+            $uploaded_invoice_ids[] = $pdo->lastInsertId();
             $uploaded_count++;
         } else {
             $errors[] = "Error al guardar $name";
@@ -150,17 +152,48 @@ try {
     
     $pdo->commit();
     
-    // Notificar al cliente
+    // Notificar al cliente (con email)
     $customer_name = trim($customer['name'] . ' ' . $customer['lastname']);
-    $notification_subject = "Nueva factura de tu asesoría";
-    $notification_message = "Tu asesoría ha subido " . $uploaded_count . " factura(s) a tu cuenta. <a href='" . ROOT_URL . "/invoices'>Ver facturas</a>";
-    notification(USER["id"], $customer_id, null, $notification_subject, $notification_message);
-    
+
+    // Obtener nombre de la asesoría
+    $stmt = $pdo->prepare("SELECT razon_social FROM advisories WHERE id = ?");
+    $stmt->execute([$advisory_id]);
+    $advisory_info = $stmt->fetch();
+    $advisory_name = $advisory_info ? $advisory_info['razon_social'] : 'Tu asesoría';
+
+    notification_v2(
+        USER["id"],
+        $customer_id,
+        null,
+        'Nuevas facturas añadidas',
+        $advisory_name . ' ha subido ' . $uploaded_count . ' factura(s) a tu cuenta.',
+        'Nuevas facturas en tu cuenta - Facilítame',
+        'notification-customer-invoices-uploaded',
+        [
+            'advisory_name' => $advisory_name,
+            'count' => $uploaded_count
+        ]
+    );
+
+    // Enviar automáticamente a Inmatic si está configurado
+    $inmatic_sent = 0;
+    $inmatic_errors = [];
+    if (!empty($uploaded_invoice_ids)) {
+        $inmatic_sent = sendInvoicesToInmatic($advisory_id, $uploaded_invoice_ids, $inmatic_errors);
+    }
+
     $msg = "$uploaded_count factura(s) subida(s) para $customer_name";
+    if ($inmatic_sent > 0) {
+        $msg .= ". $inmatic_sent enviada(s) a Inmatic";
+    }
     if (!empty($errors)) {
         $msg .= ". Errores: " . implode(', ', $errors);
     }
-    json_response("ok", $msg, 200);
+    json_response("ok", $msg, 200, [
+        'uploaded' => $uploaded_count,
+        'inmatic_sent' => $inmatic_sent,
+        'inmatic_errors' => $inmatic_errors
+    ]);
     
 } catch (Exception $e) {
     if ($pdo->inTransaction()) {

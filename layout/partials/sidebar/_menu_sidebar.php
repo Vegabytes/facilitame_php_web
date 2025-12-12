@@ -320,6 +320,14 @@ if (asesoria() && isset($pdo)) {
                         <?php endif; ?>
                     </a>
                 </li>
+
+                <li class="menu-section"><span class="menu-section-text">Integraciones</span></li>
+                <li class="menu-item <?= ($currentPage === 'inmatic') ? 'active' : '' ?>" role="none">
+                    <a href="/inmatic" class="menu-link" role="menuitem" data-tooltip="Inmatic" <?= ($currentPage === 'inmatic') ? 'aria-current="page"' : '' ?>>
+                        <i class="ki-outline ki-cloud menu-icon" aria-hidden="true"></i>
+                        <span class="menu-text">Inmatic</span>
+                    </a>
+                </li>
             <?php endif; ?>
             
         </ul>

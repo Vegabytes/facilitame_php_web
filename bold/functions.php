@@ -2335,11 +2335,464 @@ function count_appointments_by_status($advisory_id)
     global $pdo;
     $stmt = $pdo->prepare("SELECT status, COUNT(*) as count FROM advisory_appointments WHERE advisory_id = ? GROUP BY status");
     $stmt->execute([$advisory_id]);
-    
+
     $counts = ['solicitado' => 0, 'agendado' => 0, 'finalizado' => 0, 'cancelado' => 0, 'total' => 0];
     while ($row = $stmt->fetch()) {
         $counts[$row['status']] = (int)$row['count'];
         $counts['total'] += (int)$row['count'];
     }
     return $counts;
+}
+
+/**
+ * Sincronizar cliente con Inmatic
+ *
+ * Crea o actualiza un cliente en Inmatic si la asesoría tiene la integración configurada.
+ * No lanza excepciones - los errores se registran en log pero no interrumpen el flujo.
+ *
+ * @param int $advisory_id ID de la asesoría
+ * @param int $customer_id ID del cliente en Facilitame
+ * @param array $customer_data Datos del cliente: name, email, phone, nif_cif, client_type
+ * @return bool True si se sincronizó correctamente, false si no
+ */
+function syncCustomerToInmatic($advisory_id, $customer_id, $customer_data)
+{
+    global $pdo;
+
+    // Verificar si la asesoría tiene Inmatic configurado
+    $stmt = $pdo->prepare("
+        SELECT aic.inmatic_company_id, a.plan
+        FROM advisory_inmatic_config aic
+        JOIN advisories a ON a.id = aic.advisory_id
+        WHERE aic.advisory_id = ? AND aic.is_active = 1
+    ");
+    $stmt->execute([$advisory_id]);
+    $config = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$config || !$config['inmatic_company_id']) {
+        // Inmatic no configurado, salir silenciosamente
+        return false;
+    }
+
+    // Verificar plan
+    $planesConInmatic = ['pro', 'premium', 'enterprise'];
+    if (!in_array($config['plan'], $planesConInmatic)) {
+        return false;
+    }
+
+    try {
+        require_once ROOT_DIR . '/bold/classes/InmaticClient.php';
+        $client = new InmaticClient($advisory_id);
+
+        // Verificar si ya existe en Inmatic
+        $stmt = $pdo->prepare("
+            SELECT inmatic_customer_id FROM advisory_inmatic_customers
+            WHERE advisory_id = ? AND customer_id = ?
+        ");
+        $stmt->execute([$advisory_id, $customer_id]);
+        $existing = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Preparar datos para Inmatic
+        $inmaticData = [
+            'name' => $customer_data['name'],
+            'email' => $customer_data['email'] ?? '',
+            'phone' => $customer_data['phone'] ?? '',
+            'tax_id' => $customer_data['nif_cif'] ?? '',
+            'external_id' => 'facilitame_customer_' . $customer_id
+        ];
+
+        // Mapear tipo de cliente
+        $typeMap = [
+            'autonomo' => 'freelancer',
+            'empresa' => 'company',
+            'particular' => 'individual',
+            'comunidad' => 'community',
+            'asociacion' => 'association'
+        ];
+        if (isset($customer_data['client_type']) && isset($typeMap[$customer_data['client_type']])) {
+            $inmaticData['type'] = $typeMap[$customer_data['client_type']];
+        }
+
+        if ($existing && $existing['inmatic_customer_id']) {
+            // Actualizar cliente existente
+            $result = $client->updateCustomer($existing['inmatic_customer_id'], $inmaticData);
+        } else {
+            // Crear nuevo cliente
+            $result = $client->createCustomer($config['inmatic_company_id'], $inmaticData);
+
+            $inmaticCustomerId = $result['id'] ?? $result['data']['id'] ?? null;
+
+            if ($inmaticCustomerId) {
+                // Guardar vinculación
+                $stmt = $pdo->prepare("
+                    INSERT INTO advisory_inmatic_customers (advisory_id, customer_id, inmatic_customer_id)
+                    VALUES (?, ?, ?)
+                    ON DUPLICATE KEY UPDATE inmatic_customer_id = VALUES(inmatic_customer_id)
+                ");
+                $stmt->execute([$advisory_id, $customer_id, $inmaticCustomerId]);
+            }
+        }
+
+        return true;
+
+    } catch (Exception $e) {
+        // Log del error pero no interrumpir el flujo
+        $logFile = ROOT_DIR . '/logs/inmatic-sync.log';
+        $logDir = dirname($logFile);
+        if (!is_dir($logDir)) {
+            mkdir($logDir, 0755, true);
+        }
+        $logEntry = date('Y-m-d H:i:s') . " | ERROR syncCustomerToInmatic | Advisory: $advisory_id, Customer: $customer_id | " . $e->getMessage() . "\n";
+        file_put_contents($logFile, $logEntry, FILE_APPEND | LOCK_EX);
+
+        return false;
+    }
+}
+
+/**
+ * Envía facturas a Inmatic automáticamente
+ *
+ * Envia una o más facturas a Inmatic para su procesamiento OCR.
+ * No lanza excepciones - los errores se registran pero no interrumpen el flujo.
+ *
+ * @param int $advisory_id ID de la asesoría
+ * @param array $invoice_ids Array de IDs de facturas en advisory_invoices
+ * @param array &$errors Array donde se guardarán los errores (opcional)
+ * @return int Número de facturas enviadas correctamente
+ */
+function sendInvoicesToInmatic($advisory_id, $invoice_ids, &$errors = [])
+{
+    global $pdo;
+
+    if (empty($invoice_ids)) {
+        return 0;
+    }
+
+    // Verificar si la asesoría tiene Inmatic configurado y activo
+    $stmt = $pdo->prepare("
+        SELECT aic.inmatic_company_id, aic.inmatic_token, a.plan
+        FROM advisory_inmatic_config aic
+        JOIN advisories a ON a.id = aic.advisory_id
+        WHERE aic.advisory_id = ? AND aic.is_active = 1 AND aic.inmatic_token IS NOT NULL
+    ");
+    $stmt->execute([$advisory_id]);
+    $config = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$config) {
+        // Inmatic no configurado, salir silenciosamente
+        return 0;
+    }
+
+    // Verificar plan
+    $planesConInmatic = ['pro', 'premium', 'enterprise'];
+    if (!in_array($config['plan'], $planesConInmatic)) {
+        return 0;
+    }
+
+    $sent_count = 0;
+
+    try {
+        require_once ROOT_DIR . '/bold/classes/InmaticClient.php';
+        $client = new InmaticClient($advisory_id);
+
+        foreach ($invoice_ids as $invoice_id) {
+            try {
+                // Obtener datos de la factura
+                $stmt = $pdo->prepare("
+                    SELECT ai.*, u.name as customer_name, u.nif_cif as customer_nif
+                    FROM advisory_invoices ai
+                    LEFT JOIN users u ON ai.customer_id = u.id
+                    WHERE ai.id = ? AND ai.advisory_id = ?
+                ");
+                $stmt->execute([$invoice_id, $advisory_id]);
+                $invoice = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if (!$invoice) {
+                    $errors[] = "Factura #$invoice_id no encontrada";
+                    continue;
+                }
+
+                // Verificar que no se haya enviado ya
+                $stmt = $pdo->prepare("
+                    SELECT id, inmatic_status FROM advisory_inmatic_documents
+                    WHERE advisory_invoice_id = ? AND inmatic_status NOT IN ('error', 'rejected')
+                ");
+                $stmt->execute([$invoice_id]);
+                if ($stmt->fetch()) {
+                    // Ya enviada, saltar
+                    continue;
+                }
+
+                // Construir ruta del archivo
+                $filePath = ROOT_DIR . '/' . DOCUMENTS_DIR . '/' . $invoice['filename'];
+
+                if (!file_exists($filePath)) {
+                    $errors[] = "Archivo de factura #$invoice_id no encontrado";
+                    continue;
+                }
+
+                // Determinar tipo de documento
+                $documentType = ($invoice['type'] === 'ingreso') ? 'invoice' : 'receipt';
+
+                // Metadata
+                $metadata = [
+                    'external_id' => 'facilitame_invoice_' . $invoice_id,
+                    'description' => $invoice['notes'] ?? '',
+                    'tags' => $invoice['tag'] ?? ''
+                ];
+
+                if ($invoice['customer_name']) {
+                    $metadata['customer_name'] = $invoice['customer_name'];
+                }
+                if ($invoice['customer_nif']) {
+                    $metadata['customer_nif'] = $invoice['customer_nif'];
+                }
+                if ($invoice['month'] && $invoice['year']) {
+                    $metadata['period'] = $invoice['year'] . '-' . str_pad($invoice['month'], 2, '0', STR_PAD_LEFT);
+                }
+
+                // Enviar a Inmatic
+                $result = $client->uploadDocument(
+                    $filePath,
+                    $invoice['original_name'],
+                    $documentType,
+                    $metadata
+                );
+
+                $inmaticDocId = $result['id'] ?? $result['data']['id'] ?? null;
+
+                if ($inmaticDocId) {
+                    // Guardar referencia
+                    $stmt = $pdo->prepare("
+                        INSERT INTO advisory_inmatic_documents
+                        (advisory_invoice_id, inmatic_document_id, inmatic_status)
+                        VALUES (?, ?, 'pending')
+                    ");
+                    $stmt->execute([$invoice_id, $inmaticDocId]);
+                    $sent_count++;
+                } else {
+                    $errors[] = "Factura #$invoice_id: respuesta inesperada de Inmatic";
+                }
+
+            } catch (Exception $e) {
+                $errors[] = "Factura #$invoice_id: " . $e->getMessage();
+
+                // Guardar error en BD
+                $stmt = $pdo->prepare("
+                    INSERT INTO advisory_inmatic_documents
+                    (advisory_invoice_id, inmatic_document_id, inmatic_status, error_message)
+                    VALUES (?, '', 'error', ?)
+                ");
+                $stmt->execute([$invoice_id, $e->getMessage()]);
+            }
+        }
+
+    } catch (Exception $e) {
+        // Log del error general
+        $logFile = ROOT_DIR . '/logs/inmatic-sync.log';
+        $logDir = dirname($logFile);
+        if (!is_dir($logDir)) {
+            mkdir($logDir, 0755, true);
+        }
+        $logEntry = date('Y-m-d H:i:s') . " | ERROR sendInvoicesToInmatic | Advisory: $advisory_id | " . $e->getMessage() . "\n";
+        file_put_contents($logFile, $logEntry, FILE_APPEND | LOCK_EX);
+        $errors[] = "Error general: " . $e->getMessage();
+    }
+
+    return $sent_count;
+}
+
+/**
+ * Sincroniza un proveedor con Inmatic
+ *
+ * Crea o actualiza un proveedor en Inmatic cuando se detecta en una factura.
+ * No lanza excepciones - los errores se registran pero no interrumpen el flujo.
+ *
+ * @param int $advisory_id ID de la asesoría
+ * @param array $supplier_data Datos del proveedor: name, nif_cif, email, phone
+ * @return array|false Datos del proveedor con inmatic_supplier_id o false si falla
+ */
+function syncSupplierToInmatic($advisory_id, $supplier_data)
+{
+    global $pdo;
+
+    if (empty($supplier_data['name']) && empty($supplier_data['nif_cif'])) {
+        return false;
+    }
+
+    // Verificar si la asesoría tiene Inmatic configurado
+    $stmt = $pdo->prepare("
+        SELECT aic.inmatic_company_id, a.plan
+        FROM advisory_inmatic_config aic
+        JOIN advisories a ON a.id = aic.advisory_id
+        WHERE aic.advisory_id = ? AND aic.is_active = 1 AND aic.inmatic_token IS NOT NULL
+    ");
+    $stmt->execute([$advisory_id]);
+    $config = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$config || !$config['inmatic_company_id']) {
+        return false;
+    }
+
+    // Verificar plan
+    $planesConInmatic = ['pro', 'premium', 'enterprise'];
+    if (!in_array($config['plan'], $planesConInmatic)) {
+        return false;
+    }
+
+    try {
+        // Verificar si ya existe en nuestra BD
+        $stmt = $pdo->prepare("
+            SELECT id, inmatic_supplier_id FROM advisory_inmatic_suppliers
+            WHERE advisory_id = ? AND nif_cif = ?
+        ");
+        $stmt->execute([$advisory_id, $supplier_data['nif_cif'] ?? '']);
+        $existing = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        require_once ROOT_DIR . '/bold/classes/InmaticClient.php';
+        $client = new InmaticClient($advisory_id);
+
+        // Preparar datos para Inmatic
+        $inmaticData = [
+            'name' => $supplier_data['name'],
+            'tax_id' => $supplier_data['nif_cif'] ?? '',
+            'email' => $supplier_data['email'] ?? '',
+            'phone' => $supplier_data['phone'] ?? ''
+        ];
+
+        if ($existing && $existing['inmatic_supplier_id']) {
+            // Actualizar proveedor existente
+            $client->updateSupplier($existing['inmatic_supplier_id'], $inmaticData);
+
+            // Actualizar en BD local
+            $stmt = $pdo->prepare("
+                UPDATE advisory_inmatic_suppliers
+                SET name = ?, email = ?, phone = ?, updated_at = NOW()
+                WHERE id = ?
+            ");
+            $stmt->execute([
+                $supplier_data['name'],
+                $supplier_data['email'] ?? null,
+                $supplier_data['phone'] ?? null,
+                $existing['id']
+            ]);
+
+            return [
+                'id' => $existing['id'],
+                'inmatic_supplier_id' => $existing['inmatic_supplier_id'],
+                'action' => 'updated'
+            ];
+
+        } else {
+            // Crear nuevo proveedor
+            $result = $client->createSupplier($config['inmatic_company_id'], $inmaticData);
+
+            $inmaticSupplierId = $result['id'] ?? $result['data']['id'] ?? null;
+
+            // Guardar en BD local
+            $stmt = $pdo->prepare("
+                INSERT INTO advisory_inmatic_suppliers
+                (advisory_id, name, nif_cif, email, phone, inmatic_supplier_id)
+                VALUES (?, ?, ?, ?, ?, ?)
+                ON DUPLICATE KEY UPDATE
+                    name = VALUES(name),
+                    email = VALUES(email),
+                    phone = VALUES(phone),
+                    inmatic_supplier_id = VALUES(inmatic_supplier_id),
+                    updated_at = NOW()
+            ");
+            $stmt->execute([
+                $advisory_id,
+                $supplier_data['name'],
+                $supplier_data['nif_cif'] ?? null,
+                $supplier_data['email'] ?? null,
+                $supplier_data['phone'] ?? null,
+                $inmaticSupplierId
+            ]);
+
+            return [
+                'id' => $pdo->lastInsertId(),
+                'inmatic_supplier_id' => $inmaticSupplierId,
+                'action' => 'created'
+            ];
+        }
+
+    } catch (Exception $e) {
+        // Log del error
+        $logFile = ROOT_DIR . '/logs/inmatic-sync.log';
+        $logDir = dirname($logFile);
+        if (!is_dir($logDir)) {
+            mkdir($logDir, 0755, true);
+        }
+        $logEntry = date('Y-m-d H:i:s') . " | ERROR syncSupplierToInmatic | Advisory: $advisory_id | " . $e->getMessage() . "\n";
+        file_put_contents($logFile, $logEntry, FILE_APPEND | LOCK_EX);
+
+        return false;
+    }
+}
+
+/**
+ * Extrae y sincroniza proveedor desde datos OCR de Inmatic
+ *
+ * @param int $advisory_id ID de la asesoría
+ * @param array $ocr_data Datos OCR de Inmatic
+ * @return array|false Datos del proveedor sincronizado o false
+ */
+function syncSupplierFromOcr($advisory_id, $ocr_data)
+{
+    if (!is_array($ocr_data)) {
+        return false;
+    }
+
+    // Intentar extraer datos del proveedor/emisor
+    $supplierData = [];
+
+    // Mapeo de posibles campos
+    $nameFields = ['issuer_name', 'supplier_name', 'vendor_name', 'emisor', 'proveedor'];
+    $nifFields = ['issuer_tax_id', 'supplier_vat', 'vendor_nif', 'cif_emisor', 'nif_proveedor'];
+    $emailFields = ['issuer_email', 'supplier_email', 'vendor_email'];
+    $phoneFields = ['issuer_phone', 'supplier_phone', 'vendor_phone'];
+
+    foreach ($nameFields as $field) {
+        if (!empty($ocr_data[$field])) {
+            $supplierData['name'] = $ocr_data[$field];
+            break;
+        }
+        if (!empty($ocr_data['data'][$field])) {
+            $supplierData['name'] = $ocr_data['data'][$field];
+            break;
+        }
+    }
+
+    foreach ($nifFields as $field) {
+        if (!empty($ocr_data[$field])) {
+            $supplierData['nif_cif'] = $ocr_data[$field];
+            break;
+        }
+        if (!empty($ocr_data['data'][$field])) {
+            $supplierData['nif_cif'] = $ocr_data['data'][$field];
+            break;
+        }
+    }
+
+    foreach ($emailFields as $field) {
+        if (!empty($ocr_data[$field])) {
+            $supplierData['email'] = $ocr_data[$field];
+            break;
+        }
+    }
+
+    foreach ($phoneFields as $field) {
+        if (!empty($ocr_data[$field])) {
+            $supplierData['phone'] = $ocr_data[$field];
+            break;
+        }
+    }
+
+    // Si tenemos al menos nombre o NIF, sincronizar
+    if (!empty($supplierData['name']) || !empty($supplierData['nif_cif'])) {
+        return syncSupplierToInmatic($advisory_id, $supplierData);
+    }
+
+    return false;
 }
