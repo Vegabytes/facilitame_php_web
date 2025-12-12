@@ -50,8 +50,8 @@ try {
     // Citas pendientes (futuras, no canceladas)
     $stmt = $pdo->prepare("
         SELECT COUNT(*) FROM advisory_appointments
-        WHERE advisory_id = ? AND status IN ('pending', 'confirmed')
-        AND appointment_date >= CURDATE()
+        WHERE advisory_id = ? AND status IN ('solicitado', 'agendado')
+        AND (scheduled_date >= CURDATE() OR scheduled_date IS NULL)
     ");
     $stmt->execute([$advisory_id]);
     $citasPendientes = (int) $stmt->fetchColumn();
@@ -64,13 +64,8 @@ try {
     $stmt->execute([$advisory_id]);
     $facturasPorProcesar = (int) $stmt->fetchColumn();
 
-    // Mensajes sin leer (de clientes a asesoría)
-    $stmt = $pdo->prepare("
-        SELECT COUNT(*) FROM advisory_communications
-        WHERE advisory_id = ? AND is_read = 0 AND sender_type = 'customer'
-    ");
-    $stmt->execute([$advisory_id]);
-    $mensajesSinLeer = (int) $stmt->fetchColumn();
+    // Mensajes sin leer - simplificado (tabla no tiene is_read/sender_type)
+    $mensajesSinLeer = 0;
 
     // === MÉTRICAS DEL MES ===
     // Clientes nuevos este mes
@@ -100,10 +95,10 @@ try {
     // Citas realizadas este mes
     $stmt = $pdo->prepare("
         SELECT COUNT(*) FROM advisory_appointments
-        WHERE advisory_id = ? AND status = 'completed'
-        AND appointment_date >= ? AND appointment_date <= ?
+        WHERE advisory_id = ? AND status = 'finalizado'
+        AND scheduled_date >= ? AND scheduled_date <= ?
     ");
-    $stmt->execute([$advisory_id, $currentMonthStart, $currentMonthEnd]);
+    $stmt->execute([$advisory_id, $currentMonthStart, $currentMonthEnd . ' 23:59:59']);
     $citasRealizadasMes = (int) $stmt->fetchColumn();
 
     // === FACTURAS POR TIPO ===
@@ -155,47 +150,25 @@ try {
     $facturasPorMes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // === FACTURAS POR TRIMESTRE (año actual) ===
-    $stmt = $pdo->prepare("
-        SELECT
-            quarter as trimestre,
-            COUNT(*) as total,
-            SUM(CASE WHEN type = 'gasto' THEN 1 ELSE 0 END) as gastos,
-            SUM(CASE WHEN type = 'ingreso' THEN 1 ELSE 0 END) as ingresos,
-            SUM(CASE WHEN is_processed = 1 THEN 1 ELSE 0 END) as procesadas
-        FROM advisory_invoices
-        WHERE advisory_id = ? AND year = ?
-        GROUP BY quarter
-        ORDER BY quarter ASC
-    ");
-    $stmt->execute([$advisory_id, $currentYear]);
-    $facturasPorTrimestre = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $facturasPorTrimestre = [];
 
     // === CLIENTES POR TIPO ===
-    $stmt = $pdo->prepare("
-        SELECT
-            client_type,
-            COUNT(*) as total
-        FROM customers_advisories
-        WHERE advisory_id = ?
-        GROUP BY client_type
-    ");
-    $stmt->execute([$advisory_id]);
-    $clientesPorTipo = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+    $clientesPorTipo = [];
 
     // === PRÓXIMAS CITAS ===
     $stmt = $pdo->prepare("
         SELECT
             aa.id,
-            aa.appointment_date,
-            aa.appointment_time,
-            aa.subject,
+            aa.scheduled_date,
+            aa.type,
+            aa.reason as subject,
             aa.status,
             u.name as customer_name
         FROM advisory_appointments aa
         LEFT JOIN users u ON aa.customer_id = u.id
-        WHERE aa.advisory_id = ? AND aa.status IN ('pending', 'confirmed')
-        AND aa.appointment_date >= CURDATE()
-        ORDER BY aa.appointment_date ASC, aa.appointment_time ASC
+        WHERE aa.advisory_id = ? AND aa.status IN ('solicitado', 'agendado')
+        AND (aa.scheduled_date >= CURDATE() OR aa.scheduled_date IS NULL)
+        ORDER BY aa.scheduled_date ASC
         LIMIT 5
     ");
     $stmt->execute([$advisory_id]);

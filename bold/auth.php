@@ -8,7 +8,7 @@ if (!isset($_COOKIE['auth_token']) && !isset($_POST["auth_token"]))
     {
         json_response("logout", "", 2195003511);
     }
-    set_toastr("ko", "Debes iniciar sesión");    
+    set_toastr("ko", "Debes iniciar sesión");
     header('Location: login');
     exit;
 }
@@ -86,11 +86,11 @@ try
 }
 catch (Exception $e)
 {
-    if (DEBUG)
+    if (defined('DEBUG') && DEBUG)
     {
         echo (1690695852 . "<br>"); // enl
         exit($e->getFile() . " - " . $e->getLine() . " - " . $e->getMessage());
-    }    
+    }
     header('Location: login?4033197217');
-    exit;    
+    exit;
 }

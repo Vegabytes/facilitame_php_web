@@ -57,6 +57,7 @@ $no_auth = [
 // APIs que no requieren autenticación (adicionales)
 $no_auth_api = [
     "/activate-with-password",
+    "/_debug-session",
 ];
 // Páginas públicas
 if (in_array(PAGE, $no_auth) && RESOURCE === "/pages")

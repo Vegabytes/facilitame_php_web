@@ -62,12 +62,6 @@ try
 catch (Exception $e)
 {
     $pdo->rollBack();
-    if (DEBUG === true)
-    {
-        json_response("ko", $e->getMessage(), 1480508904);
-    }
-    else
-    {
-        json_response("ko", "Ha ocurrido un error", 1142366576);
-    }
+    error_log("Error en notification-mark-read: " . $e->getMessage());
+    json_response("ko", "Ha ocurrido un error", 1142366576);
 }

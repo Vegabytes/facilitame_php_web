@@ -505,9 +505,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let html = '';
         citas.forEach(cita => {
-            const date = new Date(cita.appointment_date);
-            const day = date.getDate();
-            const month = monthNames[date.getMonth() + 1];
+            let day = '--';
+            let month = '';
+            let timeStr = '';
+
+            if (cita.scheduled_date) {
+                const date = new Date(cita.scheduled_date);
+                day = date.getDate();
+                month = monthNames[date.getMonth() + 1] || '';
+                timeStr = date.toLocaleTimeString('es-ES', {hour: '2-digit', minute: '2-digit'});
+            } else {
+                month = 'Pend.';
+            }
+
+            const typeLabels = {
+                'llamada': 'Llamada',
+                'reunion_presencial': 'Presencial',
+                'reunion_virtual': 'Virtual'
+            };
+            const typeLabel = typeLabels[cita.type] || cita.type || '';
 
             html += `
                 <div class="upcoming-item">
@@ -517,7 +533,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="item-info">
                         <div class="item-title">${cita.customer_name || 'Cliente'}</div>
-                        <div class="item-meta">${cita.appointment_time ? cita.appointment_time.slice(0,5) : ''} - ${cita.subject || 'Sin asunto'}</div>
+                        <div class="item-meta">${timeStr ? timeStr + ' - ' : ''}${typeLabel}${cita.subject ? ' - ' + cita.subject : ''}</div>
                     </div>
                 </div>
             `;
