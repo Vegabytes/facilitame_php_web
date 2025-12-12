@@ -1,0 +1,631 @@
+{
+	"info": {
+		"_postman_id": "facilitame-inmatic-apis",
+		"name": "Facilitame - APIs Inmatic",
+		"description": "Coleccion de APIs para la integracion con Inmatic en Facilitame.\n\n## Autenticacion\nTodas las APIs requieren autenticacion JWT via cookie `auth_token` o parametro POST `auth_token`.\n\n## Requisitos\n- Usuario con rol `asesoria`\n- Plan `pro`, `premium` o `enterprise`, O tener `inmatic_trial = 1`\n\n## Entornos\n- LOCAL: http://facilitame.test\n- DEMO: https://demo.facilitame.es\n- PRODUCTION: https://facilitame.smbnlreg.com",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://demo.facilitame.es",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string",
+			"description": "JWT token obtenido del login"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Configuracion",
+			"item": [
+				{
+					"name": "Obtener configuracion actual",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "auth_token={{auth_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/advisory-inmatic-config",
+							"host": ["{{base_url}}"],
+							"path": ["api", "advisory-inmatic-config"]
+						},
+						"description": "Obtiene la configuracion actual de Inmatic para la asesoria.\n\n**Respuesta:**\n- `configured`: Si tiene configuracion guardada\n- `is_active`: Si la integracion esta activa\n- `company_id`: ID de empresa en Inmatic\n- `stats`: Estadisticas de documentos enviados"
+					},
+					"response": []
+				},
+				{
+					"name": "Guardar configuracion",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "auth_token={{auth_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "action",
+									"value": "save",
+									"type": "text"
+								},
+								{
+									"key": "inmatic_token",
+									"value": "tu_token_de_inmatic_aqui",
+									"type": "text",
+									"description": "Token API de Inmatic (obligatorio en primera configuracion)"
+								},
+								{
+									"key": "inmatic_company_id",
+									"value": "",
+									"type": "text",
+									"description": "ID de empresa en Inmatic (opcional)"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/advisory-inmatic-config",
+							"host": ["{{base_url}}"],
+							"path": ["api", "advisory-inmatic-config"]
+						},
+						"description": "Guarda la configuracion de Inmatic.\n\nAl guardar, automaticamente:\n1. Prueba la conexion\n2. Configura el webhook para recibir notificaciones"
+					},
+					"response": []
+				},
+				{
+					"name": "Probar conexion",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "auth_token={{auth_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "action",
+									"value": "test",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/advisory-inmatic-config",
+							"host": ["{{base_url}}"],
+							"path": ["api", "advisory-inmatic-config"]
+						},
+						"description": "Prueba la conexion con Inmatic usando el token configurado."
+					},
+					"response": []
+				},
+				{
+					"name": "Desactivar integracion",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "auth_token={{auth_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "action",
+									"value": "disable",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/advisory-inmatic-config",
+							"host": ["{{base_url}}"],
+							"path": ["api", "advisory-inmatic-config"]
+						},
+						"description": "Desactiva la integracion con Inmatic (no borra la configuracion)."
+					},
+					"response": []
+				},
+				{
+					"name": "Activar modo prueba",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "auth_token={{auth_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "action",
+									"value": "enable_trial",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/advisory-inmatic-config",
+							"host": ["{{base_url}}"],
+							"path": ["api", "advisory-inmatic-config"]
+						},
+						"description": "Activa el modo prueba de Inmatic.\n\nPermite usar la integracion sin tener plan Pro o superior."
+					},
+					"response": []
+				}
+			],
+			"description": "APIs para gestionar la configuracion de la integracion con Inmatic"
+		},
+		{
+			"name": "2. Webhooks",
+			"item": [
+				{
+					"name": "Listar webhooks",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "auth_token={{auth_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "action",
+									"value": "webhooks",
+									"type": "text"
+								},
+								{
+									"key": "webhook_action",
+									"value": "list",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/advisory-inmatic-config",
+							"host": ["{{base_url}}"],
+							"path": ["api", "advisory-inmatic-config"]
+						},
+						"description": "Lista los webhooks configurados en Inmatic."
+					},
+					"response": []
+				},
+				{
+					"name": "Crear webhook",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "auth_token={{auth_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "action",
+									"value": "webhooks",
+									"type": "text"
+								},
+								{
+									"key": "webhook_action",
+									"value": "create",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/advisory-inmatic-config",
+							"host": ["{{base_url}}"],
+							"path": ["api", "advisory-inmatic-config"]
+						},
+						"description": "Crea un webhook en Inmatic apuntando a nuestra API.\n\nEventos suscritos:\n- document.processed\n- document.approved\n- document.rejected"
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar webhook",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "auth_token={{auth_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "action",
+									"value": "webhooks",
+									"type": "text"
+								},
+								{
+									"key": "webhook_action",
+									"value": "delete",
+									"type": "text"
+								},
+								{
+									"key": "webhook_id",
+									"value": "id_del_webhook",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/advisory-inmatic-config",
+							"host": ["{{base_url}}"],
+							"path": ["api", "advisory-inmatic-config"]
+						},
+						"description": "Elimina un webhook de Inmatic."
+					},
+					"response": []
+				}
+			],
+			"description": "APIs para gestionar webhooks de Inmatic"
+		},
+		{
+			"name": "3. Envio de Facturas",
+			"item": [
+				{
+					"name": "Enviar factura individual",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "auth_token={{auth_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "invoice_id",
+									"value": "123",
+									"type": "text",
+									"description": "ID de la factura en advisory_invoices"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/advisory-invoice-send-to-inmatic",
+							"host": ["{{base_url}}"],
+							"path": ["api", "advisory-invoice-send-to-inmatic"]
+						},
+						"description": "Envia una factura individual a Inmatic para procesamiento OCR.\n\n**Validaciones:**\n- La factura debe existir y pertenecer a la asesoria\n- El archivo debe existir en el servidor\n- No debe haber sido enviada previamente (excepto si estado es error/rejected)\n\n**Respuesta exitosa:**\n- `inmatic_document_id`: ID asignado por Inmatic\n- `status`: 'pending'"
+					},
+					"response": []
+				},
+				{
+					"name": "Enviar facturas en lote",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "auth_token={{auth_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "invoice_ids",
+									"value": "[123, 124, 125]",
+									"type": "text",
+									"description": "Array JSON de IDs. Dejar vacio para enviar todas las pendientes"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/advisory-invoices-send-bulk-to-inmatic",
+							"host": ["{{base_url}}"],
+							"path": ["api", "advisory-invoices-send-bulk-to-inmatic"]
+						},
+						"description": "Envia multiples facturas a Inmatic.\n\n**Parametros:**\n- `invoice_ids`: Array de IDs. Si no se especifica, envia todas las pendientes (max 50)\n\n**Respuesta:**\n- `sent`: Cantidad enviadas exitosamente\n- `total_requested`: Cantidad solicitadas\n- `errors`: Array de errores por factura"
+					},
+					"response": []
+				},
+				{
+					"name": "Enviar todas las pendientes",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "auth_token={{auth_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/advisory-invoices-send-bulk-to-inmatic",
+							"host": ["{{base_url}}"],
+							"path": ["api", "advisory-invoices-send-bulk-to-inmatic"]
+						},
+						"description": "Envia todas las facturas pendientes (no enviadas o con error) a Inmatic.\n\nLimite: 50 facturas por ejecucion."
+					},
+					"response": []
+				}
+			],
+			"description": "APIs para enviar facturas a Inmatic"
+		},
+		{
+			"name": "4. Estado y Sincronizacion",
+			"item": [
+				{
+					"name": "Obtener estado de factura",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "auth_token={{auth_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/advisory-invoices-inmatic-status?invoice_id=123",
+							"host": ["{{base_url}}"],
+							"path": ["api", "advisory-invoices-inmatic-status"],
+							"query": [
+								{
+									"key": "invoice_id",
+									"value": "123",
+									"description": "ID de la factura"
+								}
+							]
+						},
+						"description": "Obtiene el estado de Inmatic de una factura especifica.\n\n**Respuesta incluye:**\n- Estado en Inmatic\n- Fecha de envio\n- Fecha de procesamiento\n- Datos OCR extraidos\n- Mensaje de error (si aplica)"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar facturas con estado Inmatic",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "auth_token={{auth_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/advisory-invoices-inmatic-status?page=1&limit=20&status=",
+							"host": ["{{base_url}}"],
+							"path": ["api", "advisory-invoices-inmatic-status"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Pagina (default: 1)"
+								},
+								{
+									"key": "limit",
+									"value": "20",
+									"description": "Registros por pagina (max: 100)"
+								},
+								{
+									"key": "status",
+									"value": "",
+									"description": "Filtrar por estado: pending, processed, error, rejected, not_sent"
+								}
+							]
+						},
+						"description": "Lista todas las facturas con su estado en Inmatic.\n\n**Filtros de estado:**\n- `pending`: Enviadas, esperando procesamiento\n- `processing`: En proceso de OCR\n- `processed`: Procesadas exitosamente\n- `approved`: Aprobadas\n- `exported`: Exportadas a contabilidad\n- `error`: Con error\n- `rejected`: Rechazadas\n- `not_sent`: No enviadas a Inmatic\n\n**Respuesta incluye:**\n- Lista paginada de facturas\n- Estadisticas globales"
+					},
+					"response": []
+				},
+				{
+					"name": "Sincronizar estado desde Inmatic",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "auth_token={{auth_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "invoice_id",
+									"value": "123",
+									"type": "text",
+									"description": "ID de la factura a sincronizar"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/advisory-invoice-sync-inmatic",
+							"host": ["{{base_url}}"],
+							"path": ["api", "advisory-invoice-sync-inmatic"]
+						},
+						"description": "Obtiene el estado actual y datos OCR directamente desde Inmatic y actualiza la BD local.\n\nUtil si el webhook no llego correctamente."
+					},
+					"response": []
+				}
+			],
+			"description": "APIs para consultar estado y sincronizar con Inmatic"
+		},
+		{
+			"name": "5. Webhook (Inmatic -> Facilitame)",
+			"item": [
+				{
+					"name": "Webhook receptor (ejemplo)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"event\": \"document.processed\",\n    \"document_id\": \"inmatic_doc_123\",\n    \"status\": \"processed\",\n    \"ocr_data\": {\n        \"issuer_name\": \"Empresa Proveedora SL\",\n        \"issuer_tax_id\": \"B12345678\",\n        \"invoice_number\": \"FAC-2024-001\",\n        \"date\": \"2024-12-10\",\n        \"subtotal\": 100.00,\n        \"tax\": 21.00,\n        \"total\": 121.00\n    }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/webhook-inmatic",
+							"host": ["{{base_url}}"],
+							"path": ["api", "webhook-inmatic"]
+						},
+						"description": "**NOTA:** Este endpoint es llamado automaticamente por Inmatic, no por usuarios.\n\nEste ejemplo muestra el formato de payload que Inmatic envia.\n\n**Eventos soportados:**\n- `document.processed`: Documento procesado con OCR\n- `document.approved`: Documento aprobado\n- `document.rejected`: Documento rechazado\n- `document.exported`: Documento exportado a contabilidad\n- `ping`/`test`: Prueba de conexion\n\n**Acciones del webhook:**\n1. Actualiza el estado del documento en BD\n2. Guarda datos OCR extraidos\n3. Marca factura como procesada si corresponde\n4. Notifica a la asesoria"
+					},
+					"response": []
+				}
+			],
+			"description": "Documentacion del webhook que recibe notificaciones de Inmatic"
+		},
+		{
+			"name": "6. Upload de Facturas (Cliente)",
+			"item": [
+				{
+					"name": "Subir factura (cliente)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "auth_token={{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "invoice_file[]",
+									"type": "file",
+									"description": "Archivo(s) de factura (PDF, JPG, PNG)"
+								},
+								{
+									"key": "tag",
+									"value": "gastos_generales",
+									"type": "text",
+									"description": "Etiqueta/categoria de la factura"
+								},
+								{
+									"key": "type",
+									"value": "gasto",
+									"type": "text",
+									"description": "Tipo: 'gasto' o 'ingreso'"
+								},
+								{
+									"key": "notes",
+									"value": "",
+									"type": "text",
+									"description": "Notas adicionales (opcional)"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/advisory-upload-invoice",
+							"host": ["{{base_url}}"],
+							"path": ["api", "advisory-upload-invoice"]
+						},
+						"description": "**Rol requerido:** Cliente vinculado a asesoria\n\nSube facturas a la asesoria. Si la asesoria tiene Inmatic configurado, las facturas se envian automaticamente.\n\n**Validaciones:**\n- Tipos permitidos: PDF, JPG, PNG\n- Tamaño maximo: 10MB por archivo\n- La asesoria debe tener plan Pro+ o modo prueba\n\n**Respuesta:**\n- `uploaded`: Cantidad de archivos subidos\n- `inmatic_sent`: Cantidad enviadas a Inmatic"
+					},
+					"response": []
+				}
+			],
+			"description": "API para subir facturas (usado por clientes)"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Si tienes el token en una variable de entorno, se usara automaticamente"
+				]
+			}
+		}
+	]
+}
