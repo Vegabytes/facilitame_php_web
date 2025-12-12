@@ -295,28 +295,50 @@ $tagLabels = [
                     Tu plan actual es: <strong><?php echo ucfirst($plan); ?></strong>
                 </p>
 
+                <!-- Explicación de qué es Inmatic -->
+                <div class="bg-light rounded p-4 mb-5 text-start" style="max-width: 600px; margin: 0 auto;">
+                    <h6 class="fw-bold mb-3"><i class="ki-outline ki-question-2 text-primary me-2"></i>¿Qué es Inmatic?</h6>
+                    <p class="text-muted fs-7 mb-3">
+                        <strong>Inmatic</strong> es un sistema de procesamiento automático de facturas con inteligencia artificial (OCR) que:
+                    </p>
+                    <ul class="text-muted fs-7 mb-0">
+                        <li class="mb-2"><i class="ki-outline ki-check text-success me-1"></i> Lee automáticamente los datos de las facturas (fecha, importe, proveedor, CIF...)</li>
+                        <li class="mb-2"><i class="ki-outline ki-check text-success me-1"></i> Extrae la información sin necesidad de introducirla manualmente</li>
+                        <li class="mb-2"><i class="ki-outline ki-check text-success me-1"></i> Prepara los datos para importar a tu software contable</li>
+                        <li><i class="ki-outline ki-check text-success me-1"></i> Reduce hasta un 80% el tiempo de procesamiento de facturas</li>
+                    </ul>
+                </div>
+
                 <!-- Opción de prueba -->
-                <div class="bg-light-warning rounded p-4 mb-5 text-start" style="max-width: 500px; margin: 0 auto;">
-                    <div class="d-flex align-items-start gap-3">
+                <div class="bg-light-warning rounded p-4 mb-5 text-start" style="max-width: 600px; margin: 0 auto;">
+                    <h6 class="fw-bold mb-3"><i class="ki-outline ki-flask text-warning me-2"></i>Modo Prueba Gratuito</h6>
+                    <p class="text-muted fs-7 mb-3">
+                        El <strong>modo prueba</strong> te permite probar la integración con Inmatic sin necesidad de contratar un plan superior.
+                    </p>
+                    <div class="d-flex align-items-start gap-3 mt-4 p-3 bg-white rounded border">
                         <div class="form-check form-switch form-check-custom form-check-solid">
                             <input class="form-check-input" type="checkbox" id="inmatic_trial_toggle" style="width: 50px; height: 25px;">
                         </div>
                         <div>
-                            <label class="form-check-label fw-semibold text-gray-800" for="inmatic_trial_toggle">
-                                Activar modo prueba gratuito
+                            <label class="form-check-label fw-semibold text-gray-800 cursor-pointer" for="inmatic_trial_toggle">
+                                Activar modo prueba
                             </label>
                             <p class="text-muted fs-7 mb-0 mt-1">
-                                Prueba Inmatic sin compromiso. Podrás probar las funcionalidades básicas de la integración.
+                                Haz clic aquí para activar el modo prueba y comenzar a usar Inmatic
                             </p>
                         </div>
+                    </div>
+                    <div class="alert alert-warning d-flex align-items-center mt-3 mb-0 py-2 px-3" style="font-size: 12px;">
+                        <i class="ki-outline ki-information-2 me-2"></i>
+                        <span>El modo prueba está pensado para evaluar la funcionalidad. Para uso en producción, recomendamos actualizar al plan Pro.</span>
                     </div>
                 </div>
 
                 <div class="separator my-5"></div>
 
-                <a href="/pricing" class="btn btn-primary">
+                <a href="/subscription" class="btn btn-primary">
                     <i class="ki-outline ki-arrow-up me-1"></i>
-                    Mejorar plan para acceso completo
+                    Ver planes y actualizar
                 </a>
             </div>
         </div>
@@ -326,12 +348,23 @@ $tagLabels = [
             var checkbox = this;
             if (checkbox.checked) {
                 Swal.fire({
-                    title: '¿Activar modo prueba?',
-                    html: 'Podrás probar la integración con Inmatic.<br><br><small class="text-muted">Algunas funcionalidades pueden estar limitadas en modo prueba.</small>',
+                    title: '¿Activar modo prueba de Inmatic?',
+                    html: '<div class="text-start">' +
+                          '<p>Al activar el modo prueba podrás:</p>' +
+                          '<ul class="mb-3">' +
+                          '<li>Configurar la conexión con tu cuenta de Inmatic</li>' +
+                          '<li>Enviar facturas para procesamiento OCR</li>' +
+                          '<li>Ver los datos extraídos automáticamente</li>' +
+                          '</ul>' +
+                          '<p class="text-muted fs-7 mb-0"><i class="ki-outline ki-information-2 me-1"></i>Necesitarás una cuenta en <a href="https://inmatic.ai" target="_blank">inmatic.ai</a> con un token de API.</p>' +
+                          '</div>',
                     icon: 'question',
                     showCancelButton: true,
-                    confirmButtonText: 'Sí, activar',
-                    cancelButtonText: 'Cancelar'
+                    confirmButtonText: 'Sí, activar modo prueba',
+                    cancelButtonText: 'Cancelar',
+                    customClass: {
+                        htmlContainer: 'text-start'
+                    }
                 }).then(function(result) {
                     if (result.isConfirmed) {
                         var formData = new FormData();
@@ -344,8 +377,8 @@ $tagLabels = [
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Modo prueba activado',
-                                    text: 'Ya puedes configurar tu integración con Inmatic',
-                                    timer: 2000,
+                                    html: 'Ahora puedes configurar tu integración con Inmatic.<br><br>La página se recargará automáticamente.',
+                                    timer: 2500,
                                     showConfirmButton: false
                                 }).then(function() {
                                     window.location.reload();

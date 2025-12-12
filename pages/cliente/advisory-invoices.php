@@ -45,14 +45,41 @@ $tags = [
     </div>
     
     <?php elseif (!$can_send): ?>
-    <!-- Plan gratuito -->
+    <!-- Plan gratuito - Explicación detallada -->
     <div class="card" style="flex: 1; display: flex; align-items: center; justify-content: center;">
-        <div class="empty-state">
+        <div class="empty-state" style="max-width: 500px;">
             <div class="empty-state-icon">
                 <i class="ki-outline ki-lock text-warning"></i>
             </div>
-            <div class="empty-state-title">Función no disponible</div>
-            <p class="empty-state-text">Tu asesoría tiene el plan gratuito que no incluye envío de facturas</p>
+            <div class="empty-state-title">Envío de facturas no disponible</div>
+            <p class="empty-state-text mb-4">
+                Tu asesoría tiene actualmente el <strong>plan gratuito</strong> de Facilitame,
+                que no incluye la funcionalidad de recepción de facturas de clientes.
+            </p>
+
+            <div class="bg-light rounded p-4 text-start mb-4">
+                <h6 class="fw-bold mb-3"><i class="ki-outline ki-information-2 text-primary me-2"></i>¿Por qué no puedo enviar facturas?</h6>
+                <p class="text-muted fs-7 mb-3">
+                    La función de envío de facturas permite a los clientes enviar sus facturas directamente a la asesoría
+                    para su procesamiento contable. Esta funcionalidad está disponible en los planes de pago.
+                </p>
+                <p class="text-muted fs-7 mb-0">
+                    <strong>¿Qué puedes hacer?</strong><br>
+                    Contacta con tu asesoría para que actualicen su plan, o envía tus facturas por los canales
+                    tradicionales (email, entrega en mano, etc.).
+                </p>
+            </div>
+
+            <div class="d-flex gap-2 justify-content-center flex-wrap">
+                <a href="/chat" class="btn btn-primary btn-sm">
+                    <i class="ki-outline ki-message-text-2 me-1"></i>
+                    Contactar con mi asesoría
+                </a>
+                <a href="/home" class="btn btn-light btn-sm">
+                    <i class="ki-outline ki-home me-1"></i>
+                    Volver al inicio
+                </a>
+            </div>
         </div>
     </div>
     
