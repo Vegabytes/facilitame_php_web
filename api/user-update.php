@@ -99,10 +99,10 @@ try
     // Actualizar datos básicos
     $query = "UPDATE `users` SET name = :name, lastname = :lastname, phone = :phone, nif_cif = :nif_cif, updated_at = NOW() WHERE id = :user_id";
     $stmt = $pdo->prepare($query);
-    $stmt->bindValue(":name", $_POST["name"] ?? '');
-    $stmt->bindValue(":lastname", $_POST["lastname"] ?? '');
-    $stmt->bindValue(":phone", $_POST["phone"] ?? '');
-    $stmt->bindValue(":nif_cif", $_POST["nif_cif"] ?? '');
+    $stmt->bindValue(":name", htmlspecialchars($_POST["name"] ?? '', ENT_QUOTES, 'UTF-8'));
+    $stmt->bindValue(":lastname", htmlspecialchars($_POST["lastname"] ?? '', ENT_QUOTES, 'UTF-8'));
+    $stmt->bindValue(":phone", htmlspecialchars($_POST["phone"] ?? '', ENT_QUOTES, 'UTF-8'));
+    $stmt->bindValue(":nif_cif", htmlspecialchars($_POST["nif_cif"] ?? '', ENT_QUOTES, 'UTF-8'));
     $stmt->bindValue(":user_id", $user_id);
     $stmt->execute();
 

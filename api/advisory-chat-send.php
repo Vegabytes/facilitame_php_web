@@ -36,7 +36,7 @@ if (!$stmt->fetch()) {
 
 // Insertar mensaje
 $stmt = $pdo->prepare("INSERT INTO advisory_messages (advisory_id, customer_id, sender_type, content, is_read, created_at) VALUES (?, ?, 'advisory', ?, 0, NOW())");
-$stmt->execute([$advisory_id, $customer_id, $message]);
+$stmt->execute([$advisory_id, $customer_id, htmlspecialchars($message, ENT_QUOTES, 'UTF-8')]);
 
 json_response("ok", "Mensaje enviado", 0, ['id' => $pdo->lastInsertId()]);
 ?>

@@ -18,19 +18,18 @@ var KTSigninGeneral = function ()
                 fields: {
                     'email': {
                         validators: {
-                            regexp: {
-                                regexp: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                message: 'La dirección no es válida',
+                            emailAddress: {
+                                message: 'La dirección de email no es válida'
                             },
                             notEmpty: {
-                                message: 'Campo obligatorio'
+                                message: 'El email es obligatorio'
                             }
                         }
                     },
                     'password': {
                         validators: {
                             notEmpty: {
-                                message: 'Campo obligatorio'
+                                message: 'La contraseña es obligatoria'
                             }
                         }
                     }
@@ -91,7 +90,7 @@ var KTSigninGeneral = function ()
                                     buttonsStyling: false,
                                     confirmButtonText: "Cerrar",
                                     customClass: {
-                                        confirmButton: "btn btn-primary"
+                                        confirmButton: "btn btn-primary-facilitame"
                                     }
                                 });
                             }
@@ -105,7 +104,7 @@ var KTSigninGeneral = function ()
                                 buttonsStyling: false,
                                 confirmButtonText: "Cerrar",
                                 customClass: {
-                                    confirmButton: "btn btn-primary"
+                                    confirmButton: "btn btn-primary-facilitame"
                                 }
                             });
                         }
@@ -117,7 +116,7 @@ var KTSigninGeneral = function ()
                             buttonsStyling: false,
                             confirmButtonText: "Cerrar",
                             customClass: {
-                                confirmButton: "btn btn-primary"
+                                confirmButton: "btn btn-primary-facilitame"
                             }
                         });
                     }).then(() =>
@@ -137,7 +136,7 @@ var KTSigninGeneral = function ()
                         buttonsStyling: false,
                         confirmButtonText: "Cerrar",
                         customClass: {
-                            confirmButton: "btn btn-primary"
+                            confirmButton: "btn btn-primary-facilitame"
                         }
                     });
                 }
@@ -232,7 +231,7 @@ KTUtil.onDOMContentLoaded(function ()
                             buttonsStyling: false,
                             confirmButtonText: "Cerrar",
                             customClass: {
-                                confirmButton: "btn btn-primary"
+                                confirmButton: "btn btn-primary-facilitame"
                             }
                         });
                     }
@@ -246,7 +245,7 @@ KTUtil.onDOMContentLoaded(function ()
                         buttonsStyling: false,
                         confirmButtonText: "Cerrar",
                         customClass: {
-                            confirmButton: "btn btn-primary"
+                            confirmButton: "btn btn-primary-facilitame"
                         }
                     });
                 }
@@ -258,7 +257,7 @@ KTUtil.onDOMContentLoaded(function ()
                     buttonsStyling: false,
                     confirmButtonText: "Cerrar",
                     customClass: {
-                        confirmButton: "btn btn-primary"
+                        confirmButton: "btn btn-primary-facilitame"
                     }
                 });
             }).then(() =>

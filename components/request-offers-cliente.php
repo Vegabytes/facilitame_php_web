@@ -1,6 +1,6 @@
 <?php
 // $offers ya viene del controlador
-$base_url = ROOT_URL . "/" . DOCUMENTS_DIR . "/";
+$download_url = ROOT_URL . "/api/file-download?type=offer&id=";
 
 // Solo bloquear ofertas si la solicitud está en estado APLAZADA (10)
 // Si ya cambió a otro estado (como "Oferta Disponible"), no bloquear nada
@@ -34,7 +34,7 @@ $statusConfig = [
     <?php else: ?>
         <?php foreach ($offers as $o): 
             $config = $statusConfig[$o["status_id"]] ?? ['color' => 'primary', 'label' => 'Desconocido', 'icon' => 'ki-question'];
-            $file_url = $base_url . $o["offer_file"];
+            $file_url = $download_url . $o["id"];
             $has_desc = !empty($o["offer_content"]);
             
             // Solo verificar bloqueo si la solicitud está aplazada

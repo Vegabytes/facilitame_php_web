@@ -3,7 +3,7 @@
  * Listado de Asesorías - Panel Admin
  * /pages/administrador/advisories.php
  */
-$scripts = [];
+$scripts = ["bold-submit"];
 ?>
 
 <div class="advisories-page" style="height: calc(100vh - 160px); display: flex; flex-direction: column;">
@@ -255,7 +255,8 @@ $scripts = [];
 
         if (btnNewAdvisory) {
             btnNewAdvisory.addEventListener('click', function() {
-                showNotAvailable('Crear asesoría');
+                const modal = new bootstrap.Modal(document.getElementById('modal-new-advisory'));
+                modal.show();
             });
         }
         
@@ -491,7 +492,59 @@ $scripts = [];
     }
     
     window.deleteAdvisory = function(id, name) {
-        showNotAvailable('Eliminar asesoría');
+        if (typeof Swal === 'undefined') {
+            alert('Error: SweetAlert no disponible');
+            return;
+        }
+
+        Swal.fire({
+            title: '¿Eliminar asesoría?',
+            html: `<p>Vas a eliminar la asesoría <strong>${escapeHtml(name)}</strong>.</p>
+                   <p class="text-muted small">Esta acción desvinculará los clientes y marcará la asesoría como eliminada.</p>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const formData = new FormData();
+                    formData.append('id', id);
+
+                    const response = await fetch('/api/advisories-delete', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await response.json();
+
+                    if (data.status === 'ok') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Eliminada',
+                            text: data.message || 'Asesoría eliminada correctamente',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                        loadData(); // Recargar lista
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message || 'No se pudo eliminar la asesoría'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error de conexión al eliminar'
+                    });
+                }
+            }
+        });
     };
     
     window.reloadAdvisories = () => loadData();
@@ -515,3 +568,113 @@ $scripts = [];
     }
 })();
 </script>
+
+<!-- Modal: Nueva Asesoría -->
+<div class="modal fade" id="modal-new-advisory" tabindex="-1" aria-labelledby="modal-new-advisory-label" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-new-advisory-label">
+                    <i class="ki-outline ki-chart me-2"></i>
+                    Nueva Asesoría
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <form action="api/advisories-add" data-reload="1" data-modal-close="modal-new-advisory">
+                <div class="modal-body">
+
+                    <!-- Datos de la empresa -->
+                    <div class="mb-4">
+                        <h6 class="text-muted mb-3">
+                            <i class="ki-outline ki-briefcase me-1"></i>
+                            Datos de la empresa
+                        </h6>
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <label class="form-label required">Razón Social</label>
+                                <input type="text" name="razon_social" class="form-control" required placeholder="Nombre de la empresa">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label required">CIF</label>
+                                <input type="text" name="cif" class="form-control" required placeholder="B12345678" maxlength="9" style="text-transform: uppercase;">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label required">Email Empresa</label>
+                                <input type="email" name="email_empresa" class="form-control" required placeholder="contacto@empresa.com">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Teléfono</label>
+                                <input type="text" name="telefono" class="form-control" placeholder="600 000 000">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Dirección</label>
+                                <input type="text" name="direccion" class="form-control" placeholder="Calle, número, ciudad...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Plan y estado -->
+                    <div class="mb-4">
+                        <h6 class="text-muted mb-3">
+                            <i class="ki-outline ki-setting-2 me-1"></i>
+                            Configuración
+                        </h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Plan</label>
+                                <select name="plan" class="form-select">
+                                    <option value="gratuito">Gratuito</option>
+                                    <option value="basic">Basic</option>
+                                    <option value="estandar" selected>Estándar</option>
+                                    <option value="pro">Pro</option>
+                                    <option value="premium">Premium</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Estado inicial</label>
+                                <select name="estado" class="form-select">
+                                    <option value="pendiente">Pendiente</option>
+                                    <option value="activo" selected>Activo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Usuario asociado (opcional) -->
+                    <div class="mb-0">
+                        <h6 class="text-muted mb-3">
+                            <i class="ki-outline ki-user me-1"></i>
+                            Usuario asociado <span class="text-muted fw-normal">(opcional)</span>
+                        </h6>
+                        <div class="alert alert-light-info mb-3">
+                            <i class="ki-outline ki-information-2 me-2"></i>
+                            Si proporcionas un email de usuario, se creará una cuenta y se enviará un email de activación.
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Nombre del usuario</label>
+                                <input type="text" name="user_name" class="form-control" placeholder="Nombre completo">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email del usuario</label>
+                                <input type="email" name="user_email" class="form-control" placeholder="usuario@empresa.com">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Teléfono del usuario</label>
+                                <input type="text" name="user_phone" class="form-control" placeholder="600 000 000">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary bold-submit">
+                        <i class="ki-outline ki-check me-1"></i>
+                        Crear Asesoría
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

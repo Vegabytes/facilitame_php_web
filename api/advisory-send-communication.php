@@ -19,6 +19,7 @@ $subject = trim($_POST['subject'] ?? '');
 $message = trim($_POST['message'] ?? '');
 $importance = $_POST['importance'] ?? 'media';
 $target_type = $_POST['target_type'] ?? 'all';
+$target_subtype = trim($_POST['target_subtype'] ?? '');
 $selected_clients = $_POST['selected_clients'] ?? [];
 
 if (empty($subject) || empty($message)) {
@@ -29,6 +30,12 @@ if (!in_array($importance, ['leve', 'media', 'importante'])) {
     $importance = 'media';
 }
 
+// Validar subtipos permitidos
+$allowed_subtypes = ['sin_trabajadores', 'con_trabajadores', '0_10', '10_50', '50_mas', 'vecinos', 'propietarios', 'con_lucro', 'sin_lucro', 'federacion'];
+if ($target_subtype !== '' && !in_array($target_subtype, $allowed_subtypes)) {
+    $target_subtype = '';
+}
+
 // Configuración de archivos permitidos
 $allowed_extensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png', 'gif'];
 $max_file_size_mb = 10; // 10MB por archivo
@@ -37,12 +44,12 @@ $max_total_size_mb = 25; // 25MB total
 try {
     $pdo->beginTransaction();
     
-    // Guardar comunicación
+    // Guardar comunicación (sanitizar subject y message para prevenir XSS)
     $query = "INSERT INTO advisory_communications
-              (advisory_id, subject, message, importance, target_type)
-              VALUES (?, ?, ?, ?, ?)";
+              (advisory_id, subject, message, importance, target_type, target_subtype)
+              VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $pdo->prepare($query);
-    $stmt->execute([$advisory_id, $subject, $message, $importance, $target_type]);
+    $stmt->execute([$advisory_id, htmlspecialchars($subject, ENT_QUOTES, 'UTF-8'), htmlspecialchars($message, ENT_QUOTES, 'UTF-8'), $importance, $target_type, $target_subtype ?: null]);
     $communication_id = $pdo->lastInsertId();
 
     // Procesar archivos adjuntos
@@ -129,6 +136,12 @@ try {
         // Filtrar por tipo de cliente: autonomo, empresa, particular, comunidad, asociacion
         $query .= " AND ca.client_type = ?";
         $params[] = $target_type;
+
+        // Filtrar por subtipo si se especificó
+        if ($target_subtype !== '') {
+            $query .= " AND ca.client_subtype = ?";
+            $params[] = $target_subtype;
+        }
     }
     
     $stmt = $pdo->prepare($query);
@@ -138,10 +151,26 @@ try {
     if (empty($customers)) {
         $pdo->rollBack();
         // Mensaje descriptivo según el filtro
+        $subtype_labels = [
+            'sin_trabajadores' => 'sin trabajadores',
+            'con_trabajadores' => 'con trabajadores',
+            '0_10' => '0-10 empleados',
+            '10_50' => '10-50 empleados',
+            '50_mas' => '+50 empleados',
+            'vecinos' => 'comunidad de vecinos',
+            'propietarios' => 'comunidad de propietarios',
+            'con_lucro' => 'con ánimo de lucro',
+            'sin_lucro' => 'sin ánimo de lucro',
+            'federacion' => 'federación'
+        ];
+        $subtype_text = $target_subtype ? ' (' . ($subtype_labels[$target_subtype] ?? $target_subtype) . ')' : '';
+
         $tipo_mensaje = match($target_type) {
-            'empresa' => 'No tienes clientes de tipo "Empresa" asignados a tu asesoría.',
-            'autonomo' => 'No tienes clientes de tipo "Autónomo" asignados a tu asesoría.',
+            'empresa' => 'No tienes clientes de tipo "Empresa"' . $subtype_text . ' asignados a tu asesoría.',
+            'autonomo' => 'No tienes clientes de tipo "Autónomo"' . $subtype_text . ' asignados a tu asesoría.',
             'particular' => 'No tienes clientes de tipo "Particular" asignados a tu asesoría.',
+            'comunidad' => 'No tienes clientes de tipo "Comunidad"' . $subtype_text . ' asignados a tu asesoría.',
+            'asociacion' => 'No tienes clientes de tipo "Asociación"' . $subtype_text . ' asignados a tu asesoría.',
             'selected' => 'No se seleccionaron clientes válidos.',
             default => 'No hay clientes que coincidan con el filtro seleccionado.'
         };

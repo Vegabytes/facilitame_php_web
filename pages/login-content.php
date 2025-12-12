@@ -12,16 +12,16 @@
 			<div class="d-flex flex-column flex-center p-10 w-100" id="login-left-content">
 				
 				<div class="mb-10 mb-lg-20" id="login-logo-main-wrapper">
-					<img class="mx-auto mw-100 login-logo-icon" 
+					<img class="mx-auto login-logo-icon"
 					     id="login-logo-main"
-					     src="<?php echo MEDIA_DIR . "/logo-facilitame-f-negra-fondo-transp.png" ?>" 
+					     src="<?php echo MEDIA_DIR . "/logo-facilitame-f-negra-fondo-transp.png" ?>"
 					     alt="Facilítame Logo Icon" />
 				</div>
 
-				<div class="mb-10 mb-lg-20" id="login-logo-text-wrapper">
-					<img class="mx-auto mw-100 login-logo-text" 
+				<div class="mb-12 mb-lg-20" id="login-logo-text-wrapper">
+					<img class="mx-auto login-logo-text"
 					     id="login-logo-text"
-					     src="<?php echo MEDIA_DIR . "/logo-facilitame-letras-negras.png" ?>" 
+					     src="<?php echo MEDIA_DIR . "/logo-facilitame-letras-negras.png" ?>"
 					     alt="Facilítame Logo" />
 				</div>
 

@@ -107,7 +107,7 @@ var KTSignupGeneral = function ()
                                     buttonsStyling: false,
                                     confirmButtonText: "Cerrar",
                                     customClass: {
-                                        confirmButton: "btn btn-primary"
+                                        confirmButton: "btn btn-primary-facilitame"
                                     }
                                 });
                             }
@@ -121,7 +121,7 @@ var KTSignupGeneral = function ()
                                 buttonsStyling: false,
                                 confirmButtonText: "Cerrar",
                                 customClass: {
-                                    confirmButton: "btn btn-primary"
+                                    confirmButton: "btn btn-primary-facilitame"
                                 }
                             });
                         }
@@ -133,7 +133,7 @@ var KTSignupGeneral = function ()
                             buttonsStyling: false,
                             confirmButtonText: "Cerrar",
                             customClass: {
-                                confirmButton: "btn btn-primary"
+                                confirmButton: "btn btn-primary-facilitame"
                             }
                         });
                     }).then(() =>
@@ -153,7 +153,7 @@ var KTSignupGeneral = function ()
                         buttonsStyling: false,
                         confirmButtonText: "Cerrar",
                         customClass: {
-                            confirmButton: "btn btn-primary"
+                            confirmButton: "btn btn-primary-facilitame"
                         }
                     });
                 }
@@ -215,13 +215,7 @@ var KTSignupGeneral = function ()
             form = document.querySelector('#kt_restore_form');
             submitButton = document.querySelector('#kt_restore_submit');
 
-            if (isValidUrl(submitButton.closest('form').getAttribute('action')))
-            {
-                handleFormAjax();
-            } else
-            {
-                handleForm();
-            }
+            handleForm();
         }
     };
 }();

@@ -21,7 +21,7 @@ try
         $stmt = $pdo->prepare($query);
         $stmt->bindValue(":request_id", $_POST["request_id"]);
         $stmt->bindValue(":user_id", USER["id"]);
-        $stmt->bindValue(":content", $_POST["text"]);
+        $stmt->bindValue(":content", htmlspecialchars($_POST["text"], ENT_QUOTES, 'UTF-8'));
         $stmt->execute();
         $message_id = $pdo->lastInsertId();
 

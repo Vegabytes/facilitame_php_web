@@ -62,12 +62,19 @@ try {
         $advisory_user = $stmt->fetch();
 
         if ($advisory_user) {
-            notification(
+            notification_v2(
                 USER['id'],                      // sender_id (cliente)
                 $advisory_user['user_id'],       // receiver_id (usuario de la asesoría)
                 null,                            // request_id (no aplica para citas)
                 'Nuevo mensaje de cita',
-                USER['name'] . ' ' . USER['lastname'] . ' te ha enviado un mensaje.'
+                USER['name'] . ' ' . USER['lastname'] . ' te ha enviado un mensaje.',
+                'Nuevo mensaje en cita - Facilítame',
+                'notification-appointment-chat-message',
+                [
+                    'sender_name' => USER['name'] . ' ' . USER['lastname'],
+                    'appointment_id' => $appointment_id,
+                    'message_preview' => mb_strimwidth($message, 0, 100, '...')
+                ]
             );
         }
 

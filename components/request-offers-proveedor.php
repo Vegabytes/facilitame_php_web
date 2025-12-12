@@ -1,6 +1,6 @@
 <?php
 // $offers ya viene definido desde el controlador
-$base_url = ROOT_URL . "/" . DOCUMENTS_DIR . "/";
+$download_url = ROOT_URL . "/api/file-download?type=offer&id=";
 
 $statusConfig = [
     1  => ['color' => 'muted',   'label' => 'Borrador',    'icon' => 'ki-pencil'],
@@ -51,7 +51,7 @@ $statusConfig = [
     <?php else: ?>
         <?php foreach ($offers as $o): 
             $config = $statusConfig[$o["status_id"]] ?? ['color' => 'primary', 'label' => 'Desconocido', 'icon' => 'ki-question'];
-            $file_url = $base_url . $o["offer_file"];
+            $file_url = $download_url . $o["id"];
             $has_desc = !empty($o["offer_content"]);
         ?>
             <div class="list-card list-card-<?= $config['color'] ?>">

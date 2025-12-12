@@ -11,7 +11,7 @@ try {
         INSERT INTO `messages_v2`
         SET content = :content, user_id = :user_id, request_id = :request_id
     ");
-    $stmt->bindValue(":content", $_POST["message"]);
+    $stmt->bindValue(":content", htmlspecialchars($_POST["message"], ENT_QUOTES, 'UTF-8'));
     $stmt->bindValue(":user_id", USER["id"]);
     $stmt->bindValue(":request_id", $_POST["request_id"]);
     $stmt->execute();
@@ -34,7 +34,7 @@ try {
     // 3) Notificar a la otra parte
     if (!cliente()) {
         // Asesor -> cliente (con email)
-        $email_subject  = "Notificación importante de tu asesor";
+        $email_subject  = "Notificaci锟斤拷n importante de tu asesor";
         $email_template = "message-store";
         notification_v2(
             $sender_id,
@@ -46,7 +46,7 @@ try {
             $email_template
         );
     } else {
-        // Cliente -> asesor (sin email, como ya tenías)
+        // Cliente -> asesor (sin email, como ya ten锟斤拷as)
         notification(
             $sender_id,
             $receiver_id,
@@ -56,7 +56,7 @@ try {
         );
     }
 
-// Comercial (si existe) — igual que el proveedor: NOTIFICACIÓN normal (sin email)
+// Comercial (si existe) 锟斤拷 igual que el proveedor: NOTIFICACI锟�0锟�7N normal (sin email)
 $stmt = $pdo->prepare("
     SELECT u.id AS commercial_user_id
     FROM customers_sales_codes csc
@@ -85,7 +85,7 @@ if ($commercial) {
 }
 
 
-    // 5) Commit y respuesta única
+    // 5) Commit y respuesta 锟斤拷nica
     $pdo->commit();
 
     $data = ["message_id" => $message_id];

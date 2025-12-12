@@ -52,7 +52,7 @@ if (!preg_match('/^[0-9]{9,15}$/', $phone)) {
     json_response("ko", "El telefono no es valido", 400);
 }
 
-$allowed_roles = ['autonomo', 'empresa', 'particular', 'asesoria'];
+$allowed_roles = ['autonomo', 'empresa', 'comunidad', 'asociacion', 'particular', 'asesoria'];
 if (!in_array($_POST["role"], $allowed_roles)) {
     json_response("ko", "Tipo de cuenta no valido", 400);
 }
@@ -256,21 +256,36 @@ try {
 
     // Si tiene código de asesoría -> vincular cliente con asesoría
     if ($advisory_id !== false) {
+        // Guardar tipo de cliente (autonomo/empresa/particular)
+        $client_type = $_POST["role"];
+
+        // Guardar subtipo (tamaño del negocio/comunidad/asociación)
         $client_subtype = NULL;
         if (isset($_POST["client_subtype"]) && !empty($_POST["client_subtype"])) {
-            $allowed_subtypes = ['1-10', '10-50', '50+', '0-10', '50-250', '250+'];
+            $allowed_subtypes = [
+                // Autónomo
+                '1-10', '10-50', '50+',
+                // Empresa
+                '0-10', '10-50', '50-250', '250+',
+                // Comunidad de Bienes
+                'vecinos', 'propietarios',
+                // Asociación
+                'con_lucro', 'sin_lucro', 'federacion'
+            ];
             if (in_array($_POST["client_subtype"], $allowed_subtypes)) {
                 $client_subtype = $_POST["client_subtype"];
             }
         }
-        
-        $query = "INSERT INTO `customers_advisories` SET 
+
+        $query = "INSERT INTO `customers_advisories` SET
         customer_id = :new_user_id,
         advisory_id = :advisory_id,
+        client_type = :client_type,
         client_subtype = :client_subtype";
         $stmt = $pdo->prepare($query);
         $stmt->bindValue(":new_user_id", $new_user_id);
         $stmt->bindValue(":advisory_id", $advisory_id);
+        $stmt->bindValue(":client_type", $client_type);
         $stmt->bindValue(":client_subtype", $client_subtype);
         $stmt->execute();
     }
@@ -318,8 +333,21 @@ try {
 
         // Notificacion al admin si queda pendiente
         if ($estado === "pendiente") {
-            // TODO: Implementar sistema de notificaciones para eventos administrativos
-            // Por ahora el admin revisará manualmente la tabla advisories
+            notification_v2(
+                $new_user_id,
+                ADMIN_ID,
+                null,
+                'Nueva asesoría pendiente',
+                "La asesoría {$razon_social} ({$cif_asesoria}) está pendiente de aprobación",
+                'Nueva asesoría pendiente de aprobación',
+                'notification-admin-advisory-pending',
+                [
+                    'advisory_name' => $razon_social,
+                    'advisory_cif' => $cif_asesoria,
+                    'advisory_email' => $email_empresa,
+                    'user_name' => $name . ' ' . $lastname
+                ]
+            );
         }
     }
 

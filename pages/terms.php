@@ -1,250 +1,54 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Política de Privacidad - Facilítame</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     <link rel="shortcut icon" href="assets/media/bold/favicon.png" />
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e8f4f5 100%);
-            margin: 0;
-            padding: 2rem 1rem;
-            min-height: 100vh;
-            color: #475569;
-            line-height: 1.7;
-        }
-
-        .legal-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 194, 203, 0.08);
-            padding: 3rem;
-        }
-
-        .legal-header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-            padding-bottom: 2rem;
-            border-bottom: 3px solid #00c2cb;
-        }
-
-        .legal-header h1 {
-            color: #00c2cb;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin: 0 0 0.5rem 0;
-        }
-
-        .legal-header p {
-            color: #64748b;
-            font-size: 1rem;
-            margin: 0;
-            text-align: center;
-        }
-
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: #00c2cb;
-            text-decoration: none;
-            font-weight: 600;
-            margin-bottom: 2rem;
-            transition: all 0.2s ease;
-        }
-
-        .back-button:hover {
-            color: #00a8b0;
-            transform: translateX(-3px);
-        }
-
-        .back-button svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        h2 {
-            color: #1e293b;
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin: 2rem 0 1rem 0;
-            padding-left: 1rem;
-            border-left: 4px solid #00c2cb;
-        }
-
-        h3 {
-            color: #00c2cb;
-            font-size: 1rem;
-            font-weight: 600;
-            margin: 1.5rem 0 0.75rem 0;
-        }
-
-        p {
-            text-align: justify;
-            margin-bottom: 1rem;
-            color: #475569;
-        }
-
-        .info-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin: 1.5rem 0;
-            background: #f8fafc;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 2px solid #e2e8f0;
-        }
-
-        .info-table tr {
-            transition: background-color 0.2s ease;
-        }
-
-        .info-table tr:hover {
-            background: #f0fdff;
-        }
-
-        .info-table td {
-            padding: 0.875rem 1.25rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .info-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .info-table td:first-child {
-            font-weight: 600;
-            color: #00c2cb;
-            width: 35%;
-            white-space: nowrap;
-        }
-
-        .info-table td:last-child {
-            color: #1e293b;
-        }
-
-        ul {
-            margin: 1rem 0;
-            padding-left: 1.5rem;
-        }
-
-        li {
-            margin-bottom: 0.5rem;
-            color: #475569;
-        }
-
-        li::marker {
-            color: #00c2cb;
-        }
-
-        a {
-            color: #00c2cb;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s ease;
-        }
-
-        a:hover {
-            color: #00a8b0;
-            text-decoration: underline;
-        }
-
-        .highlight-box {
-            background: #f0fdff;
-            border: 2px solid #00c2cb;
-            border-radius: 12px;
-            padding: 1.25rem;
-            margin: 1.5rem 0;
-        }
-
-        .highlight-box p {
-            margin: 0;
-            color: #1e293b;
-        }
-
-        .company-name {
-            font-weight: 600;
-            color: #00c2cb;
-        }
-
-        b, strong {
-            color: #1e293b;
-            font-weight: 600;
-        }
-
-        .legal-footer {
-            margin-top: 3rem;
-            padding-top: 1.5rem;
-            border-top: 2px solid #e2e8f0;
-            text-align: center;
-            color: #94a3b8;
-            font-size: 0.875rem;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 1rem;
-            }
-
-            .legal-container {
-                padding: 1.5rem;
-                border-radius: 12px;
-            }
-
-            .legal-header h1 {
-                font-size: 1.75rem;
-            }
-
-            h2 {
-                font-size: 1.125rem;
-            }
-
-            .info-table td:first-child {
-                width: auto;
-                white-space: normal;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/static.css" />
 </head>
-
 <body>
     <div class="legal-container">
+        <a href="/" class="back-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m15 18-6-6 6-6"/>
+            </svg>
+            Volver al inicio
+        </a>
+
         <div class="legal-header">
             <h1>Política de Privacidad</h1>
             <p>Siguiendo los principios de licitud, lealtad y transparencia</p>
         </div>
+
         <h2>1. ¿Quién es el responsable de sus datos?</h2>
-        <table class="info-table">
-            <tbody>
-                <tr>
-                    <td>Responsable</td>
-                    <td>Facilítame 2024 SL</td>
-                </tr>
-                <tr>
-                    <td>NIF</td>
-                    <td>B56290158</td>
-                </tr>
-                <tr>
-                    <td>Domicilio Fiscal</td>
-                    <td>Bizkai Kalea 13, 2ºC, 48960, Galdakao (Bizkaia)</td>
-                </tr>
-                <tr>
-                    <td>Correo electrónico</td>
-                    <td><a href="mailto:info@facilitame.es">info@facilitame.es</a></td>
-                </tr>
-                <tr>
-                    <td>Teléfono</td>
-                    <td><a href="tel:+34655929997">655 929 997</a></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="info-table">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Responsable</td>
+                        <td>Facilítame 2024 SL</td>
+                    </tr>
+                    <tr>
+                        <td>NIF</td>
+                        <td>B56290158</td>
+                    </tr>
+                    <tr>
+                        <td>Domicilio Fiscal</td>
+                        <td>Bizkai Kalea 13, 2ºC, 48960, Galdakao (Bizkaia)</td>
+                    </tr>
+                    <tr>
+                        <td>Correo electrónico</td>
+                        <td><a href="mailto:info@facilitame.es">info@facilitame.es</a></td>
+                    </tr>
+                    <tr>
+                        <td>Teléfono</td>
+                        <td><a href="tel:+34655929997">655 929 997</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
         <h2>2. ¿Qué datos recopilamos?</h2>
         <p>Al utilizar la app de <span class="company-name">Facilítame 2024 SL</span>, recopilaremos y trataremos la siguiente información:</p>
@@ -308,9 +112,8 @@
         </div>
 
         <div class="legal-footer">
-            Facilítame 2024 SL · Última actualización: Noviembre 2025
+            Facilítame 2024 SL · Última actualización: Diciembre 2025
         </div>
     </div>
 </body>
-
 </html>

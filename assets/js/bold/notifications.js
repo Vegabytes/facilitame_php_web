@@ -31,7 +31,7 @@
                         //     buttonsStyling: false,
                         //     confirmButtonText: "Cerrar",
                         //     customClass: {
-                        //         confirmButton: "btn btn-primary"
+                        //         confirmButton: "btn btn-primary-facilitame"
                         //     }
                         // });
 
@@ -51,7 +51,7 @@
                         //     buttonsStyling: false,
                         //     confirmButtonText: "Cerrar",
                         //     customClass: {
-                        //         confirmButton: "btn btn-primary"
+                        //         confirmButton: "btn btn-primary-facilitame"
                         //     }
                         // });
                     }
@@ -63,7 +63,7 @@
                     //     buttonsStyling: false,
                     //     confirmButtonText: "Cerrar",
                     //     customClass: {
-                    //         confirmButton: "btn btn-primary"
+                    //         confirmButton: "btn btn-primary-facilitame"
                     //     }
                     // });
                     return;
@@ -100,7 +100,7 @@
                         buttonsStyling: false,
                         confirmButtonText: "Cerrar",
                         customClass: {
-                            confirmButton: "btn btn-primary"
+                            confirmButton: "btn btn-primary-facilitame"
                         }
                     });
                 }
@@ -112,7 +112,7 @@
                     buttonsStyling: false,
                     confirmButtonText: "Cerrar",
                     customClass: {
-                        confirmButton: "btn btn-primary"
+                        confirmButton: "btn btn-primary-facilitame"
                     }
                 });
                 return;

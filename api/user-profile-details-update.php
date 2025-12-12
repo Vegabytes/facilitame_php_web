@@ -21,8 +21,8 @@ try
     $query = "UPDATE `users` SET name = :name, lastname = :lastname WHERE id = :user_id";
     $stmt = $pdo->prepare($query);
     $stmt->bindValue(":user_id", USER["id"]);
-    $stmt->bindValue(":name", $_POST["name"]);
-    $stmt->bindValue(":lastname", $_POST["lastname"]);
+    $stmt->bindValue(":name", htmlspecialchars($_POST["name"], ENT_QUOTES, 'UTF-8'));
+    $stmt->bindValue(":lastname", htmlspecialchars($_POST["lastname"], ENT_QUOTES, 'UTF-8'));
     $stmt->execute();
     app_log("customer", USER["id"], "customer_update_info");
 

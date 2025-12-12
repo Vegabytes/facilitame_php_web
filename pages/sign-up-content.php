@@ -22,6 +22,12 @@ body {
 	width: 70px;
 	height: 70px;
 	filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+	animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+	0%, 100% { transform: translateY(0px); }
+	50% { transform: translateY(-10px); }
 }
 
 .signup-logo-text {
@@ -30,14 +36,15 @@ body {
 
 .signup-tagline {
 	color: white;
-	font-size: 1.75rem;
+	font-size: 2rem;
 	font-weight: 700;
-	margin-bottom: 0.5rem;
+	margin-bottom: 0.75rem;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .signup-subtitle {
 	color: rgba(255, 255, 255, 0.9);
-	font-size: 1rem;
+	font-size: 1.25rem;
 	font-weight: 500;
 	margin: 0;
 }
@@ -165,18 +172,22 @@ body {
 	.signup-aside-facilitame {
 		min-height: 220px;
 	}
-	
+
 	.signup-logo-icon {
-		width: 60px;
-		height: 60px;
+		width: 55px;
+		height: 55px;
 	}
-	
+
 	.signup-logo-text {
-		max-width: 180px;
+		max-width: 160px;
 	}
-	
+
 	.signup-tagline {
-		font-size: 1.25rem;
+		font-size: 1.625rem;
+	}
+
+	.signup-subtitle {
+		font-size: 1.0625rem;
 	}
 }
 
@@ -191,13 +202,13 @@ body {
 		<div class="d-flex flex-lg-row-fluid w-lg-50 signup-aside-facilitame">
 			<div class="d-flex flex-column flex-center p-10 w-100">
 				<div class="mb-8">
-					<img class="mx-auto mw-100 signup-logo-icon" 
-					     src="<?php echo MEDIA_DIR . "/logo-facilitame-f-negra-fondo-transp.png" ?>" 
+					<img class="mx-auto signup-logo-icon"
+					     src="<?php echo MEDIA_DIR . "/logo-facilitame-f-negra-fondo-transp.png" ?>"
 					     alt="Facilítame Logo Icon" />
 				</div>
-				<div class="mb-8">
-					<img class="mx-auto mw-100 signup-logo-text" 
-					     src="<?php echo MEDIA_DIR . "/logo-facilitame-letras-negras.png" ?>" 
+				<div class="mb-12">
+					<img class="mx-auto signup-logo-text"
+					     src="<?php echo MEDIA_DIR . "/logo-facilitame-letras-negras.png" ?>"
 					     alt="Facilítame Logo" />
 				</div>
 				<div class="text-center">
@@ -235,6 +246,8 @@ body {
 								<option value="" disabled selected>Selecciona tipo</option>
 								<option value="autonomo">Autónomo</option>
 								<option value="empresa">Empresa</option>
+								<option value="comunidad">Comunidad de Bienes</option>
+								<option value="asociacion">Asociación</option>
 								<option value="particular">Particular</option>
 								<option value="asesoria">Asesoría</option>
 							</select>
@@ -394,7 +407,28 @@ body {
 									<option value="250+">Más de 250 empleados</option>
 								</select>
 							</div>
-							
+
+							<!-- Para Comunidad de Bienes -->
+							<div class="fv-row mb-3" id="comunidad-size-field" style="display:none;">
+								<label class="form-label-facilitame required">Tipo de Comunidad</label>
+								<select name="client_subtype" id="client_subtype_comunidad" class="form-select form-select-facilitame-sm">
+									<option value="">Selecciona...</option>
+									<option value="vecinos">Comunidad de vecinos</option>
+									<option value="propietarios">Comunidad de propietarios</option>
+								</select>
+							</div>
+
+							<!-- Para Asociaciones -->
+							<div class="fv-row mb-3" id="asociacion-size-field" style="display:none;">
+								<label class="form-label-facilitame required">Tipo de Asociación</label>
+								<select name="client_subtype" id="client_subtype_asociacion" class="form-select form-select-facilitame-sm">
+									<option value="">Selecciona...</option>
+									<option value="con_lucro">Con ánimo de lucro</option>
+									<option value="sin_lucro">Sin ánimo de lucro</option>
+									<option value="federacion">Federación/Confederación</option>
+								</select>
+							</div>
+
 						</div>
 
 						<div class="fv-row mb-3">
@@ -496,8 +530,8 @@ document.getElementById("role-id").addEventListener("change", function() {
 		// Asesoría
 		asesoriaFields.style.display = "block";
 		nifField.style.display = "none";
-	} else if (role === "empresa") {
-		// Empresa
+	} else if (role === "empresa" || role === "comunidad" || role === "asociacion") {
+		// Empresa, Comunidad de Bienes, Asociación
 		lastnameWrapper.style.display = "none";
 		advisoryCodeField.style.display = "block";
 	} else if (role === "particular") {
@@ -521,25 +555,33 @@ function checkSubtypeFields() {
 	var code = document.getElementById('advisory_code').value.trim();
 	var role = document.getElementById('role-id').value;
 	var subtypeFields = document.getElementById('client-subtype-fields');
-	
+
 	if (!subtypeFields) return;
-	
+
 	var autonomoField = document.getElementById('autonomo-size-field');
 	var empresaField = document.getElementById('empresa-size-field');
-	
+	var comunidadField = document.getElementById('comunidad-size-field');
+	var asociacionField = document.getElementById('asociacion-size-field');
+
 	// Ocultar todos
 	subtypeFields.style.display = 'none';
 	if (autonomoField) autonomoField.style.display = 'none';
 	if (empresaField) empresaField.style.display = 'none';
-	
-	// Si tiene código Y es autónomo o empresa
-	if (code && (role === 'autonomo' || role === 'empresa')) {
+	if (comunidadField) comunidadField.style.display = 'none';
+	if (asociacionField) asociacionField.style.display = 'none';
+
+	// Si tiene código Y es un tipo que requiere subtipo
+	if (code && (role === 'autonomo' || role === 'empresa' || role === 'comunidad' || role === 'asociacion')) {
 		subtypeFields.style.display = 'block';
-		
+
 		if (role === 'autonomo' && autonomoField) {
 			autonomoField.style.display = 'block';
 		} else if (role === 'empresa' && empresaField) {
 			empresaField.style.display = 'block';
+		} else if (role === 'comunidad' && comunidadField) {
+			comunidadField.style.display = 'block';
+		} else if (role === 'asociacion' && asociacionField) {
+			asociacionField.style.display = 'block';
 		}
 	}
 }

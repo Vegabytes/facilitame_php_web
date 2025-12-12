@@ -34,8 +34,8 @@ try
     $query = "UPDATE `users` SET name = :name, lastname = :lastname, email = :email WHERE id = :user_id";
     $stmt = $pdo->prepare($query);
     $stmt->bindValue(":user_id", USER["id"]);
-    $stmt->bindValue(":name", $_POST["name"]);
-    $stmt->bindValue(":lastname", $_POST["lastname"]);
+    $stmt->bindValue(":name", htmlspecialchars($_POST["name"], ENT_QUOTES, 'UTF-8'));
+    $stmt->bindValue(":lastname", htmlspecialchars($_POST["lastname"], ENT_QUOTES, 'UTF-8'));
     $stmt->bindValue(":email", $_POST["email"]);
     $stmt->execute();
     

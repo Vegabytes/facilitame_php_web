@@ -1,6 +1,5 @@
 <?php
 $scripts = [
-    "tinymce",
     "request",
     "chat"
 ];

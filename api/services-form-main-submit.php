@@ -49,7 +49,7 @@ try
 
                 $fileTmpPath = $tmpName;
                 $fileName = $_FILES['documents']['name'][$index];
-                $fileName_store = $uuid . "-" . $fileName;
+                $fileName_store = $uuid . "-" . preg_replace('/[^a-zA-Z0-9._-]/', '_', $fileName);
                 $fileType = $_FILES['documents']['type'][$index];
                 $fileSize = $_FILES['documents']['size'][$index] / (1024 * 1024); // MB
 

@@ -112,9 +112,12 @@ $statusClass = $statusClasses[$appointment['status']] ?? 'muted';
                                 <div class="list-card-meta">
                                     <strong class="text-dark"><?php echo !empty($appointment['scheduled_date']) ? date('d/m/Y \a \l\a\s H:i', strtotime($appointment['scheduled_date'])) : '-'; ?></strong>
                                 </div>
+                                <a href="#" onclick="addToGoogleCalendar(); return false;" class="btn btn-sm btn-light-primary mt-2">
+                                    <i class="ki-outline ki-calendar-add me-1"></i> Añadir a Google Calendar
+                                </a>
                             </div>
                         </div>
-                        
+
                         <?php elseif ($hasProposedDate && $proposedBy === 'customer'): ?>
                         <div class="list-card list-card-warning mb-3">
                             <div class="list-card-content">
@@ -501,4 +504,28 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 window.addEventListener('beforeunload', function() { if (chatInterval) clearInterval(chatInterval); });
+
+// Google Calendar
+window.addToGoogleCalendar = function() {
+    <?php if ($hasScheduledDate): ?>
+    var startDate = new Date('<?php echo date('c', strtotime($appointment['scheduled_date'])); ?>');
+    var endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // 1 hora después
+
+    var title = encodeURIComponent('Cita con <?php echo addslashes(htmlspecialchars($appointment['advisory_name'])); ?>');
+    var details = encodeURIComponent('<?php echo addslashes($typeLabels[$appointment['type']] ?? $appointment['type']); ?> - <?php echo addslashes($deptLabels[$appointment['department']] ?? $appointment['department']); ?>\n\nMotivo: <?php echo addslashes(str_replace(["\r\n", "\r", "\n"], " ", $appointment['reason'] ?? '')); ?>');
+    var location = encodeURIComponent('<?php echo $appointment['type'] === 'reunion_presencial' ? addslashes($appointment['direccion'] ?? '') : ($appointment['type'] === 'reunion_virtual' ? 'Videollamada' : 'Llamada telefónica'); ?>');
+
+    var formatDate = function(d) {
+        return d.toISOString().replace(/-|:|\.\d+/g, '').slice(0, 15) + 'Z';
+    };
+
+    var url = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+        '&text=' + title +
+        '&dates=' + formatDate(startDate) + '/' + formatDate(endDate) +
+        '&details=' + details +
+        '&location=' + location;
+
+    window.open(url, '_blank');
+    <?php endif; ?>
+};
 </script>

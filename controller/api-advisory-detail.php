@@ -22,11 +22,12 @@ if (!$id) {
 try {
     // Consulta base de la asesoría
     $stmt = $pdo->prepare("
-        SELECT 
+        SELECT
             a.id,
             a.razon_social,
             a.cif,
             a.email_empresa,
+            a.telefono,
             a.direccion,
             a.codigo_identificacion,
             a.plan,
@@ -34,10 +35,11 @@ try {
             a.created_at,
             a.user_id,
             CONCAT(COALESCE(u.name, ''), ' ', COALESCE(u.lastname, '')) AS user_name,
-            u.email AS user_email
+            u.email AS user_email,
+            u.phone AS user_phone
         FROM advisories a
         LEFT JOIN users u ON u.id = a.user_id
-        WHERE a.id = ?
+        WHERE a.id = ? AND a.deleted_at IS NULL
     ");
     $stmt->execute([$id]);
     $advisory = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -90,14 +92,16 @@ try {
         'razon_social' => $advisory['razon_social'] ?? '',
         'cif' => $advisory['cif'] ?? '',
         'email_empresa' => $advisory['email_empresa'] ?? '',
+        'telefono' => $advisory['telefono'] ?? '',
         'direccion' => $advisory['direccion'] ?? '',
         'codigo_identificacion' => $advisory['codigo_identificacion'] ?? '',
-        'plan' => $advisory['plan'] ?? 'basico',
+        'plan' => $advisory['plan'] ?? 'gratuito',
         'estado' => $advisory['estado'] ?? 'activo',
         'created_at' => $created_at_formatted,
         'user_id' => !empty($advisory['user_id']) ? (int) $advisory['user_id'] : null,
         'user_name' => trim($advisory['user_name'] ?? ''),
         'user_email' => $advisory['user_email'] ?? '',
+        'user_phone' => $advisory['user_phone'] ?? '',
         'stats' => [
             'total_customers' => $total_customers,
             'pending_appointments' => $pending_appointments,

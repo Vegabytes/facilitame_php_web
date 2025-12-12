@@ -11,7 +11,7 @@ try
     $pdo->beginTransaction();
 
     // 1. Comprobar si la solicitud tiene alguna oferta en estado activo (7: activada, 8: revisión solicitada )
-    $query = "SELECT * FROM `offers` WHERE status_id IN (7,8) AND request_id = :request_id";
+    $query = "SELECT * FROM `offers` WHERE status_id IN (7,8) AND request_id = :request_id AND deleted_at IS NULL";
     $stmt = $pdo->prepare($query);
     $stmt->bindValue(":request_id", $_POST["request_id"]);    
     $stmt->execute();

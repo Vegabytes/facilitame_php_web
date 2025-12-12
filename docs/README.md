@@ -215,8 +215,21 @@ facilitame/
 
 ## Crons
 
-- `advisory-reminder.php` - Recordatorios de comunicaciones importantes no leídas (24h)
-- Otros crons para limpieza y mantenimiento
+Los crons están en la carpeta `/crons/` y generan logs en `/crons/logs/`.
+
+| Cron | Frecuencia | Descripción |
+|------|------------|-------------|
+| `cron_advisory_reminder.php` | Cada hora | Reenvía recordatorio de comunicaciones con importancia "Importante" que no han sido leídas después de 24h |
+| `cron_notify_rescheduled_requests.php` | Diario (8:00) | Notifica a cliente, comercial y proveedor cuando una solicitud reagendada alcanza su fecha de reactivación |
+
+### Configuración en crontab
+```bash
+# Recordatorio comunicaciones importantes (cada hora)
+0 * * * * php /var/www/facilitame/crons/cron_advisory_reminder.php
+
+# Solicitudes reagendadas (diario a las 8:00)
+0 8 * * * php /var/www/facilitame/crons/cron_notify_rescheduled_requests.php
+```
 
 ## Configuración
 

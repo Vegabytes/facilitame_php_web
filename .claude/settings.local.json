@@ -36,7 +36,18 @@
       "Bash(/mnt/c/Users/acast/Documents/Facilitame/assets/js/custom/landing.js )",
       "Bash(/mnt/c/Users/acast/Documents/Facilitame/assets/plugins/custom/fslightbox )",
       "Bash(/mnt/c/Users/acast/Documents/Facilitame/assets/plugins/custom/typedjs )",
-      "Bash(sort:*)"
+      "Bash(sort:*)",
+      "Bash(git log:*)",
+      "Bash(zip -r:*)",
+      "Bash(powershell.exe -Command:*)",
+      "Bash(/mnt/c/laragon/bin/mysql/mysql-8.0.30-winx64/bin/mysqldump.exe:*)",
+      "Bash(/mnt/c/laragon/bin/mysql/mysql-8.4.3-winx64/bin/mysqldump.exe:*)",
+      "Bash(git restore:*)",
+      "Bash(done)",
+      "Bash(awk:*)",
+      "Bash(curl:*)",
+      "WebSearch",
+      "WebFetch(domain:inmatic.ai)"
     ]
   }
 }

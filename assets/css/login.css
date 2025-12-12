@@ -35,28 +35,29 @@ body.app-blank {
 }
 
 .login-logo-icon {
-    width: 70px;
-    height: 70px;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-    animation: float 3s ease-in-out infinite;
+    width: 140px;
+    height: 140px;
+    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.15));
+    animation: logoFloat 4s ease-in-out infinite, logoPulse 2s ease-in-out infinite;
 }
 
 .login-logo-text {
-    max-width: 220px;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    max-width: 320px;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.12));
+    animation: fadeInScale 1s ease-out;
 }
 
 .login-tagline {
     color: white;
-    font-size: 1.75rem;
+    font-size: 2rem;
     font-weight: 700;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .login-subtitle {
     color: rgba(255, 255, 255, 0.9);
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     font-weight: 500;
     margin: 0;
 }
@@ -75,11 +76,15 @@ body.app-blank {
 .login-form-container {
     width: 100%;
     max-width: 450px;
-    padding: 2rem;
+    min-height: 500px;
+    padding: 2.5rem 2rem;
     background: white;
     border-radius: 20px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
     animation: fadeInUp 0.6s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .login-form-title {
@@ -282,11 +287,46 @@ body.app-blank {
 }
 
 @keyframes float {
-    0%, 100% { 
-        transform: translateY(0px); 
+    0%, 100% {
+        transform: translateY(0px);
     }
-    50% { 
-        transform: translateY(-10px); 
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes logoFloat {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-8px) rotate(2deg);
+    }
+    50% {
+        transform: translateY(-15px) rotate(0deg);
+    }
+    75% {
+        transform: translateY(-8px) rotate(-2deg);
+    }
+}
+
+@keyframes logoPulse {
+    0%, 100% {
+        filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.15));
+    }
+    50% {
+        filter: drop-shadow(0 12px 32px rgba(0, 194, 203, 0.4));
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
     }
 }
 
@@ -320,31 +360,32 @@ body.app-blank {
 
 @media (max-width: 991px) {
     .login-aside-facilitame {
-        min-height: 300px;
+        min-height: 320px;
     }
 
     .login-logo-icon {
-        width: 55px;
-        height: 55px;
+        width: 100px;
+        height: 100px;
     }
 
     .login-logo-text {
-        max-width: 180px;
+        max-width: 240px;
     }
-    
+
     .login-tagline {
-        font-size: 1.5rem;
+        font-size: 1.625rem;
     }
-    
+
     .login-subtitle {
-        font-size: 1rem;
+        font-size: 1.0625rem;
     }
-    
+
     .login-form-container {
         box-shadow: none;
         padding: 1.5rem;
+        min-height: auto;
     }
-    
+
     .login-form-title {
         font-size: 1.75rem;
     }
@@ -353,6 +394,7 @@ body.app-blank {
 @media (max-width: 576px) {
     .login-form-container {
         padding: 1rem;
+        min-height: auto;
     }
     
     .login-form-title {

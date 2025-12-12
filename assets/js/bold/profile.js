@@ -4,7 +4,7 @@
         const SwalCustom = Swal.mixin({
             buttonsStyling: false,
             customClass: {
-                confirmButton: 'btn btn-primary',
+                confirmButton: 'btn btn-primary-facilitame',
                 cancelButton: 'btn btn-light',
                 denyButton: 'btn btn-light'
             }

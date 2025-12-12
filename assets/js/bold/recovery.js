@@ -20,10 +20,10 @@ var KTSigninGeneral = function ()
                     'email': {
                         validators: {
                             emailAddress: {
-                                message: 'La dirección no es válida'
+                                message: 'La dirección de email no es válida'
                             },
                             notEmpty: {
-                                message: 'Campo obligatorio'
+                                message: 'El email es obligatorio'
                             }
                         }
                     }
@@ -73,7 +73,7 @@ var KTSigninGeneral = function ()
                                     buttonsStyling: false,
                                     confirmButtonText: "Cerrar",
                                     customClass: {
-                                        confirmButton: "btn btn-primary"
+                                        confirmButton: "btn btn-primary-facilitame"
                                     },
                                     showConfirmButton: false
                                 });
@@ -91,7 +91,7 @@ var KTSigninGeneral = function ()
                                     buttonsStyling: false,
                                     confirmButtonText: "Cerrar",
                                     customClass: {
-                                        confirmButton: "btn btn-primary"
+                                        confirmButton: "btn btn-primary-facilitame"
                                     }
                                 });
                             }
@@ -105,7 +105,7 @@ var KTSigninGeneral = function ()
                                 buttonsStyling: false,
                                 confirmButtonText: "Cerrar",
                                 customClass: {
-                                    confirmButton: "btn btn-primary"
+                                    confirmButton: "btn btn-primary-facilitame"
                                 }
                             });
                         }
@@ -117,7 +117,7 @@ var KTSigninGeneral = function ()
                             buttonsStyling: false,
                             confirmButtonText: "Cerrar",
                             customClass: {
-                                confirmButton: "btn btn-primary"
+                                confirmButton: "btn btn-primary-facilitame"
                             }
                         });
                     }).then(() =>
@@ -137,7 +137,7 @@ var KTSigninGeneral = function ()
                         buttonsStyling: false,
                         confirmButtonText: "Cerrar",
                         customClass: {
-                            confirmButton: "btn btn-primary"
+                            confirmButton: "btn btn-primary-facilitame"
                         }
                     });
                 }

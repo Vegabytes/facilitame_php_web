@@ -1,115 +1,123 @@
 <?php
-file_put_contents('./cron_prueba.log', date('c') . " - Script iniciado\n", FILE_APPEND);
+/**
+ * CRON: Notificar solicitudes reagendadas
+ *
+ * Ejecutar diariamente: 0 8 * * * php /path/to/cron_notify_rescheduled_requests.php
+ *
+ * Función: Notifica a cliente, comercial y proveedor cuando una solicitud
+ * reagendada alcanza su fecha de reactivación.
+ */
 
-// Cargar configuración y utilidades del proyecto
-try {
-    require_once(__DIR__ . '/../bold/vars.php');
-    file_put_contents('./cron_prueba.log', date('c') . " - vars.php cargado correctamente\n", FILE_APPEND);
+// Cargar configuración
+require_once(__DIR__ . '/../bold/vars.php');
+require_once(__DIR__ . "/../vendor/autoload.php");
+require_once(__DIR__ . "/../bold/db.php");
+require_once(__DIR__ . "/../bold/functions.php");
+require_once(__DIR__ . "/../bold/utils/firebase-console-message.php");
+require_once(__DIR__ . "/../bold/utils/apple-apn.php");
 
-    require_once(__DIR__ . "/../vendor/autoload.php");
-    file_put_contents('./cron_prueba.log', date('c') . " - autoload.php cargado correctamente\n", FILE_APPEND);
+$log_file = __DIR__ . '/logs/rescheduled_requests_' . date('Y-m') . '.log';
 
-    require_once(__DIR__ . "/../bold/db.php");
-    file_put_contents('./cron_prueba.log', date('c') . " - db.php cargado correctamente\n", FILE_APPEND);
-
-    require_once(__DIR__ . "/../bold/functions.php");
-    file_put_contents('./cron_prueba.log', date('c') . " - functions.php cargado correctamente\n", FILE_APPEND);
-
-    require_once(__DIR__ . "/../bold/utils/firebase-console-message.php");
-    file_put_contents('./cron_prueba.log', date('c') . " - firebase-console-message.php cargado correctamente\n", FILE_APPEND);
-
-    require_once(__DIR__ . "/../bold/utils/apple-apn.php");
-    file_put_contents('./cron_prueba.log', date('c') . " - apple-apn.php cargado correctamente\n", FILE_APPEND);
-
-} catch (Throwable $e) {
-    file_put_contents('./cron_prueba.log', date('c') . " - ERROR cargando archivos: " . $e->getMessage() . "\n", FILE_APPEND);
-    exit(1);
+function cron_log($message) {
+    global $log_file;
+    $dir = dirname($log_file);
+    if (!is_dir($dir)) {
+        mkdir($dir, 0755, true);
+    }
+    file_put_contents($log_file, date('Y-m-d H:i:s') . " - " . $message . "\n", FILE_APPEND);
 }
 
-// Fecha actual (al empezar el día)
-$today = date('Y-m-d');
-file_put_contents('./cron_prueba.log', date('c') . " - Fecha hoy: $today\n", FILE_APPEND);
+cron_log("=== Iniciando cron rescheduled_requests ===");
 
-// Preparar consulta
 try {
+    $today = date('Y-m-d');
+
+    // Buscar solicitudes reagendadas cuya fecha ya llegó
     $query = "SELECT * FROM requests WHERE status_id = 10 AND rescheduled_at IS NOT NULL AND DATE(rescheduled_at) <= :today";
     $stmt = $pdo->prepare($query);
     $stmt->bindValue(':today', $today);
     $stmt->execute();
-    file_put_contents('./cron_prueba.log', date('c') . " - Consulta ejecutada correctamente\n", FILE_APPEND);
-
     $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    file_put_contents('./cron_prueba.log', date('c') . " - Solicitudes encontradas: " . count($requests) . "\n", FILE_APPEND);
 
-} catch (Throwable $e) {
-    file_put_contents('./cron_prueba.log', date('c') . " - ERROR en consulta: " . $e->getMessage() . "\n", FILE_APPEND);
+    cron_log("Solicitudes encontradas: " . count($requests));
+
+    if (empty($requests)) {
+        cron_log("No hay solicitudes pendientes. Finalizando.");
+        exit(0);
+    }
+
+    $notified_count = 0;
+
+    foreach ($requests as $request) {
+        try {
+            // Obtener usuario, comercial y proveedor
+            $client = get_user($request["user_id"]);
+            $provider = get_request_provider($request["id"]);
+            $sales_rep_id = customer_get_sales_rep($request["user_id"]);
+
+            $fecha_formateada = fdate($request["rescheduled_at"]);
+
+            // Notificar al cliente
+            $title = "¡Tu solicitud aplazada ya está lista!";
+            $desc = "La solicitud #" . $request["id"] . " ya está disponible para ser gestionada (fecha aplazamiento: " . $fecha_formateada . ").";
+            notification_v2(
+                165, // ID sistema
+                $client["id"],
+                $request["id"],
+                $title,
+                $desc,
+                $title,
+                "solicitud_reagendada_cliente",
+                ["nombre" => $client["name"], "fecha" => $fecha_formateada, "id" => $request["id"]]
+            );
+            cron_log("Notificación enviada al cliente #{$client['id']}");
+
+            // Notificar al comercial
+            if ($sales_rep_id) {
+                $sales_rep = get_user($sales_rep_id);
+                $title = "Una solicitud aplazada ya está disponible";
+                $desc = "La solicitud #" . $request["id"] . " ya puede ser gestionada. Fecha de reagendado: " . $fecha_formateada . ".";
+                notification_v2(
+                    165,
+                    $sales_rep_id,
+                    $request["id"],
+                    $title,
+                    $desc,
+                    $title,
+                    "reschedule_notification_generic",
+                    ["nombre" => $sales_rep["name"], "fecha" => $fecha_formateada, "id" => $request["id"]]
+                );
+                cron_log("Notificación enviada al comercial #{$sales_rep_id}");
+            }
+
+            // Notificar al proveedor
+            if ($provider) {
+                $title = "Una solicitud aplazada ya está disponible";
+                $desc = "La solicitud #" . $request["id"] . " ya puede ser gestionada. Fecha de reagendado: " . $fecha_formateada . ".";
+                notification_v2(
+                    165,
+                    $provider["id"],
+                    $request["id"],
+                    $title,
+                    $desc,
+                    $title,
+                    "reschedule_notification_generic",
+                    ["nombre" => $provider["name"], "fecha" => $fecha_formateada, "id" => $request["id"]]
+                );
+                cron_log("Notificación enviada al proveedor #{$provider['id']}");
+            }
+
+            $notified_count++;
+
+        } catch (Exception $e) {
+            cron_log("ERROR procesando solicitud #{$request['id']}: " . $e->getMessage());
+        }
+    }
+
+    cron_log("Solicitudes procesadas: {$notified_count}");
+    cron_log("=== Cron finalizado ===\n");
+
+} catch (Exception $e) {
+    cron_log("ERROR FATAL: " . $e->getMessage());
     exit(1);
 }
-
-foreach ($requests as $request) {
-    file_put_contents('./cron_prueba.log', date('c') . " - Procesando solicitud ID " . $request["id"] . "\n", FILE_APPEND);
-
-    try {
-        // Obtener usuario, comercial y proveedor
-        $client       = get_user($request["user_id"]);
-        $provider     = get_request_provider($request["id"]);
-        $sales_rep_id = customer_get_sales_rep($request["user_id"]);
-
-        $rescheduled_at = $request["rescheduled_at"];
-        $fecha_formateada = fdate($rescheduled_at);
-
-        // Cliente
-        $title = "¡Tu solicitud aplazada ya está lista!";
-        $desc  = "La solicitud #" . $request["id"] . " ya está disponible para ser gestionada (fecha aplazamiento: " . $fecha_formateada . ").";
-        notification_v2(
-       165,
-            $client["id"],
-            $request["id"],
-            $title,
-            $desc,
-            $title,
-            "solicitud_reagendada_cliente",
-            [ "nombre" => $client["name"], "fecha" => $fecha_formateada, "id" => $request["id"] ]
-        );
-        file_put_contents('./cron_prueba.log', date('c') . " - Notificación enviada al cliente " . $client["id"] . "\n", FILE_APPEND);
-
-        // Comercial
-        if ($sales_rep_id) {
-            $title = "Una solicitud aplazada ya está disponible";
-            $desc  = "La solicitud #" . $request["id"] . " ya puede ser gestionada. Fecha de reagendado: " . $fecha_formateada . ".";
-            notification_v2(
-        165,
-                $sales_rep_id,
-                $request["id"],
-                $title,
-                $desc,
-                $title,
-                "reschedule_notification_generic",
-                [ "nombre" => get_user($sales_rep_id)["name"], "fecha" => $fecha_formateada, "id" => $request["id"] ]
-            );
-            file_put_contents('./cron_prueba.log', date('c') . " - Notificación enviada al comercial " . $sales_rep_id . "\n", FILE_APPEND);
-        }
-
-        // Proveedor
-        if ($provider) {
-            $title = "Una solicitud aplazada ya está disponible";
-            $desc  = "La solicitud #" . $request["id"] . " ya puede ser gestionada. Fecha de reagendado: " . $fecha_formateada . ".";
-            notification_v2(
-      165,
-                $provider["id"],
-                $request["id"],
-                $title,
-                $desc,
-                $title,
-                "reschedule_notification_generic",
-                [ "nombre" => $provider["name"], "fecha" => $fecha_formateada, "id" => $request["id"] ]
-            );
-            file_put_contents('./cron_prueba.log', date('c') . " - Notificación enviada al proveedor " . $provider["id"] . "\n", FILE_APPEND);
-        }
-
-    } catch (Throwable $e) {
-        file_put_contents('./cron_prueba.log', date('c') . " - ERROR procesando solicitud ID " . $request["id"] . ": " . $e->getMessage() . "\n", FILE_APPEND);
-    }
-}
-
-file_put_contents('./cron_prueba.log', date('c') . " - Script finalizado\n", FILE_APPEND);

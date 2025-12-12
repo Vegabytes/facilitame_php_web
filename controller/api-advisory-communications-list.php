@@ -19,6 +19,7 @@ $offset = ($page - 1) * $limit;
 // Filtros
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $importance = isset($_GET['importance']) ? trim($_GET['importance']) : '';
+$subtype = isset($_GET['subtype']) ? trim($_GET['subtype']) : '';
 // Construir WHERE
 $where = ["ac.advisory_id = ?"];
 $params = [$advisory_id];
@@ -30,6 +31,12 @@ if ($search !== '') {
 if ($importance !== '' && in_array($importance, ['leve', 'media', 'importante'])) {
     $where[] = "ac.importance = ?";
     $params[] = $importance;
+}
+// Filtro por subtipo de cliente destinatario
+$allowed_subtypes = ['sin_trabajadores', 'con_trabajadores', '0_10', '10_50', '50_mas', 'vecinos', 'propietarios', 'con_lucro', 'sin_lucro', 'federacion'];
+if ($subtype !== '' && in_array($subtype, $allowed_subtypes)) {
+    $where[] = "ac.target_subtype = ?";
+    $params[] = $subtype;
 }
 $where_clause = implode(' AND ', $where);
 // Contar total
@@ -95,6 +102,7 @@ foreach ($communications as $comm) {
         'importance_class' => $imp['class'],
         'importance_icon' => $imp['icon'],
         'target_type' => $comm['target_type'],
+        'target_subtype' => $comm['target_subtype'],
         'target_label' => $target_labels[$comm['target_type']] ?? $comm['target_type'],
         'created_at' => date('d/m/Y H:i', strtotime($comm['created_at'])),
         'total_recipients' => (int)$comm['total_recipients'],

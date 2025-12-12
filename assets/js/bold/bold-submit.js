@@ -55,7 +55,7 @@
                     confirmButtonText: 'Sí, continuar',
                     cancelButtonText: 'Cancelar',
                     customClass: {
-                        confirmButton: "btn btn-primary",
+                        confirmButton: "btn btn-primary-facilitame",
                         cancelButton: "btn"
                     },
                 });
@@ -108,7 +108,7 @@
                         buttonsStyling: false,
                         confirmButtonText: "Cerrar",
                         customClass: {
-                            confirmButton: "btn btn-primary"
+                            confirmButton: "btn btn-primary-facilitame"
                         },
                         showCloseButton: (reload === true) ? false : true
                     });
@@ -121,7 +121,7 @@
                     buttonsStyling: false,
                     confirmButtonText: "Cerrar",
                     customClass: {
-                        confirmButton: "btn btn-primary"
+                        confirmButton: "btn btn-primary-facilitame"
                     }
                 });
                 return;
@@ -161,7 +161,7 @@
                         buttonsStyling: false,
                         confirmButtonText: "Cerrar",
                         customClass: {
-                            confirmButton: "btn btn-primary"
+                            confirmButton: "btn btn-primary-facilitame"
                         }
                     });
                 }
@@ -178,7 +178,7 @@
                     buttonsStyling: false,
                     confirmButtonText: "Cerrar",
                     customClass: {
-                        confirmButton: "btn btn-primary"
+                        confirmButton: "btn btn-primary-facilitame"
                     }
                 });
                 return;

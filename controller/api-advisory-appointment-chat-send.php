@@ -66,13 +66,26 @@ try {
             'Mensaje enviado en el chat'
         );
 
-        // Generar notificación para el cliente
-        notification(
+        // Generar notificación para el cliente (con email)
+        // Obtener nombre de la asesoría
+        $stmt = $pdo->prepare("SELECT razon_social FROM advisories WHERE id = ?");
+        $stmt->execute([$advisory['id']]);
+        $advisory_info = $stmt->fetch();
+        $advisory_name = $advisory_info ? $advisory_info['razon_social'] : 'Tu asesoría';
+
+        notification_v2(
             USER['id'],                        // sender_id (asesoría)
             $appointment['customer_id'],       // receiver_id (cliente)
             null,                              // request_id (no aplica para citas)
             'Nuevo mensaje de cita',
-            'Tu asesoría te ha enviado un mensaje.'
+            $advisory_name . ' te ha enviado un mensaje.',
+            'Nuevo mensaje en cita - Facilítame',
+            'notification-appointment-chat-message',
+            [
+                'sender_name' => $advisory_name,
+                'appointment_id' => $appointment_id,
+                'message_preview' => mb_strimwidth($message, 0, 100, '...')
+            ]
         );
 
         json_response("ok", "Mensaje enviado", 200, [

@@ -3,7 +3,7 @@
  * Detalle de Asesoría - Panel Admin
  * /pages/administrador/advisory.php
  */
-$scripts = [];
+$scripts = ["bold-submit"];
 
 $advisory_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 if (!$advisory_id) {
@@ -113,11 +113,11 @@ if (!$advisory_id) {
                 
                 <div class="card-footer" style="flex-shrink: 0; padding: 1rem; border-top: 1px solid var(--f-border);">
                     <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-sm btn-light-primary flex-fill" onclick="showNotAvailable('Editar asesoría')">
+                        <button type="button" class="btn btn-sm btn-light-primary flex-fill" onclick="showEditTab()">
                             <i class="ki-outline ki-pencil me-1"></i>
                             Editar
                         </button>
-                        <button type="button" class="btn btn-sm btn-light-danger" onclick="showNotAvailable('Eliminar asesoría')">
+                        <button type="button" class="btn btn-sm btn-light-danger" onclick="deleteAdvisory()">
                             <i class="ki-outline ki-trash"></i>
                         </button>
                     </div>
@@ -169,15 +169,27 @@ if (!$advisory_id) {
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" 
-                                    data-bs-toggle="tab" 
-                                    data-bs-target="#tab-invoices" 
+                            <button class="nav-link"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#tab-invoices"
                                     type="button"
                                     role="tab"
                                     aria-selected="false">
                                 <i class="ki-outline ki-bill"></i>
                                 Facturas
                                 <span class="badge badge-sm bg-light text-muted ms-1" id="badge-invoices">0</span>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#tab-settings"
+                                    type="button"
+                                    role="tab"
+                                    id="tab-settings-btn"
+                                    aria-selected="false">
+                                <i class="ki-outline ki-setting-2"></i>
+                                Configuración
                             </button>
                         </li>
                     </ul>
@@ -290,7 +302,7 @@ if (!$advisory_id) {
                                         </select>
                                     </div>
                                 </div>
-                                
+
                                 <div class="tab-list-container" id="invoices-list">
                                     <div class="loading-state">
                                         <div class="spinner-border spinner-border-sm text-primary"></div>
@@ -300,7 +312,94 @@ if (!$advisory_id) {
                             </div>
                         </div>
                     </div>
-                    
+
+                    <!-- Tab: Configuración -->
+                    <div class="tab-pane fade" id="tab-settings" role="tabpanel">
+                        <div class="tab-pane-content" style="padding: 1.5rem;">
+                            <div class="details-section">
+                                <h6 class="details-section-title">
+                                    <i class="ki-outline ki-setting-2"></i>
+                                    Editar Asesoría
+                                </h6>
+
+                                <form action="api/advisories-update" data-reload="1" id="form-edit-advisory">
+                                    <input type="hidden" name="id" value="<?php echo $advisory_id; ?>">
+
+                                    <!-- Datos de la empresa -->
+                                    <div class="mb-4">
+                                        <h6 class="text-muted mb-3">
+                                            <i class="ki-outline ki-briefcase me-1"></i>
+                                            Datos de la empresa
+                                        </h6>
+                                        <div class="row g-3">
+                                            <div class="col-md-8">
+                                                <label class="form-label required">Razón Social</label>
+                                                <input type="text" name="razon_social" id="edit-razon_social" class="form-control" required>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label required">CIF</label>
+                                                <input type="text" name="cif" id="edit-cif" class="form-control" required maxlength="9" style="text-transform: uppercase;">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label required">Email Empresa</label>
+                                                <input type="email" name="email_empresa" id="edit-email_empresa" class="form-control" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Teléfono</label>
+                                                <input type="text" name="telefono" id="edit-telefono" class="form-control">
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label">Dirección</label>
+                                                <input type="text" name="direccion" id="edit-direccion" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Plan y estado -->
+                                    <div class="mb-4">
+                                        <h6 class="text-muted mb-3">
+                                            <i class="ki-outline ki-element-11 me-1"></i>
+                                            Configuración
+                                        </h6>
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Plan</label>
+                                                <select name="plan" id="edit-plan" class="form-select">
+                                                    <option value="gratuito">Gratuito</option>
+                                                    <option value="basic">Basic</option>
+                                                    <option value="estandar">Estándar</option>
+                                                    <option value="pro">Pro</option>
+                                                    <option value="premium">Premium</option>
+                                                    <option value="enterprise">Enterprise</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Estado</label>
+                                                <select name="estado" id="edit-estado" class="form-select">
+                                                    <option value="pendiente">Pendiente</option>
+                                                    <option value="activo">Activo</option>
+                                                    <option value="suspendido">Suspendido</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="alert alert-light-warning mb-4">
+                                        <i class="ki-outline ki-information-2 me-2"></i>
+                                        <strong>Estado "Suspendido":</strong> La asesoría y sus usuarios no podrán acceder al sistema.
+                                    </div>
+
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <button type="submit" class="btn btn-primary bold-submit">
+                                            <i class="ki-outline ki-check me-1"></i>
+                                            Guardar cambios
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 
             </div>
@@ -356,6 +455,7 @@ if (!$advisory_id) {
             
             if (result.status === 'ok' && result.data) {
                 renderAdvisoryInfo(result.data);
+                fillEditForm(result.data);
                 // Cargar pestaña de clientes al inicio
                 loadCustomers();
             } else {
@@ -742,6 +842,93 @@ if (!$advisory_id) {
         return div.innerHTML;
     }
     
+    // Variable para almacenar datos de la asesoría
+    let advisoryData = null;
+
+    // Ir al tab de edición
+    window.showEditTab = function() {
+        const tabBtn = document.getElementById('tab-settings-btn');
+        if (tabBtn) {
+            const tab = new bootstrap.Tab(tabBtn);
+            tab.show();
+        }
+    };
+
+    // Eliminar asesoría
+    window.deleteAdvisory = function() {
+        if (!advisoryData) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se han cargado los datos de la asesoría'
+            });
+            return;
+        }
+
+        Swal.fire({
+            title: '¿Eliminar asesoría?',
+            html: `<p>Vas a eliminar la asesoría <strong>${escapeHtml(advisoryData.razon_social)}</strong>.</p>
+                   <p class="text-muted small">Esta acción desvinculará los clientes y marcará la asesoría como eliminada.</p>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const formData = new FormData();
+                    formData.append('id', ADVISORY_ID);
+
+                    const response = await fetch('/api/advisories-delete', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await response.json();
+
+                    if (data.status === 'ok') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Eliminada',
+                            text: data.message || 'Asesoría eliminada correctamente',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = '/advisories';
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message || 'No se pudo eliminar la asesoría'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error de conexión al eliminar'
+                    });
+                }
+            }
+        });
+    };
+
+    // Rellenar formulario de edición
+    function fillEditForm(adv) {
+        advisoryData = adv;
+
+        const fields = ['razon_social', 'cif', 'email_empresa', 'telefono', 'direccion', 'plan', 'estado'];
+        fields.forEach(field => {
+            const input = document.getElementById('edit-' + field);
+            if (input && adv[field] !== undefined) {
+                input.value = adv[field] || '';
+            }
+        });
+    }
+
     window.showNotAvailable = function(action) {
         if (typeof Swal !== 'undefined') {
             Swal.fire({

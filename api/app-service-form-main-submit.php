@@ -59,7 +59,7 @@ try
             $uuid = Uuid::uuid4();
             $fileTmpPath = $_FILES['documents']['tmp_name'][$i];
             $fileName = $_FILES['documents']['name'][$i];
-            $fileName_store = $uuid . "-" . $fileName;
+            $fileName_store = $uuid . "-" . preg_replace('/[^a-zA-Z0-9._-]/', '_', $fileName);
             $fileType = $_FILES['documents']['type'][$i];
             $fileSize = $_FILES['documents']['size'][$i] / (1024 * 1024); // en MB
 

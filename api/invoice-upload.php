@@ -63,7 +63,7 @@ try
         $stmt = $pdo->prepare($query);
         $stmt->bindValue(":request_id", $_POST["request_id"]);
         $stmt->bindValue(":filename", $new_file_name);
-        $stmt->bindValue(":description", $_POST["description"]);
+        $stmt->bindValue(":description", htmlspecialchars($_POST["description"], ENT_QUOTES, 'UTF-8'));
         $stmt->bindValue(":invoice_date", $_POST["invoice_date"]);
         $stmt->bindValue(":current_user", USER["id"]);
         $stmt->execute();

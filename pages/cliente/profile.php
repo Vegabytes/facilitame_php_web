@@ -5,6 +5,16 @@
  */
 $currentPage = 'profile';
 $scripts = ["profile"];
+
+// Verificar si tiene asesoría vinculada
+$stmt = $pdo->prepare("
+    SELECT ca.*, a.razon_social, a.codigo_identificacion
+    FROM customers_advisories ca
+    INNER JOIN advisories a ON a.id = ca.advisory_id
+    WHERE ca.customer_id = ?
+");
+$stmt->execute([USER['id']]);
+$linked_advisory = $stmt->fetch();
 ?>
 
 <div id="facilita-app">
@@ -170,7 +180,7 @@ $scripts = ["profile"];
                 </div>
                 
                 <!-- Cambiar contraseña -->
-                <div class="profile-form-section">
+                <div class="profile-form-section mb-3">
                     <div class="profile-form-header">
                         <div class="profile-form-icon profile-form-icon-danger">
                             <i class="ki-outline ki-lock"></i>
@@ -180,7 +190,7 @@ $scripts = ["profile"];
                             <p class="profile-form-subtitle">Cambia tu contraseña</p>
                         </div>
                     </div>
-                    
+
                     <form action="api/user-profile-password-update" data-reload="0" id="form-user-profile-password-update">
                         <div class="profile-form-body">
                             <div class="row g-3">
@@ -205,7 +215,76 @@ $scripts = ["profile"];
                         </div>
                     </form>
                 </div>
-                
+
+                <!-- Vincular Asesoría -->
+                <div class="profile-form-section">
+                    <div class="profile-form-header">
+                        <div class="profile-form-icon profile-form-icon-info">
+                            <i class="ki-outline ki-briefcase"></i>
+                        </div>
+                        <div>
+                            <h6 class="profile-form-title">Mi Asesoría</h6>
+                            <p class="profile-form-subtitle"><?php echo $linked_advisory ? 'Asesoría vinculada' : 'Vincula tu asesoría'; ?></p>
+                        </div>
+                    </div>
+
+                    <?php if ($linked_advisory): ?>
+                    <!-- Ya tiene asesoría vinculada -->
+                    <div class="profile-form-body">
+                        <div class="d-flex align-items-center gap-3 p-3 bg-light rounded">
+                            <div class="flex-shrink-0">
+                                <div class="symbol symbol-50px">
+                                    <div class="symbol-label bg-primary text-white fs-2 fw-bold">
+                                        <?php echo strtoupper(substr($linked_advisory['razon_social'], 0, 1)); ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="fw-bold text-dark"><?php secho($linked_advisory['razon_social']); ?></div>
+                                <div class="text-muted fs-7">
+                                    <i class="ki-outline ki-barcode me-1"></i>
+                                    Código: <?php secho($linked_advisory['codigo_identificacion']); ?>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="badge badge-light-success">
+                                    <i class="ki-outline ki-check-circle me-1"></i>Vinculada
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-text mt-3">
+                            <i class="ki-outline ki-information-2 me-1"></i>
+                            Tu cuenta está vinculada a esta asesoría. Puedes enviarles facturas y solicitar citas.
+                        </div>
+                    </div>
+                    <?php else: ?>
+                    <!-- No tiene asesoría - Mostrar formulario -->
+                    <form action="api/customer-link-advisory" data-reload="1" id="form-link-advisory">
+                        <div class="profile-form-body">
+                            <div class="alert alert-info d-flex align-items-center gap-2 mb-4" style="background: rgba(0, 194, 203, 0.1); border: 1px solid rgba(0, 194, 203, 0.3);">
+                                <i class="ki-outline ki-information-2 text-primary fs-2"></i>
+                                <div>
+                                    <div class="fw-semibold text-dark">¿Tu asesoría usa Facilítame?</div>
+                                    <div class="text-muted fs-7">Introduce el código que te ha proporcionado tu asesoría para vincular tu cuenta.</div>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-8 fv-row">
+                                    <label class="form-label required">Código de Asesoría</label>
+                                    <input type="text" class="form-control" name="advisory_code" placeholder="Ej: ASE-A12345678" required>
+                                    <div class="form-text">El código tiene el formato ASE-XXXXXXXXX</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-form-footer">
+                            <button type="submit" class="btn btn-primary bold-submit">
+                                <i class="ki-outline ki-check me-1"></i> Vincular asesoría
+                            </button>
+                        </div>
+                    </form>
+                    <?php endif; ?>
+                </div>
+
             </div>
             
         </div>

@@ -89,7 +89,7 @@ var KTActivatePassword = function ()
                                     buttonsStyling: false,
                                     confirmButtonText: "Iniciar sesión",
                                     customClass: {
-                                        confirmButton: "btn btn-primary"
+                                        confirmButton: "btn btn-primary-facilitame"
                                     }
                                 }).then(function () {
                                     location.href = "/login";
@@ -103,7 +103,7 @@ var KTActivatePassword = function ()
                                     buttonsStyling: false,
                                     confirmButtonText: "Cerrar",
                                     customClass: {
-                                        confirmButton: "btn btn-primary"
+                                        confirmButton: "btn btn-primary-facilitame"
                                     }
                                 });
                             }
@@ -116,7 +116,7 @@ var KTActivatePassword = function ()
                                 buttonsStyling: false,
                                 confirmButtonText: "Cerrar",
                                 customClass: {
-                                    confirmButton: "btn btn-primary"
+                                    confirmButton: "btn btn-primary-facilitame"
                                 }
                             });
                         }
@@ -132,7 +132,7 @@ var KTActivatePassword = function ()
                             buttonsStyling: false,
                             confirmButtonText: "Cerrar",
                             customClass: {
-                                confirmButton: "btn btn-primary"
+                                confirmButton: "btn btn-primary-facilitame"
                             }
                         });
                     }).then(() =>
@@ -150,7 +150,7 @@ var KTActivatePassword = function ()
                         buttonsStyling: false,
                         confirmButtonText: "Cerrar",
                         customClass: {
-                            confirmButton: "btn btn-primary"
+                            confirmButton: "btn btn-primary-facilitame"
                         }
                     });
                 }

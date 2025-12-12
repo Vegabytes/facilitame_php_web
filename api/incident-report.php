@@ -47,7 +47,7 @@ try {
     $stmt = $pdo->prepare($query);
     $stmt->bindValue(":request_id", $_POST["request_id"]);
     $stmt->bindValue(":incident_category_id", $_POST["incident_category_id"]);
-    $stmt->bindValue(":details", $_POST["incident_details"]);    
+    $stmt->bindValue(":details", htmlspecialchars($_POST["incident_details"], ENT_QUOTES, 'UTF-8'));    
     $stmt->bindValue(":created_by", USER["id"]);
     $stmt->execute();
     $incident_id = $pdo->lastInsertId();
@@ -94,7 +94,7 @@ try {
     $pdo->commit();
     
     define("BYPASS", true);
-    $_POST["comment"] = "---- INCIDENCIA NOTIFICADA ----\n" . $_POST["incident_details"];
+    $_POST["comment"] = "---- INCIDENCIA NOTIFICADA ----\n" . htmlspecialchars($_POST["incident_details"], ENT_QUOTES, 'UTF-8');
     require ROOT_DIR . "/api/request-add-provider-comment.php";
 
     json_response("ok", "Incidencia comunicada<br><br>Nuestro equipo la atenderá en breve y contactaremos de nuevo contigo.", 926331890);

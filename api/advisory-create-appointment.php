@@ -81,9 +81,9 @@ try {
         $customer_id,
         $type,
         $department,
-        $reason,
+        htmlspecialchars($reason, ENT_QUOTES, 'UTF-8'),
         $proposed_date_mysql,
-        $notes_advisory
+        $notes_advisory ? htmlspecialchars($notes_advisory, ENT_QUOTES, 'UTF-8') : null
     ]);
     
     $appointment_id = $pdo->lastInsertId();

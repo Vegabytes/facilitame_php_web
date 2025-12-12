@@ -146,15 +146,15 @@ try {
         
         if ($cancellation_reason) {
             $updates[] = "cancellation_reason = ?";
-            $params[] = $cancellation_reason;
+            $params[] = htmlspecialchars($cancellation_reason, ENT_QUOTES, 'UTF-8');
         }
-        
+
         $changes[] = [
             'action' => 'cancelled',
             'field' => 'status',
             'old' => $appointment['status'],
             'new' => 'cancelado',
-            'notes' => $cancellation_reason
+            'notes' => $cancellation_reason ? htmlspecialchars($cancellation_reason, ENT_QUOTES, 'UTF-8') : null
         ];
         
         $email_type = 'cancelled';
@@ -211,15 +211,15 @@ try {
             
             if ($cancellation_reason) {
                 $updates[] = "cancellation_reason = ?";
-                $params[] = $cancellation_reason;
+                $params[] = htmlspecialchars($cancellation_reason, ENT_QUOTES, 'UTF-8');
             }
-            
+
             $changes[] = [
                 'action' => 'cancelled',
                 'field' => null,
                 'old' => null,
                 'new' => null,
-                'notes' => $cancellation_reason
+                'notes' => $cancellation_reason ? htmlspecialchars($cancellation_reason, ENT_QUOTES, 'UTF-8') : null
             ];
             
             $email_type = 'cancelled';
@@ -292,10 +292,10 @@ try {
     // Notas de asesoria
     if (isset($_POST['notes_advisory'])) {
         $new_notes = trim($_POST['notes_advisory']);
-        
+
         if ($new_notes !== ($appointment['notes_advisory'] ?? '')) {
             $updates[] = "notes_advisory = ?";
-            $params[] = $new_notes;
+            $params[] = htmlspecialchars($new_notes, ENT_QUOTES, 'UTF-8');
             
             $changes[] = [
                 'action' => 'notes_updated',
@@ -309,10 +309,10 @@ try {
     // Compatibilidad con 'notes' (alias)
     if (isset($_POST['notes']) && !isset($_POST['notes_advisory'])) {
         $new_notes = trim($_POST['notes']);
-        
+
         if ($new_notes !== ($appointment['notes_advisory'] ?? '')) {
             $updates[] = "notes_advisory = ?";
-            $params[] = $new_notes;
+            $params[] = htmlspecialchars($new_notes, ENT_QUOTES, 'UTF-8');
             
             $changes[] = [
                 'action' => 'notes_updated',
@@ -326,10 +326,10 @@ try {
     // Motivo
     if (isset($_POST['reason'])) {
         $new_reason = trim($_POST['reason']);
-        
+
         if ($new_reason !== ($appointment['reason'] ?? '')) {
             $updates[] = "reason = ?";
-            $params[] = $new_reason;
+            $params[] = htmlspecialchars($new_reason, ENT_QUOTES, 'UTF-8');
             
             $changes[] = [
                 'action' => 'edited',

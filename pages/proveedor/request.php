@@ -1,6 +1,5 @@
 <?php
 $scripts = [
-    "tinymce",
     "request",
     "chat"
 ];
@@ -227,12 +226,19 @@ $isDeleted = ((int)$request["status_id"] === 9 || !is_null($request["deleted_at"
             </div>
             <div class="modal-body">
                 <form id="form-reschedule">
-                    <div class="mb-0">
+                    <div class="mb-3">
                         <label class="form-label">Selecciona nueva fecha para revisión</label>
                         <input type="date" id="reschedule-date" name="reschedule_date" class="form-control" required min="<?= date('Y-m-d') ?>">
                     </div>
                     <input type="hidden" name="request_id" value="<?php echo $request["id"] ?>">
                 </form>
+                <div class="alert alert-info d-flex align-items-start gap-2 mb-0" style="background: rgba(0, 194, 203, 0.1); border: 1px solid rgba(0, 194, 203, 0.3);">
+                    <i class="ki-outline ki-notification-on text-primary fs-3 mt-1"></i>
+                    <div>
+                        <div class="fw-semibold text-dark">Notificación automática</div>
+                        <div class="text-muted fs-7">Cuando llegue la fecha seleccionada, se notificará automáticamente al cliente, comercial y proveedor.</div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>

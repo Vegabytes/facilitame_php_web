@@ -1,167 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa del Sitio - Facilitame</title>
+    <title>Mapa del Sitio - Facilítame</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     <link rel="shortcut icon" href="assets/media/bold/favicon.png" />
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e8f4f5 100%);
-            margin: 0;
-            padding: 2rem 1rem;
-            min-height: 100vh;
-            color: #475569;
-            line-height: 1.7;
-        }
-
-        .legal-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 194, 203, 0.08);
-            padding: 3rem;
-        }
-
-        .legal-header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-            padding-bottom: 2rem;
-            border-bottom: 3px solid #00c2cb;
-        }
-
-        .legal-header h1 {
-            color: #00c2cb;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin: 0 0 0.5rem 0;
-        }
-
-        .legal-header p {
-            color: #64748b;
-            font-size: 1rem;
-            margin: 0;
-            text-align: center;
-        }
-
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: #00c2cb;
-            text-decoration: none;
-            font-weight: 600;
-            margin-bottom: 2rem;
-            transition: all 0.2s ease;
-        }
-
-        .back-button:hover {
-            color: #00a8b0;
-            transform: translateX(-3px);
-        }
-
-        .sitemap-section {
-            margin-bottom: 2rem;
-        }
-
-        .sitemap-section h2 {
-            color: #00c2cb;
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin: 0 0 1rem 0;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #e2e8f0;
-        }
-
-        .sitemap-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .sitemap-list li {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .sitemap-list li:last-child {
-            border-bottom: none;
-        }
-
-        .sitemap-list a {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            color: #1e293b;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-
-        .sitemap-list a:hover {
-            color: #00c2cb;
-            padding-left: 0.5rem;
-        }
-
-        .sitemap-list .icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, #00c2cb 0%, #00a8b0 100%);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 0.875rem;
-        }
-
-        .sitemap-list .description {
-            font-size: 0.875rem;
-            color: #64748b;
-            font-weight: 400;
-            margin-left: auto;
-        }
-
-        .legal-footer {
-            margin-top: 3rem;
-            padding-top: 1.5rem;
-            border-top: 2px solid #e2e8f0;
-            text-align: center;
-            color: #64748b;
-            font-size: 0.875rem;
-        }
-
-        .legal-footer a {
-            color: #00c2cb;
-            text-decoration: none;
-        }
-
-        .legal-footer a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            .legal-container {
-                padding: 1.5rem;
-                margin: 1rem;
-                border-radius: 12px;
-            }
-
-            .legal-header h1 {
-                font-size: 1.75rem;
-            }
-
-            .sitemap-list .description {
-                display: none;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/static.css" />
 </head>
-
 <body>
     <div class="legal-container">
         <a href="/" class="back-button">
@@ -173,7 +19,7 @@
 
         <div class="legal-header">
             <h1>Mapa del Sitio</h1>
-            <p>Navegacion completa de Facilitame</p>
+            <p>Navegación completa de Facilítame</p>
         </div>
 
         <div class="sitemap-section">
@@ -188,7 +34,7 @@
                                 <line x1="15" y1="12" x2="3" y2="12"/>
                             </svg>
                         </span>
-                        Iniciar Sesion
+                        Iniciar Sesión
                         <span class="description">Accede a tu cuenta</span>
                     </a>
                 </li>
@@ -214,7 +60,7 @@
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                             </svg>
                         </span>
-                        Recuperar Contrasena
+                        Recuperar Contraseña
                         <span class="description">Restablece tu acceso</span>
                     </a>
                 </li>
@@ -222,7 +68,7 @@
         </div>
 
         <div class="sitemap-section">
-            <h2>Informacion Legal</h2>
+            <h2>Información Legal</h2>
             <ul class="sitemap-list">
                 <li>
                     <a href="/terms">
@@ -231,8 +77,8 @@
                                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                             </svg>
                         </span>
-                        Politica de Privacidad
-                        <span class="description">Proteccion de datos</span>
+                        Política de Privacidad
+                        <span class="description">Protección de datos</span>
                     </a>
                 </li>
                 <li>
@@ -246,7 +92,7 @@
                             </svg>
                         </span>
                         Aviso Legal
-                        <span class="description">Terminos de uso</span>
+                        <span class="description">Términos de uso</span>
                     </a>
                 </li>
                 <li>
@@ -257,7 +103,7 @@
                                 <circle cx="12" cy="12" r="3"/>
                             </svg>
                         </span>
-                        Politica de Cookies
+                        Política de Cookies
                         <span class="description">Uso de cookies</span>
                     </a>
                 </li>
@@ -268,14 +114,14 @@
             <h2>Contacto</h2>
             <ul class="sitemap-list">
                 <li>
-                    <a href="mailto:soporte@facilitame.es">
+                    <a href="mailto:info@facilitame.es">
                         <span class="icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                                 <polyline points="22,6 12,13 2,6"/>
                             </svg>
                         </span>
-                        soporte@facilitame.es
+                        info@facilitame.es
                         <span class="description">Ayuda y soporte</span>
                     </a>
                 </li>
@@ -296,10 +142,8 @@
         </div>
 
         <div class="legal-footer">
-            <p>&copy; 2024 Facilitame 2024 SL. Todos los derechos reservados.</p>
-            <p><a href="/">Volver al inicio</a></p>
+            Facilítame 2024 SL · Última actualización: Diciembre 2025
         </div>
     </div>
 </body>
-
 </html>

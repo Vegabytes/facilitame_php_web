@@ -50,12 +50,36 @@ $importanceClasses = [
                 </div>
                 <div class="d-flex align-items-center gap-3">
                     <div class="pagination-size">
-                        <label for="comm-filter-importance">Tipo:</label>
+                        <label for="comm-filter-importance">Prioridad:</label>
                         <select id="comm-filter-importance" class="form-select form-select-sm">
                             <option value="">Todas</option>
                             <option value="leve">Informativa</option>
                             <option value="media">Normal</option>
                             <option value="importante">Importante</option>
+                        </select>
+                    </div>
+                    <div class="pagination-size">
+                        <label for="comm-filter-subtype">Subtipo:</label>
+                        <select id="comm-filter-subtype" class="form-select form-select-sm">
+                            <option value="">Todos</option>
+                            <optgroup label="Autónomos">
+                                <option value="sin_trabajadores">Sin trabajadores</option>
+                                <option value="con_trabajadores">Con trabajadores</option>
+                            </optgroup>
+                            <optgroup label="Empresas">
+                                <option value="0_10">0-10 empleados</option>
+                                <option value="10_50">10-50 empleados</option>
+                                <option value="50_mas">+50 empleados</option>
+                            </optgroup>
+                            <optgroup label="Comunidades">
+                                <option value="vecinos">Comunidad de vecinos</option>
+                                <option value="propietarios">Comunidad de propietarios</option>
+                            </optgroup>
+                            <optgroup label="Asociaciones">
+                                <option value="con_lucro">Con ánimo de lucro</option>
+                                <option value="sin_lucro">Sin ánimo de lucro</option>
+                                <option value="federacion">Federación</option>
+                            </optgroup>
                         </select>
                     </div>
                     <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modal_new_communication">
@@ -122,7 +146,7 @@ $importanceClasses = [
                     <div class="row mb-4">
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Prioridad <span class="text-danger">*</span></label>
-                            <select name="importance" class="form-select" required>
+                            <select name="importance" class="form-select" required id="importance_select">
                                 <option value="leve">Informativa</option>
                                 <option value="media" selected>Normal</option>
                                 <option value="importante">Importante</option>
@@ -139,6 +163,15 @@ $importanceClasses = [
                                 <option value="asociacion">Solo Asociaciones</option>
                                 <option value="selected">Selección manual</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="row mb-4" id="subtype_row" style="display: none;">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Filtrar por subtipo</label>
+                            <select name="target_subtype" class="form-select" id="target_subtype_select">
+                                <option value="">Todos los subtipos</option>
+                            </select>
+                            <div class="form-text">Opcional: filtra por subtipo específico</div>
                         </div>
                     </div>
                     <div class="mb-4" id="clients_selector" style="display: none;">
@@ -180,6 +213,16 @@ $importanceClasses = [
                             <span class="info-box-text">El comunicado se enviará por email y quedará visible en el panel de cada cliente.</span>
                         </div>
                     </div>
+
+                    <div class="info-box info-box-warning" id="importance-reminder-info" style="display: none;">
+                        <div class="info-box-icon">
+                            <i class="ki-outline ki-notification-bing"></i>
+                        </div>
+                        <div class="info-box-content">
+                            <span class="info-box-title">Recordatorio automático</span>
+                            <span class="info-box-text">Las comunicaciones importantes que no sean leídas recibirán un recordatorio automático por email pasadas 24 horas.</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
@@ -219,15 +262,28 @@ $importanceClasses = [
     'use strict';
     
     var API_URL = '/api-advisory-communications-list';
-    
+
     var importanceLabels = <?php echo json_encode($importanceLabels); ?>;
     var importanceClasses = <?php echo json_encode($importanceClasses); ?>;
-    
+    var subtypeLabels = {
+        'sin_trabajadores': 'Sin trabajadores',
+        'con_trabajadores': 'Con trabajadores',
+        '0_10': '0-10 empl.',
+        '10_50': '10-50 empl.',
+        '50_mas': '+50 empl.',
+        'vecinos': 'C. vecinos',
+        'propietarios': 'C. propietarios',
+        'con_lucro': 'Con lucro',
+        'sin_lucro': 'Sin lucro',
+        'federacion': 'Federación'
+    };
+
     var state = {
         currentPage: 1,
         pageSize: 25,
         searchQuery: '',
         importance: '',
+        subtype: '',
         totalPages: 1,
         totalRecords: 0,
         isLoading: false
@@ -240,6 +296,7 @@ $importanceClasses = [
     var prevBtn = document.getElementById('comm-prev');
     var nextBtn = document.getElementById('comm-next');
     var importanceFilter = document.getElementById('comm-filter-importance');
+    var subtypeFilter = document.getElementById('comm-filter-subtype');
     var paginationContainer = document.getElementById('comm-pagination');
     
     var searchTimeout = null;
@@ -248,6 +305,7 @@ $importanceClasses = [
         prevBtn.addEventListener('click', function() { goToPage(state.currentPage - 1); });
         nextBtn.addEventListener('click', function() { goToPage(state.currentPage + 1); });
         importanceFilter.addEventListener('change', handleImportanceFilter);
+        subtypeFilter.addEventListener('change', handleSubtypeFilter);
         loadData();
     }
     
@@ -260,7 +318,8 @@ $importanceClasses = [
             page: state.currentPage,
             limit: state.pageSize,
             search: state.searchQuery,
-            importance: state.importance
+            importance: state.importance,
+            subtype: state.subtype
         });
         
         fetch(API_URL + '?' + params)
@@ -282,8 +341,9 @@ $importanceClasses = [
     
     function renderList(data) {
         if (!data || data.length === 0) {
-            var msg = state.searchQuery || state.importance ? 'No se encontraron comunicaciones' : 'No hay comunicaciones enviadas';
-            var title = state.searchQuery || state.importance ? 'Sin resultados' : 'Sin comunicaciones';
+            var hasFilters = state.searchQuery || state.importance || state.subtype;
+            var msg = hasFilters ? 'No se encontraron comunicaciones con los filtros seleccionados' : 'No hay comunicaciones enviadas';
+            var title = hasFilters ? 'Sin resultados' : 'Sin comunicaciones';
             listContainer.innerHTML = 
                 '<div class="empty-state">' +
                     '<div class="empty-state-icon"><i class="ki-outline ki-sms"></i></div>' +
@@ -304,11 +364,16 @@ $importanceClasses = [
                 ? '<span class="text-primary"><i class="ki-outline ki-paperclip"></i> ' + item.attachments_count + ' archivo' + (item.attachments_count > 1 ? 's' : '') + '</span>'
                 : '';
 
+            var subtypeBadge = item.target_subtype && subtypeLabels[item.target_subtype]
+                ? '<span class="badge-status badge-status-muted">' + subtypeLabels[item.target_subtype] + '</span>'
+                : '';
+
             html += '<div class="list-card list-card-' + colorClass + '">' +
                 '<div class="list-card-content">' +
                     '<div class="list-card-title">' +
                         '<span class="fw-semibold">' + escapeHtml(item.subject) + '</span>' +
                         '<span class="badge-status badge-status-' + colorClass + '">' + label + '</span>' +
+                        subtypeBadge +
                     '</div>' +
                     '<div class="list-card-desc">' + escapeHtml(preview) + '</div>' +
                     '<div class="list-card-meta">' +
@@ -334,6 +399,12 @@ $importanceClasses = [
     
     function handleImportanceFilter(e) {
         state.importance = e.target.value;
+        state.currentPage = 1;
+        loadData();
+    }
+
+    function handleSubtypeFilter(e) {
+        state.subtype = e.target.value;
         state.currentPage = 1;
         loadData();
     }
@@ -404,9 +475,55 @@ $importanceClasses = [
     }
 })();
 
-// Toggle selector de clientes
+// Subtipos por tipo de cliente
+var subtypesByType = {
+    'autonomo': [
+        { value: 'sin_trabajadores', label: 'Sin trabajadores' },
+        { value: 'con_trabajadores', label: 'Con trabajadores' }
+    ],
+    'empresa': [
+        { value: '0_10', label: '0-10 empleados' },
+        { value: '10_50', label: '10-50 empleados' },
+        { value: '50_mas', label: '+50 empleados' }
+    ],
+    'comunidad': [
+        { value: 'vecinos', label: 'Comunidad de vecinos' },
+        { value: 'propietarios', label: 'Comunidad de propietarios' }
+    ],
+    'asociacion': [
+        { value: 'con_lucro', label: 'Con ánimo de lucro' },
+        { value: 'sin_lucro', label: 'Sin ánimo de lucro' },
+        { value: 'federacion', label: 'Federación' }
+    ]
+};
+
+// Mostrar aviso de recordatorio cuando prioridad es "importante"
+document.getElementById('importance_select').addEventListener('change', function() {
+    var reminderInfo = document.getElementById('importance-reminder-info');
+    reminderInfo.style.display = this.value === 'importante' ? 'flex' : 'none';
+});
+
+// Toggle selector de clientes y subtipos
 document.getElementById('target_type_select').addEventListener('change', function() {
-    document.getElementById('clients_selector').style.display = this.value === 'selected' ? 'block' : 'none';
+    var type = this.value;
+    var subtypeRow = document.getElementById('subtype_row');
+    var subtypeSelect = document.getElementById('target_subtype_select');
+    var clientsSelector = document.getElementById('clients_selector');
+
+    // Mostrar/ocultar selector de clientes
+    clientsSelector.style.display = type === 'selected' ? 'block' : 'none';
+
+    // Mostrar/ocultar selector de subtipos
+    if (subtypesByType[type]) {
+        subtypeRow.style.display = 'flex';
+        subtypeSelect.innerHTML = '<option value="">Todos los subtipos</option>';
+        subtypesByType[type].forEach(function(st) {
+            subtypeSelect.innerHTML += '<option value="' + st.value + '">' + st.label + '</option>';
+        });
+    } else {
+        subtypeRow.style.display = 'none';
+        subtypeSelect.innerHTML = '<option value="">Todos los subtipos</option>';
+    }
 });
 
 // Formulario nuevo comunicado
@@ -590,9 +707,12 @@ document.getElementById('comm-attachments').addEventListener('change', function(
     preview.innerHTML = html;
 });
 
-// Limpiar preview al cerrar modal
+// Limpiar preview y resetear campos al cerrar modal
 document.getElementById('modal_new_communication').addEventListener('hidden.bs.modal', function() {
     document.getElementById('comm-files-preview').innerHTML = '';
     document.getElementById('comm-attachments').value = '';
+    document.getElementById('subtype_row').style.display = 'none';
+    document.getElementById('target_subtype_select').innerHTML = '<option value="">Todos los subtipos</option>';
+    document.getElementById('importance-reminder-info').style.display = 'none';
 });
 </script>

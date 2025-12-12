@@ -33,7 +33,7 @@ const FacilitameHelpers = {
             text: message,
             buttonsStyling: false,
             customClass: {
-                confirmButton: 'btn btn-primary'
+                confirmButton: 'btn btn-primary-facilitame'
             }
         });
     },
@@ -90,7 +90,7 @@ const FacilitameHelpers = {
             cancelButtonText: cancelText,
             buttonsStyling: false,
             customClass: {
-                confirmButton: 'btn btn-primary',
+                confirmButton: 'btn btn-primary-facilitame',
                 cancelButton: 'btn btn-light ms-2'
             }
         });

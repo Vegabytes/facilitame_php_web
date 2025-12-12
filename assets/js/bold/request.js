@@ -16,7 +16,7 @@
             html: message || "Ha ocurrido un error.",
             buttonsStyling: false,
             confirmButtonText: "Cerrar",
-            customClass: { confirmButton: "btn btn-primary" }
+            customClass: { confirmButton: "btn btn-primary-facilitame" }
         });
     }
 
@@ -27,7 +27,7 @@
             html: message,
             buttonsStyling: false,
             confirmButtonText: "Cerrar",
-            customClass: { confirmButton: "btn btn-primary" }
+            customClass: { confirmButton: "btn btn-primary-facilitame" }
         });
         if (reloadDelay) {
             setTimeout(() => location.reload(), reloadDelay);
@@ -330,28 +330,54 @@
         }
 
         // =====================================================================
-        // MODAL SUBIR OFERTA - TinyMCE
+        // MODAL SUBIR OFERTA - TinyMCE (Lazy Load desde CDN)
         // =====================================================================
         const $modalOfferUpload = $("#modal-offer-upload");
         if ($modalOfferUpload.length) {
             let tinymceInitialized = false;
+            let tinymceLoaded = false;
 
-            $modalOfferUpload.on("shown.bs.modal", function () {
+            // Función para cargar TinyMCE desde CDN (cdnjs - sin API key)
+            function loadTinyMCE() {
+                return new Promise((resolve, reject) => {
+                    if (window.tinymce) {
+                        resolve();
+                        return;
+                    }
+                    const script = document.createElement('script');
+                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.10.9/tinymce.min.js';
+                    script.onload = resolve;
+                    script.onerror = reject;
+                    document.head.appendChild(script);
+                });
+            }
+
+            $modalOfferUpload.on("shown.bs.modal", async function () {
                 if (!tinymceInitialized && $("#offer-content-textarea").length) {
-                    tinymce.init({
-                        selector: "#offer-content-textarea",
-                        height: 300,
-                        menubar: false,
-                        toolbar: "bold italic | bullist numlist",
-                        plugins: "advlist autolink lists"
-                    });
-                    tinymceInitialized = true;
+                    try {
+                        if (!tinymceLoaded) {
+                            await loadTinyMCE();
+                            tinymceLoaded = true;
+                        }
+                        tinymce.init({
+                            selector: "#offer-content-textarea",
+                            height: 300,
+                            menubar: false,
+                            toolbar: "bold italic | bullist numlist",
+                            plugins: "advlist autolink lists"
+                        });
+                        tinymceInitialized = true;
+                    } catch (error) {
+                        console.error('Error loading TinyMCE:', error);
+                    }
                 }
             });
 
             $modalOfferUpload.on("hidden.bs.modal", function () {
-                const editor = tinymce.get("offer-content-textarea");
-                if (editor) editor.setContent("");
+                if (window.tinymce) {
+                    const editor = tinymce.get("offer-content-textarea");
+                    if (editor) editor.setContent("");
+                }
                 $("#offer_title").val("");
                 $("#offer_file").val("");
             });
@@ -360,7 +386,7 @@
                 const $this = $(this);
                 const offerTitle = $("#offer_title").val().trim();
                 const offerFile = $("#offer_file")[0]?.files[0];
-                const editor = tinymce.get("offer-content-textarea");
+                const editor = window.tinymce ? tinymce.get("offer-content-textarea") : null;
                 const offerContent = editor ? editor.getContent() : ($("#offer-content-textarea").val() || "");
 
                 if (!offerTitle || !offerFile) {

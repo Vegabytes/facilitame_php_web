@@ -29,18 +29,18 @@
 
 <style>
 .grafico-container-enhanced {
-    padding: 1.5rem;
+    padding: 1rem 1.25rem;
 }
 .grafico-layout {
     display: flex;
     align-items: center;
-    gap: 2rem;
-    min-height: 280px;
+    gap: 1.5rem;
+    min-height: 220px;
 }
 .grafico-chart-wrapper {
     position: relative;
-    flex: 0 0 280px;
-    height: 280px;
+    flex: 0 0 220px;
+    height: 220px;
 }
 .grafico-amcharts {
     width: 100%;
@@ -56,16 +56,16 @@
 }
 .grafico-total-value {
     display: block;
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--f-text-dark, #1e293b);
     line-height: 1;
 }
 .grafico-total-label {
     display: block;
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
     color: var(--f-text-medium, #64748b);
-    margin-top: 0.25rem;
+    margin-top: 0.125rem;
 }
 .grafico-legend {
     flex: 1;
@@ -125,13 +125,13 @@
 @media (max-width: 768px) {
     .grafico-layout {
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 1rem;
     }
     .grafico-chart-wrapper {
         flex: none;
         width: 100%;
-        max-width: 260px;
-        height: 260px;
+        max-width: 200px;
+        height: 200px;
     }
     .grafico-legend {
         width: 100%;
@@ -253,6 +253,7 @@
             container.style.display = 'block';
 
             chartRoot = am5.Root.new("kt_amcharts_3");
+            chartRoot._logo.dispose(); // Quitar logo amCharts
             chartRoot.setThemes([am5themes_Animated.new(chartRoot)]);
 
             var chart = chartRoot.container.children.push(am5percent.PieChart.new(chartRoot, {
@@ -287,21 +288,22 @@
             series.labels.template.set("forceHidden", true);
             series.ticks.template.set("forceHidden", true);
 
-            // Tooltip limpio
-            series.slices.template.set("tooltipText", "{category}: {value}");
-
+            // Tooltip con fondo blanco y borde sutil
             var tooltip = am5.Tooltip.new(chartRoot, {
-                getFillFromSprite: false
+                getFillFromSprite: false,
+                autoTextColor: false,
+                labelText: "{category}: {value}"
             });
             tooltip.get("background").setAll({
                 fill: am5.color(0xffffff),
                 fillOpacity: 1,
-                strokeOpacity: 0,
+                stroke: am5.color(0xe2e8f0),
+                strokeWidth: 1,
                 shadowColor: am5.color(0x000000),
                 shadowBlur: 12,
                 shadowOffsetX: 0,
                 shadowOffsetY: 4,
-                shadowOpacity: 0.15
+                shadowOpacity: 0.12
             });
             tooltip.label.setAll({
                 fill: am5.color(0x1e293b),

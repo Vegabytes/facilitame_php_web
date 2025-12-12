@@ -77,7 +77,7 @@ try {
     $pdo->commit();
 
     // Actualizar el estado de la solicitud
-    $query = "SELECT * FROM `offers` WHERE request_id = :request_id";
+    $query = "SELECT * FROM `offers` WHERE request_id = :request_id AND deleted_at IS NULL";
     $stmt = $pdo->prepare($query);
     $stmt->bindValue(":request_id", $_POST["request_id"]);
     $stmt->execute();

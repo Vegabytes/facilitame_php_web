@@ -29,7 +29,7 @@ var KTSignupGeneral = function ()
                     'cif': {
                         validators: {
                             callback: {
-                                message: 'El CIF es obligatorio y debe ser valido',
+                                message: 'El CIF es obligatorio y debe ser válido',
                                 callback: function (input)
                                 {
                                     let role = $("select[name='role']").val();
@@ -76,7 +76,7 @@ var KTSignupGeneral = function ()
                     'email_empresa': {
                         validators: {
                             callback: {
-                                message: 'El email de empresa es obligatorio y debe ser valido',
+                                message: 'El email de empresa es obligatorio y debe ser válido',
                                 callback: function (input)
                                 {
                                     let role = $("select[name='role']").val();
@@ -141,9 +141,8 @@ var KTSignupGeneral = function ()
                     },
                     'email': {
                         validators: {
-                            regexp: {
-                                regexp: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                message: 'Escribe un email valido',
+                            emailAddress: {
+                                message: 'Escribe un email válido'
                             },
                             notEmpty: {
                                 message: 'El email es obligatorio'
@@ -153,17 +152,17 @@ var KTSignupGeneral = function ()
                     'phone': {
                         validators: {
                             notEmpty: {
-                                message: 'El telefono es obligatorio'
+                                message: 'El teléfono es obligatorio'
                             }
                         }
                     },
                     'password': {
                         validators: {
                             notEmpty: {
-                                message: 'La contrasena es obligatoria'
+                                message: 'La contraseña es obligatoria'
                             },
                             callback: {
-                                message: 'Escribe una contrasena valida',
+                                message: 'Escribe una contraseña válida',
                                 callback: function (input)
                                 {
                                     if (input.value.length > 0)
@@ -177,21 +176,21 @@ var KTSignupGeneral = function ()
                     'confirm-password': {
                         validators: {
                             notEmpty: {
-                                message: 'Confirma tu contrasena'
+                                message: 'Confirma tu contraseña'
                             },
                             identical: {
                                 compare: function ()
                                 {
                                     return form.querySelector('[name="password"]').value;
                                 },
-                                message: 'Las contrasenas no coinciden'
+                                message: 'Las contraseñas no coinciden'
                             }
                         }
                     },
 'privacy-policy': {
     validators: {
         notEmpty: {
-            message: 'Debes aceptar la politica de privacidad'
+            message: 'Debes aceptar la política de privacidad'
         }
     }
 },
@@ -274,7 +273,7 @@ var KTSignupGeneral = function ()
                         } else
                         {
                             Swal.fire({
-                                html: "Ha ocurrido un error.<br>Intentalo de nuevo, por favor.",
+                                html: "Ha ocurrido un error.<br>Inténtalo de nuevo, por favor.",
                                 icon: "warning",
                                 buttonsStyling: false,
                                 confirmButtonText: "Cerrar",
@@ -286,7 +285,7 @@ var KTSignupGeneral = function ()
                     }).catch(function (error)
                     {
                         Swal.fire({
-                            html: "Ha ocurrido un error.<br>Intentalo de nuevo, por favor.",
+                            html: "Ha ocurrido un error.<br>Inténtalo de nuevo, por favor.",
                             icon: "warning",
                             buttonsStyling: false,
                             confirmButtonText: "Cerrar",
@@ -337,9 +336,13 @@ var KTSignupGeneral = function ()
 
         if (password.length >= 8)
         {
-            score += 50;
+            score += 25;
         }
         if (/\d/.test(password))
+        {
+            score += 25;
+        }
+        if (/[!@#$%^&*(),.?":{}|<>]/.test(password))
         {
             score += 25;
         }

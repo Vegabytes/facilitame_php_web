@@ -47,12 +47,12 @@ try
 
     $query = "INSERT INTO `users` SET name = :name, lastname = :lastname, phone = :phone, email = :email, password = :password, nif_cif = :nif_cif, email_verified_at = CURRENT_TIMESTAMP()";
     $stmt = $pdo->prepare($query);
-    $stmt->bindValue(":name", $_POST["name"]);
-    $stmt->bindValue(":lastname", $_POST["lastname"]);
-    $stmt->bindValue(":phone", $_POST["phone"]);
+    $stmt->bindValue(":name", htmlspecialchars($_POST["name"], ENT_QUOTES, 'UTF-8'));
+    $stmt->bindValue(":lastname", htmlspecialchars($_POST["lastname"], ENT_QUOTES, 'UTF-8'));
+    $stmt->bindValue(":phone", htmlspecialchars($_POST["phone"], ENT_QUOTES, 'UTF-8'));
     $stmt->bindValue(":email", $_POST["email"]);
     $stmt->bindValue(":password", $password_hash);
-    $stmt->bindValue(":nif_cif", $_POST["nif_cif"]);
+    $stmt->bindValue(":nif_cif", htmlspecialchars($_POST["nif_cif"], ENT_QUOTES, 'UTF-8'));
     $stmt->execute();
     $id_insertada = $pdo->lastInsertId();
 
