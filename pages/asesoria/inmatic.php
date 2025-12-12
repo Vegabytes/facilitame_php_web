@@ -402,6 +402,17 @@ $tagLabels = [
 
         <?php else: ?>
 
+        <?php if ($inmaticTrial && !$hasInmaticByPlan): ?>
+        <!-- Aviso modo prueba -->
+        <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
+            <i class="ki-outline ki-flask fs-2 me-3"></i>
+            <div>
+                <strong>Modo prueba activo.</strong> Estás usando Inmatic en modo prueba. Esta funcionalidad está pensada para evaluar el servicio.
+                Para uso en producción, te recomendamos <a href="/subscription" class="alert-link">actualizar a un plan Pro o superior</a>.
+            </div>
+        </div>
+        <?php endif; ?>
+
         <?php if ($isConfigured && $isActive): ?>
         <!-- Estadísticas -->
         <div class="row g-4 mb-4">
@@ -889,7 +900,7 @@ $tagLabels = [
                     Swal.fire({ icon: 'success', title: 'Enviada', text: 'Factura enviada a Inmatic', timer: 1500, showConfirmButton: false })
                     .then(function() { window.location.reload(); });
                 } else {
-                    Swal.fire({ icon: 'error', title: 'Error', text: result.message });
+                    Swal.fire({ icon: 'error', title: 'Error', text: result.message_plain || result.message || 'Error desconocido' });
                     btnEl.disabled = false;
                     btnEl.innerHTML = '<i class="ki-outline ki-send"></i>';
                 }

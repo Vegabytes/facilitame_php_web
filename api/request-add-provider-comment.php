@@ -97,9 +97,9 @@ try {
             FILE_APPEND
         );
 
-        $msg_admin   = "El administrador ha añadido un comentario interno en la solicitud <a target='_blank' href='" . ROOT_URL . "/request?id=" . $request["id"] . "'>" . $request["id"] . "</a>";
-        $msg_sales   = "El equipo de ventas ha añadido un comentario interno en la solicitud <a target='_blank' href='" . ROOT_URL . "/request?id=" . $request["id"] . "'>" . $request["id"] . "</a>";
-        $msg_provider= "El colaborador ha añadido un comentario interno en la solicitud <a target='_blank' href='" . ROOT_URL . "/request?id=" . $request["id"] . "'>" . $request["id"] . "</a>";
+        $msg_admin   = "El administrador ha añadido un comentario interno en la solicitud #" . $request["id"];
+        $msg_sales   = "El equipo de ventas ha añadido un comentario interno en la solicitud #" . $request["id"];
+        $msg_provider= "El colaborador ha añadido un comentario interno en la solicitud #" . $request["id"];
 
         if (admin()) {
             if (!empty($provider['id'])) notification(USER["id"], $provider["id"], $request["id"], "Nuevo mensaje interno", $msg_admin);

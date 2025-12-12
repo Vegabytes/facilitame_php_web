@@ -91,7 +91,7 @@ try
         ADMIN_ID,
         $_POST["request_id"],
         $title,
-        "El colaborador ha cargado una nueva oferta en la solicitud <a target='_blank' href='" . ROOT_URL . "/request?id=" . $request["id"] . "'>" . $request["id"] . "</a>"
+        "El colaborador ha cargado una nueva oferta en la solicitud #" . $request["id"]
     );
 
     // Notificar al comercial (notification_v2)

@@ -113,30 +113,30 @@ try {
     $notification_subject = $uploaded_count === 1 ? "Nuevo documento" : "Nuevos documentos";
 
     if (admin()) {
-        $notification_message = "El administrador ha cargado $doc_text en la solicitud <a target='_blank' href='" . ROOT_URL . "/request?id=" . $request["id"] . "'>" . $request["id"] . "</a>";
+        $notification_message = "El administrador ha cargado $doc_text en la solicitud #" . $request["id"];
         notification(USER["id"], $provider_id, $request["id"], $notification_subject, $notification_message);
         if ($sales_rep_id) {
             notification(USER["id"], $sales_rep_id, $request["id"], $notification_subject, $notification_message);
         }
     } elseif (comercial()) {
-        $notification_message = "El equipo de ventas ha cargado $doc_text en la solicitud <a target='_blank' href='" . ROOT_URL . "/request?id=" . $request["id"] . "'>" . $request["id"] . "</a>";
+        $notification_message = "El equipo de ventas ha cargado $doc_text en la solicitud #" . $request["id"];
         notification(USER["id"], $provider_id, $request["id"], $notification_subject, $notification_message);
         notification(USER["id"], ADMIN_ID, $request["id"], $notification_subject, $notification_message);
     } elseif (proveedor()) {
-        $notification_message = "El colaborador ha cargado $doc_text en la solicitud <a target='_blank' href='" . ROOT_URL . "/request?id=" . $request["id"] . "'>" . $request["id"] . "</a>";
+        $notification_message = "El colaborador ha cargado $doc_text en la solicitud #" . $request["id"];
         notification(USER["id"], ADMIN_ID, $request["id"], $notification_subject, $notification_message);
         if ($sales_rep_id) {
             notification(USER["id"], $sales_rep_id, $request["id"], $notification_subject, $notification_message);
         }
     } elseif (cliente()) {
-        $notification_message = "El cliente ha cargado $doc_text en la solicitud <a target='_blank' href='" . ROOT_URL . "/request?id=" . $request["id"] . "'>" . $request["id"] . "</a>";
+        $notification_message = "El cliente ha cargado $doc_text en la solicitud #" . $request["id"];
         notification_v2(
             USER["id"],
             $provider_id,
             $request["id"],
-            "Documentaci&oacute;n nueva",
-            USER["name"] . " ha cargado documentaci&oacute;n nueva <a target='_blank' href='" . ROOT_URL . "/request?id=" . $request["id"] . "'>en esta solicitud</a>.",
-            "Documentaci&oacute;n nueva",
+            "Documentación nueva",
+            USER["name"] . " ha cargado documentación nueva en la solicitud #" . $request["id"],
+            "Documentación nueva",
             "document-uploaded"
         );
         notification(

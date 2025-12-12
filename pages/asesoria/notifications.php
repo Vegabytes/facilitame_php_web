@@ -122,6 +122,14 @@ $scripts = [];
             const response = await fetch(`${API_URL}?${params}`);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
+            // Verificar si la respuesta es JSON
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await response.text().catch(() => '');
+                console.error('loadData: Respuesta no es JSON', response.status, text.substring(0, 200));
+                throw new Error('Respuesta inválida del servidor');
+            }
+
             const result = await response.json();
 
             if (result.status === 'ok' && result.data) {
@@ -240,6 +248,13 @@ $scripts = [];
                 body: JSON.stringify({ id: notificationId })
             });
 
+            // Verificar si la respuesta es JSON antes de parsear
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                console.error('markAsRead: Respuesta no es JSON', response.status, await response.text().catch(() => ''));
+                return;
+            }
+
             const result = await response.json();
 
             if (result.status === 'ok' || result.success) {
@@ -292,6 +307,14 @@ $scripts = [];
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             });
+
+            // Verificar si la respuesta es JSON
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await response.text().catch(() => '');
+                console.error('markAllAsRead: Respuesta no es JSON', response.status, text.substring(0, 200));
+                throw new Error('Respuesta inválida del servidor');
+            }
 
             const data = await response.json();
 

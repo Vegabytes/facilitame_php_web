@@ -11,7 +11,7 @@ if (!cliente()) {
 }
 
 $stmt = $pdo->prepare("
-    SELECT a.id, a.plan, a.user_id as advisory_user_id
+    SELECT a.id, a.plan, a.user_id as advisory_user_id, a.inmatic_trial
     FROM customers_advisories ca
     INNER JOIN advisories a ON ca.advisory_id = a.id
     WHERE ca.customer_id = ?
@@ -23,7 +23,11 @@ if (!$advisory) {
     json_response("ko", "No estás vinculado a ninguna asesoría", 4002);
 }
 
-if ($advisory['plan'] === 'gratuito') {
+// Verificar si tiene acceso: plan de pago O modo prueba activo
+$planesConFacturas = ['pro', 'premium', 'enterprise'];
+$hasAccess = in_array($advisory['plan'], $planesConFacturas) || $advisory['inmatic_trial'];
+
+if (!$hasAccess) {
     json_response("ko", "Tu asesoría tiene el plan gratuito sin envío de facturas", 4003);
 }
 
@@ -128,7 +132,7 @@ try {
     $pdo->commit();
     
     $notification_subject = "Nueva factura recibida";
-    $notification_message = USER["name"] . " ha enviado " . $uploaded_count . " factura(s) <a href='" . ROOT_URL . "/invoices'>Ver facturas</a>";
+    $notification_message = USER["name"] . " ha enviado " . $uploaded_count . " factura(s)";
     notification(USER["id"], $advisory['advisory_user_id'], null, $notification_subject, $notification_message);
 
     // Enviar automáticamente a Inmatic si está configurado

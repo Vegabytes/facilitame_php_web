@@ -2,8 +2,9 @@
 $currentPage = 'advisory-invoices';
 
 $stmt = $pdo->prepare("
-    SELECT ca.advisory_id 
+    SELECT ca.advisory_id, a.plan, a.inmatic_trial
     FROM customers_advisories ca
+    INNER JOIN advisories a ON a.id = ca.advisory_id
     WHERE ca.customer_id = ?
     LIMIT 1
 ");
@@ -11,13 +12,11 @@ $stmt->execute([USER['id']]);
 $advisory_data = $stmt->fetch();
 $customer_advisory_id = $advisory_data['advisory_id'] ?? null;
 
-$can_send = false;
-if ($customer_advisory_id) {
-    $stmt = $pdo->prepare("SELECT plan FROM advisories WHERE id = ?");
-    $stmt->execute([$customer_advisory_id]);
-    $advisory = $stmt->fetch();
-    $can_send = ($advisory && $advisory['plan'] !== 'gratuito');
-}
+// Verificar si tiene acceso: plan de pago O modo prueba activo
+$planesConFacturas = ['pro', 'premium', 'enterprise'];
+$hasPlanAccess = $advisory_data && in_array($advisory_data['plan'], $planesConFacturas);
+$hasTrialAccess = $advisory_data && $advisory_data['inmatic_trial'] && !$hasPlanAccess;
+$can_send = $hasPlanAccess || $hasTrialAccess;
 
 $tags = [
     'restaurante' => 'Restaurante',
@@ -84,7 +83,18 @@ $tags = [
     </div>
     
     <?php else: ?>
-    
+
+    <?php if ($hasTrialAccess): ?>
+    <!-- Aviso modo prueba -->
+    <div class="alert alert-info d-flex align-items-center mb-3" role="alert">
+        <i class="ki-outline ki-flask fs-2 me-3"></i>
+        <div>
+            <strong>Modo prueba.</strong> Tu asesoría ha activado el modo prueba para el envío de facturas.
+            Puedes enviar tus facturas mientras dure este período de evaluación.
+        </div>
+    </div>
+    <?php endif; ?>
+
     <!-- Card principal -->
     <div class="card" style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
         

@@ -22,7 +22,7 @@ if (!$invoiceId) {
 }
 
 // Obtener advisory_id y verificar plan
-$stmt = $pdo->prepare("SELECT id, plan FROM advisories WHERE user_id = ? AND deleted_at IS NULL");
+$stmt = $pdo->prepare("SELECT id, plan, inmatic_trial FROM advisories WHERE user_id = ? AND deleted_at IS NULL");
 $stmt->execute([USER['id']]);
 $advisory = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -30,9 +30,10 @@ if (!$advisory) {
     json_response("ko", "Asesoría no encontrada", 404);
 }
 
-// Verificar plan
+// Verificar plan o modo prueba
 $planesConInmatic = ['pro', 'premium', 'enterprise'];
-if (!in_array($advisory['plan'], $planesConInmatic)) {
+$hasAccess = in_array($advisory['plan'], $planesConInmatic) || $advisory['inmatic_trial'];
+if (!$hasAccess) {
     json_response("ko", "Tu plan no incluye integración con Inmatic", 403);
 }
 
