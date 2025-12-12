@@ -38,8 +38,8 @@ $statusConfig = [
             $has_desc = !empty($o["offer_content"]);
             
             // Solo verificar bloqueo si la solicitud está aplazada
-            $offer_created_at = strtotime($o["created_at"]);
-            $is_blocked = $rescheduled_at !== null && $offer_created_at < $rescheduled_at;
+            $offer_created_at = !empty($o["created_at"]) ? strtotime($o["created_at"]) : 0;
+            $is_blocked = $rescheduled_at !== null && $offer_created_at > 0 && $offer_created_at < $rescheduled_at;
             
             // Puede aceptar/rechazar si: status_id de request es 2,4,8,10 Y oferta es status 2 Y no bloqueada
             $can_respond = in_array($request["status_id"], [2, 4, 8, 10]) 
