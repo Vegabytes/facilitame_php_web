@@ -436,6 +436,15 @@ document.addEventListener('DOMContentLoaded', function() {
             overlay.classList.remove('active');
         });
     }
+
+    // Botón hamburguesa del header para móvil
+    const mobileToggle = document.getElementById('kt_sidebar_mobile_toggle');
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('mobile-open');
+            if (overlay) overlay.classList.toggle('active');
+        });
+    }
     
     const menuLinks = document.querySelectorAll('.menu-link');
     menuLinks.forEach(function(link) {

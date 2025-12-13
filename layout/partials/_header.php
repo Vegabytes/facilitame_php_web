@@ -207,7 +207,7 @@ elseif (cliente()) $currentRole = 'client';
 <!--begin::Header-->
 <header class="facilitame-header" id="kt_app_header">
     <div class="header-left">
-        <button class="mobile-toggle-btn d-lg-none" id="kt_app_header_menu_toggle" aria-label="Abrir menú">
+        <button class="mobile-toggle-btn d-lg-none" id="kt_sidebar_mobile_toggle" aria-label="Abrir menú">
             <i class="ki-outline ki-burger-menu-1 fs-1"></i>
         </button>
         
@@ -267,12 +267,10 @@ elseif (cliente()) $currentRole = 'client';
 </header>
 <!--end::Header-->
 
-<!--begin::Menu móvil-->
-<div class="app-header-menu app-header-mobile-drawer" 
-     data-kt-drawer="true" data-kt-drawer-name="app-header-menu" 
-     data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" 
-     data-kt-drawer-width="{default:'250px', '300px': '280px'}" 
-     data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_app_header_menu_toggle">
+<!--begin::Menu móvil (desactivado - ahora usamos sidebar principal)-->
+<div class="app-header-menu app-header-mobile-drawer d-none"
+     data-kt-drawer="false"
+     style="display: none !important;">
     
     <div class="mobile-menu-header">
         <a href="/home" title="Ir al inicio">
@@ -283,48 +281,64 @@ elseif (cliente()) $currentRole = 'client';
     <div class="menu menu-column menu-rounded menu-active-bg fw-semibold my-3 px-3" data-kt-menu="true">
         <?php if (cliente()): ?>
             <div class="menu-section-mobile"><span>Principal</span></div>
+            <?php if (is_menu_visible('home')): ?>
             <a href="/home" class="mobile-menu-link <?= ($currentPage === 'home') ? 'active' : '' ?>">
                 <i class="ki-outline ki-home"></i><span>Inicio</span>
             </a>
+            <?php endif; ?>
+            <?php if (is_menu_visible('notifications')): ?>
             <a href="/notifications" class="mobile-menu-link <?= ($currentPage === 'notifications') ? 'active' : '' ?>">
                 <i class="ki-outline ki-notification-bing"></i><span>Notificaciones</span>
                 <?php if (isset(NOTIFICATIONS['unread']) && NOTIFICATIONS['unread'] > 0): ?>
                 <span class="badge badge-circle badge-danger ms-auto"><?= NOTIFICATIONS['unread'] ?></span>
                 <?php endif; ?>
             </a>
+            <?php endif; ?>
+            <?php if (is_menu_visible('services')): ?>
             <a href="/services" class="mobile-menu-link <?= ($currentPage === 'services') ? 'active' : '' ?>">
                 <i class="ki-outline ki-search-list"></i><span>Buscar servicios</span>
             </a>
-            
+            <?php endif; ?>
+
             <div class="menu-section-mobile"><span>Mis Gestiones</span></div>
+            <?php if (is_menu_visible('my-services')): ?>
             <a href="/my-services" class="mobile-menu-link <?= ($currentPage === 'my-services') ? 'active' : '' ?>">
                 <i class="ki-outline ki-folder"></i><span>Mis solicitudes</span>
             </a>
+            <?php endif; ?>
+            <?php if (is_menu_visible('my-incidents')): ?>
             <a href="/my-incidents" class="mobile-menu-link <?= ($currentPage === 'my-incidents') ? 'active' : '' ?>">
                 <i class="ki-outline ki-information-5"></i><span>Mis incidencias</span>
             </a>
-            <?php if (!guest()): ?>
+            <?php endif; ?>
+            <?php if (!guest() && is_menu_visible('invoices')): ?>
             <a href="/invoices" class="mobile-menu-link <?= ($currentPage === 'invoices') ? 'active' : '' ?>">
                 <i class="ki-outline ki-credit-cart"></i><span>Mis facturas</span>
             </a>
             <?php endif; ?>
-            
+
             <?php if (isset($has_advisory) && $has_advisory): ?>
             <div class="menu-section-mobile"><span>Mi Asesoría</span></div>
+            <?php if (is_menu_visible('communications')): ?>
             <a href="/communications" class="mobile-menu-link <?= ($currentPage === 'communications') ? 'active' : '' ?>">
                 <i class="ki-outline ki-sms"></i><span>Comunicaciones</span>
                 <?php if (isset($unread_communications) && $unread_communications > 0): ?>
                 <span class="badge badge-circle badge-danger ms-auto"><?= $unread_communications ?></span>
                 <?php endif; ?>
             </a>
+            <?php endif; ?>
+            <?php if (is_menu_visible('advisory-invoices')): ?>
             <a href="/advisory-invoices" class="mobile-menu-link <?= ($currentPage === 'advisory-invoices') ? 'active' : '' ?>">
                 <i class="ki-outline ki-document"></i><span>Enviar Facturas</span>
             </a>
+            <?php endif; ?>
+            <?php if (is_menu_visible('appointments')): ?>
             <a href="/appointments" class="mobile-menu-link <?= ($currentPage === 'appointments') ? 'active' : '' ?>">
                 <i class="ki-outline ki-calendar"></i><span>Solicitar Cita</span>
             </a>
             <?php endif; ?>
-            
+            <?php endif; ?>
+
         <?php elseif (admin()): ?>
             <div class="menu-section-mobile"><span>Principal</span></div>
             <a href="/home" class="mobile-menu-link <?= ($currentPage === 'home') ? 'active' : '' ?>">
@@ -333,7 +347,7 @@ elseif (cliente()) $currentRole = 'client';
             <a href="/log" class="mobile-menu-link <?= ($currentPage === 'log') ? 'active' : '' ?>">
                 <i class="ki-outline ki-time"></i><span>Seguimiento</span>
             </a>
-            
+
             <div class="menu-section-mobile"><span>Gestión</span></div>
             <a href="/customers" class="mobile-menu-link <?= ($currentPage === 'customers') ? 'active' : '' ?>">
                 <i class="ki-outline ki-people"></i><span>Clientes</span>
@@ -350,69 +364,113 @@ elseif (cliente()) $currentRole = 'client';
             <a href="/commissions" class="mobile-menu-link <?= ($currentPage === 'commissions') ? 'active' : '' ?>">
                 <i class="ki-outline ki-dollar"></i><span>Comisiones</span>
             </a>
-            
+
+            <div class="menu-section-mobile"><span>Configuración</span></div>
+            <a href="/menu-config" class="mobile-menu-link <?= ($currentPage === 'menu-config') ? 'active' : '' ?>">
+                <i class="ki-outline ki-menu"></i><span>Menú Lateral</span>
+            </a>
+
         <?php elseif (proveedor()): ?>
             <div class="menu-section-mobile"><span>Principal</span></div>
+            <?php if (is_menu_visible('home')): ?>
             <a href="/home" class="mobile-menu-link <?= ($currentPage === 'home') ? 'active' : '' ?>">
                 <i class="ki-outline ki-home"></i><span>Inicio</span>
             </a>
+            <?php endif; ?>
+            <?php if (is_menu_visible('log')): ?>
             <a href="/log" class="mobile-menu-link <?= ($currentPage === 'log') ? 'active' : '' ?>">
                 <i class="ki-outline ki-time"></i><span>Seguimiento</span>
             </a>
-            
+            <?php endif; ?>
+
             <div class="menu-section-mobile"><span>Gestión</span></div>
+            <?php if (is_menu_visible('customers')): ?>
             <a href="/customers" class="mobile-menu-link <?= ($currentPage === 'customers') ? 'active' : '' ?>">
                 <i class="ki-outline ki-people"></i><span>Clientes</span>
             </a>
+            <?php endif; ?>
+            <?php if (is_menu_visible('invoices')): ?>
             <a href="/invoices" class="mobile-menu-link <?= ($currentPage === 'invoices') ? 'active' : '' ?>">
                 <i class="ki-outline ki-credit-cart"></i><span>Facturas</span>
             </a>
-            
+            <?php endif; ?>
+
         <?php elseif (comercial()): ?>
             <div class="menu-section-mobile"><span>Principal</span></div>
+            <?php if (is_menu_visible('home')): ?>
             <a href="/home" class="mobile-menu-link <?= ($currentPage === 'home') ? 'active' : '' ?>">
                 <i class="ki-outline ki-home"></i><span>Inicio</span>
             </a>
+            <?php endif; ?>
+            <?php if (is_menu_visible('notifications')): ?>
             <a href="/notifications" class="mobile-menu-link <?= ($currentPage === 'notifications') ? 'active' : '' ?>">
                 <i class="ki-outline ki-notification-bing"></i><span>Notificaciones</span>
                 <?php if (isset(NOTIFICATIONS['unread']) && NOTIFICATIONS['unread'] > 0): ?>
                 <span class="badge badge-circle badge-danger ms-auto"><?= NOTIFICATIONS['unread'] ?></span>
                 <?php endif; ?>
             </a>
+            <?php endif; ?>
+            <?php if (is_menu_visible('log')): ?>
             <a href="/log" class="mobile-menu-link <?= ($currentPage === 'log') ? 'active' : '' ?>">
                 <i class="ki-outline ki-time"></i><span>Seguimiento</span>
             </a>
-            
+            <?php endif; ?>
+
             <div class="menu-section-mobile"><span>Gestión</span></div>
+            <?php if (is_menu_visible('customers')): ?>
             <a href="/customers" class="mobile-menu-link <?= ($currentPage === 'customers') ? 'active' : '' ?>">
                 <i class="ki-outline ki-people"></i><span>Clientes</span>
             </a>
+            <?php endif; ?>
+            <?php if (is_menu_visible('commissions')): ?>
             <a href="/commissions" class="mobile-menu-link <?= ($currentPage === 'commissions') ? 'active' : '' ?>">
                 <i class="ki-outline ki-dollar"></i><span>Comisiones</span>
             </a>
-            
+            <?php endif; ?>
+
         <?php elseif (asesoria()): ?>
             <div class="menu-section-mobile"><span>Principal</span></div>
+            <?php if (is_menu_visible('home')): ?>
             <a href="/home" class="mobile-menu-link <?= ($currentPage === 'home') ? 'active' : '' ?>">
                 <i class="ki-outline ki-home"></i><span>Inicio</span>
             </a>
-            
+            <?php endif; ?>
+            <?php if (is_menu_visible('notifications')): ?>
+            <a href="/notifications" class="mobile-menu-link <?= ($currentPage === 'notifications') ? 'active' : '' ?>">
+                <i class="ki-outline ki-notification-bing"></i><span>Notificaciones</span>
+                <?php if (isset(NOTIFICATIONS['unread']) && NOTIFICATIONS['unread'] > 0): ?>
+                <span class="badge badge-circle badge-danger ms-auto"><?= NOTIFICATIONS['unread'] ?></span>
+                <?php endif; ?>
+            </a>
+            <?php endif; ?>
+
             <div class="menu-section-mobile"><span>Gestión</span></div>
+            <?php if (is_menu_visible('customers')): ?>
             <a href="/customers" class="mobile-menu-link <?= ($currentPage === 'customers') ? 'active' : '' ?>">
                 <i class="ki-outline ki-people"></i><span>Mis Clientes</span>
             </a>
+            <?php endif; ?>
+            <?php if (is_menu_visible('invoices')): ?>
             <a href="/invoices" class="mobile-menu-link <?= ($currentPage === 'invoices') ? 'active' : '' ?>">
                 <i class="ki-outline ki-document"></i><span>Facturas Recibidas</span>
             </a>
+            <?php endif; ?>
+            <?php if (is_menu_visible('appointments')): ?>
             <a href="/appointments" class="mobile-menu-link <?= ($currentPage === 'appointments') ? 'active' : '' ?>">
                 <i class="ki-outline ki-calendar"></i><span>Citas</span>
             </a>
+            <?php endif; ?>
+            <?php if (is_menu_visible('communications')): ?>
             <a href="/communications" class="mobile-menu-link <?= ($currentPage === 'communications') ? 'active' : '' ?>">
                 <i class="ki-outline ki-sms"></i><span>Comunicaciones</span>
             </a>
-            <a href="/commissions" class="mobile-menu-link <?= ($currentPage === 'commissions') ? 'active' : '' ?>">
-                <i class="ki-outline ki-dollar"></i><span>Comisiones</span>
+            <?php endif; ?>
+            <?php if (is_menu_visible('inmatic')): ?>
+            <div class="menu-section-mobile"><span>Integraciones</span></div>
+            <a href="/inmatic" class="mobile-menu-link <?= ($currentPage === 'inmatic') ? 'active' : '' ?>">
+                <i class="ki-outline ki-cloud"></i><span>Inmatic</span>
             </a>
+            <?php endif; ?>
         <?php endif; ?>
         
         <div class="mobile-menu-divider"></div>

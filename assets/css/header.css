@@ -765,8 +765,26 @@
    7. MENÚ MÓVIL
    ============================================ */
 
-.app-header-mobile-drawer {
-    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+/* Base del drawer móvil */
+.app-header-mobile-drawer,
+div.app-header-mobile-drawer,
+.app-header-menu.app-header-mobile-drawer {
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%) !important;
+}
+
+/* Forzar el background en el drawer de Metronic - varios selectores */
+.drawer[data-kt-drawer-name="app-header-menu"],
+.drawer.drawer-on[data-kt-drawer-name="app-header-menu"],
+[data-kt-drawer="true"].app-header-mobile-drawer,
+.app-header-mobile-drawer.drawer,
+.app-header-mobile-drawer.drawer-on {
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%) !important;
+}
+
+/* Override global menu background dentro del drawer móvil */
+.app-header-mobile-drawer .menu,
+.app-header-mobile-drawer .menu.menu-column {
+    background: transparent !important;
 }
 
 .mobile-menu-header {
@@ -791,40 +809,43 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.4) !important;
 }
 
 .mobile-menu-link {
-    display: flex;
+    display: flex !important;
     align-items: center;
     gap: 0.75rem;
     padding: 0.75rem 1rem;
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
+    color: rgba(255, 255, 255, 0.85) !important;
+    text-decoration: none !important;
     border-radius: 8px;
     margin: 2px 0;
     transition: all 0.2s ease;
+    background: transparent;
 }
 
 .mobile-menu-link:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
 }
 
 .mobile-menu-link.active {
-    background: var(--color-main-facilitame, #00c2cb);
-    color: white;
+    background: var(--color-main-facilitame, #00c2cb) !important;
+    color: white !important;
 }
 
 .mobile-menu-link i {
     font-size: 1.25rem;
     width: 24px;
     text-align: center;
+    color: inherit !important;
 }
 
 .mobile-menu-link span {
     font-size: 0.9rem;
     font-weight: 500;
+    color: inherit !important;
 }
 
 .mobile-menu-divider {
@@ -839,6 +860,30 @@
 
 .mobile-menu-logout:hover {
     background: rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Asegurar que todos los elementos hijos del menú móvil sean visibles */
+.app-header-mobile-drawer * {
+    color: inherit;
+}
+
+.app-header-mobile-drawer a,
+.app-header-mobile-drawer .menu-link {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.app-header-mobile-drawer .menu-title {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.app-header-mobile-drawer .menu-icon i,
+.app-header-mobile-drawer i.ki-outline {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Badge de notificaciones */
+.app-header-mobile-drawer .badge {
+    color: white !important;
 }
 
 /* ============================================
