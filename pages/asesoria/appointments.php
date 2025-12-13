@@ -164,7 +164,7 @@ $statusLabels = ['solicitado' => 'Pendiente', 'agendado' => 'Confirmada', 'final
                         <i class="ki-outline ki-file-down me-1"></i>CSV
                     </button>
                     <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modal_create_appointment">
-                        <i class="ki-outline ki-plus me-1"></i>Nueva Cita
+                        <i class="ki-outline ki-plus me-1"></i>Nueva cita
                     </button>
                 </div>
             </div>
@@ -281,7 +281,7 @@ $statusLabels = ['solicitado' => 'Pendiente', 'agendado' => 'Confirmada', 'final
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">
-                        <i class="ki-outline ki-check me-1"></i>Crear Cita
+                        <i class="ki-outline ki-check me-1"></i>Crear cita
                     </button>
                 </div>
             </form>
@@ -376,7 +376,7 @@ $statusLabels = ['solicitado' => 'Pendiente', 'agendado' => 'Confirmada', 'final
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Volver</button>
                     <button type="submit" class="btn btn-danger">
-                        <i class="ki-outline ki-cross me-1"></i>Cancelar Cita
+                        <i class="ki-outline ki-cross me-1"></i>Cancelar cita
                     </button>
                 </div>
             </form>

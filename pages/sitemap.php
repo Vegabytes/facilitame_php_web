@@ -34,7 +34,7 @@
                                 <line x1="15" y1="12" x2="3" y2="12"/>
                             </svg>
                         </span>
-                        Iniciar Sesión
+                        Iniciar sesión
                         <span class="description">Accede a tu cuenta</span>
                     </a>
                 </li>

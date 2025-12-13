@@ -19,7 +19,7 @@ $statusConfig = [
     <div class="toolbar-actions">
         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-offer-upload">
             <i class="ki-outline ki-plus fs-4 me-1"></i>
-            Cargar Oferta
+            Cargar oferta
         </button>
         
         <?php if (!in_array($request["status_id"], [10])): ?>

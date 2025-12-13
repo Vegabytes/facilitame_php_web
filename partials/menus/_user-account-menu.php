@@ -44,7 +44,7 @@
             <div class="user-menu-icon icon-logout">
                 <i class="ki-outline ki-exit-right"></i>
             </div>
-            <span class="user-menu-text">Cerrar Sesión</span>
+            <span class="user-menu-text">Cerrar sesión</span>
             <i class="ki-outline ki-right fs-6 ms-auto"></i>
         </button>
     </div>

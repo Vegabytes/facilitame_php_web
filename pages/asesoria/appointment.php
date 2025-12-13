@@ -468,13 +468,13 @@ $proposedBy = $appointment['proposed_by'] ?? null;
                                     <div class="action-buttons">
                                         <?php if ($needsConfirmation && $hasProposedDate): ?>
                                         <button class="btn-action btn-action-success" onclick="acceptProposal()">
-                                            <i class="ki-outline ki-check text-white"></i> Aceptar Propuesta
+                                            <i class="ki-outline ki-check text-white"></i> Aceptar propuesta
                                         </button>
                                         <?php endif; ?>
                                         
                                         <?php if (in_array($appointment['status'], ['solicitado', 'agendado'])): ?>
                                         <button class="btn-action btn-action-warning" data-bs-toggle="modal" data-bs-target="#modal_reschedule">
-                                            <i class="ki-outline ki-calendar-edit text-white"></i> <?php echo $hasScheduledDate ? 'Reprogramar' : 'Proponer Fecha'; ?>
+                                            <i class="ki-outline ki-calendar-edit text-white"></i> <?php echo $hasScheduledDate ? 'Reprogramar' : 'Proponer fecha'; ?>
                                         </button>
                                         <?php endif; ?>
                                         
@@ -639,7 +639,7 @@ $proposedBy = $appointment['proposed_by'] ?? null;
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-warning text-white"><i class="ki-outline ki-calendar-edit fs-4 me-1"></i> Proponer Fecha</button>
+                    <button type="submit" class="btn btn-warning text-white"><i class="ki-outline ki-calendar-edit fs-4 me-1"></i> Proponer fecha</button>
                 </div>
             </form>
         </div>
@@ -671,7 +671,7 @@ $proposedBy = $appointment['proposed_by'] ?? null;
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Volver</button>
-                    <button type="submit" class="btn btn-danger"><i class="ki-outline ki-cross fs-4 text-white"></i> Cancelar Cita</button>
+                    <button type="submit" class="btn btn-danger"><i class="ki-outline ki-cross fs-4 text-white"></i> Cancelar cita</button>
                 </div>
             </form>
         </div>

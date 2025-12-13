@@ -1,4 +1,4 @@
-<!-- Modal Crear Cliente -->
+<!-- Modal Crear cliente -->
 <div class="modal fade" id="modal_create_customer" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
@@ -121,7 +121,7 @@
                     <button type="submit" class="btn btn-primary-facilitame">
                         <span class="indicator-label">
                             <i class="ki-outline ki-check fs-4 me-2 text-white"></i>
-                            Crear Cliente
+                            Crear cliente
                         </span>
                         <span class="indicator-progress">
                             Creando...

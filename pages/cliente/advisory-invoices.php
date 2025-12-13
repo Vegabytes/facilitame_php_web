@@ -148,7 +148,7 @@ $tags = [
                     <i class="ki-outline ki-file-down me-1"></i>CSV
                 </button>
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal_send_invoice">
-                    <i class="ki-outline ki-plus fs-4 me-1"></i>Nueva Factura
+                    <i class="ki-outline ki-plus fs-4 me-1"></i>Nueva factura
                 </button>
             </div>
         </div>

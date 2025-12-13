@@ -1,4 +1,4 @@
-<!--begin::Modal - Enviar Comunicación-->
+<!--begin::Modal - Enviar comunicación-->
 <div class="modal fade" id="kt_modal_advisory_communication" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
     <div class="modal-dialog mw-650px">
@@ -19,7 +19,7 @@
                 <!--begin::Heading-->
                 <div class="text-center mb-13">
                     <!--begin::Title-->
-                    <h1 class="mb-3">Enviar Comunicación</h1>
+                    <h1 class="mb-3">Enviar comunicación</h1>
                     <!--end::Title-->
                     <!--begin::Description-->
                     <div class="text-muted fw-semibold fs-5">
@@ -156,7 +156,7 @@
                     <button type="button" class="btn btn-primary-facilitame" id="btn-send-communication">
                         <span class="indicator-label">
                             <i class="ki-outline ki-send me-1 text-white"></i>
-                            Enviar Comunicación
+                            Enviar comunicación
                         </span>
                         <span class="indicator-progress">
                             Enviando... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
@@ -171,7 +171,7 @@
     </div>
     <!--end::Modal dialog-->
 </div>
-<!--end::Modal - Enviar Comunicación-->
+<!--end::Modal - Enviar comunicación-->
 
 <script>
 document.getElementById('btn-send-communication').addEventListener('click', function() {

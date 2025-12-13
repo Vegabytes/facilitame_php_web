@@ -246,11 +246,11 @@ $statusClass = $statusClasses[$appointment['status']] ?? 'muted';
                         <div class="d-flex gap-2 flex-wrap mt-4">
                             <?php if ($needsConfirmation): ?>
                             <button class="btn btn-success" onclick="confirmAppointment()">
-                                <i class="ki-outline ki-check me-1"></i> Confirmar Fecha
+                                <i class="ki-outline ki-check me-1"></i> Confirmar fecha
                             </button>
                             <?php endif; ?>
                             <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal_request_change">
-                                <i class="ki-outline ki-pencil me-1"></i> Solicitar Cambio
+                                <i class="ki-outline ki-pencil me-1"></i> Solicitar cambio
                             </button>
                         </div>
                         <?php endif; ?>

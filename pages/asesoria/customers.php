@@ -72,7 +72,7 @@ $ROLES = [
                         <i class="ki-outline ki-file-down me-1"></i>CSV
                     </button>
                     <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modal_create_customer">
-                        <i class="ki-outline ki-plus fs-4 me-1"></i>Nuevo Cliente
+                        <i class="ki-outline ki-plus fs-4 me-1"></i>Nuevo cliente
                     </button>
                 </div>
             </div>
