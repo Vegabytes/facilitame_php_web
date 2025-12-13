@@ -85,6 +85,7 @@ $pageTitles = [
     'advisory-commissions' => 'Comisiones',
     'advisory-customers' => 'Clientes',
     'notifications' => 'Notificaciones',
+    'menu-config' => 'Configuración de Menús',
 ];
 
 $pageTitle = $pageTitles[$currentPage] ?? 'Facilítame';
@@ -117,6 +118,7 @@ $pageIcons = [
     'advisory-commissions' => 'ki-dollar',
     'advisory-customers' => 'ki-people',
     'notifications' => 'ki-notification-bing',
+    'menu-config' => 'ki-setting-2',
 ];
 
 $pageIcon = $pageIcons[$currentPage] ?? 'ki-abstract-26';
@@ -220,7 +222,21 @@ elseif (cliente()) $currentRole = 'client';
     </div>
     
     <div class="header-right">
-        <?php if ($showSearch): ?>
+        <?php if ($currentPage === 'menu-config'): ?>
+        <!-- Controles de configuración de menú -->
+        <div class="d-flex align-items-center gap-3 me-4">
+            <select id="role-selector" class="form-select form-select-solid form-select-sm w-150px">
+                <option value="cliente">Cliente</option>
+                <option value="administrador">Administrador</option>
+                <option value="proveedor">Colaborador</option>
+                <option value="comercial">Comercial</option>
+                <option value="asesoria">Asesoría</option>
+            </select>
+            <button type="button" class="btn btn-light btn-sm" id="btn-reset" title="Restaurar">
+                <i class="ki-outline ki-arrows-circle"></i>
+            </button>
+        </div>
+        <?php elseif ($showSearch): ?>
         <div class="search-wrapper d-none d-md-flex">
             <i class="ki-outline ki-magnifier search-icon"></i>
             <input type="text" class="search-input" placeholder="<?= e($searchPlaceholder) ?>"

@@ -534,7 +534,7 @@ $proposedBy = $appointment['proposed_by'] ?? null;
                                         </div>
                                         
                                         <button type="submit" class="btn btn-primary-facilitame">
-                                            <i class="ki-outline ki-check fs-4 text-white"></i> Guardar Cambios
+                                            <i class="ki-outline ki-check me-1"></i> Guardar cambios
                                         </button>
                                     </form>
                                 </div>

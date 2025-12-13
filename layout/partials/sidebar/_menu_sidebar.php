@@ -200,7 +200,15 @@ if (asesoria() && isset($pdo)) {
                         <span class="menu-text">Comisiones</span>
                     </a>
                 </li>
-                
+
+                <li class="menu-section"><span class="menu-section-text">Configuración</span></li>
+                <li class="menu-item <?= ($currentPage === 'menu-config') ? 'active' : '' ?>" role="none">
+                    <a href="/menu-config" class="menu-link" role="menuitem" data-tooltip="Menús" <?= ($currentPage === 'menu-config') ? 'aria-current="page"' : '' ?>>
+                        <i class="ki-outline ki-setting-2 menu-icon" aria-hidden="true"></i>
+                        <span class="menu-text">Menús</span>
+                    </a>
+                </li>
+
             <?php elseif (proveedor()): ?>
                 <li class="menu-section"><span class="menu-section-text">Principal</span></li>
                 <li class="menu-item <?= ($currentPage === 'home') ? 'active' : '' ?>" role="none">

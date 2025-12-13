@@ -1,136 +1,34 @@
 <?php
 $currentPage = 'menu-config';
-$pageTitle = 'Configuración de Menú';
-
-$ROLES = [
-    'cliente' => 'Cliente',
-    'administrador' => 'Administrador',
-    'proveedor' => 'Colaborador',
-    'comercial' => 'Comercial',
-    'asesoria' => 'Asesoría',
-];
+$pageTitle = 'Configuración de Menús';
 ?>
 
-<div class="d-flex flex-column flex-column-fluid">
-    <div id="kt_app_content" class="app-content flex-column-fluid">
-
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="ki-outline ki-menu me-2 text-primary"></i>
-                    Configuración del Menú Lateral
-                </h3>
-                <div class="card-toolbar">
-                    <div class="d-flex align-items-center gap-3">
-                        <label class="form-label mb-0 fw-semibold">Rol:</label>
-                        <select id="role-selector" class="form-select form-select-sm w-200px">
-                            <?php foreach ($ROLES as $key => $label): ?>
-                            <option value="<?= $key ?>"><?= $label ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center bg-light-primary rounded border-primary border border-dashed p-4 mb-6">
+            <div class="d-flex align-items-center">
+                <i class="ki-outline ki-information-5 fs-2tx me-4 text-facilitame"></i>
+                <div class="d-flex flex-column">
+                    <span class="fw-bold fs-6">Instrucciones</span>
+                    <span class="text-gray-700">Arrastra los items para reordenarlos. Usa el switch para mostrar/ocultar.</span>
                 </div>
             </div>
-
-            <div class="card-body">
-                <div class="alert alert-info d-flex align-items-center mb-5">
-                    <i class="ki-outline ki-information-5 fs-2 me-3"></i>
-                    <div>
-                        <strong>Instrucciones:</strong> Arrastra los items para reordenarlos.
-                        Usa el switch para mostrar/ocultar opciones del menú para cada rol.
-                    </div>
-                </div>
-
-                <div id="menu-items-container">
-                    <div class="text-center py-10">
-                        <div class="spinner-border text-primary" role="status"></div>
-                        <p class="mt-3 text-muted">Cargando configuración...</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-footer d-flex justify-content-end gap-3">
-                <button type="button" class="btn btn-light" id="btn-reset">
-                    <i class="ki-outline ki-arrows-circle me-1"></i>
-                    Restaurar
-                </button>
-                <button type="button" class="btn btn-primary" id="btn-save">
-                    <i class="ki-outline ki-check me-1"></i>
-                    Guardar Cambios
-                </button>
-            </div>
+            <button type="button" class="btn btn-primary-facilitame" id="btn-save">
+                <i class="ki-outline ki-check me-1 text-white"></i>
+                Guardar cambios
+            </button>
         </div>
 
+        <div id="menu-items-container">
+            <div class="text-center py-10">
+                <div class="spinner-border spinner-facilitame" role="status"></div>
+                <p class="mt-3 text-muted">Cargando configuración...</p>
+            </div>
+        </div>
     </div>
 </div>
 
-<style>
-.menu-item-card {
-    background: var(--bs-gray-100);
-    border: 1px solid var(--bs-gray-300);
-    border-radius: 8px;
-    padding: 12px 16px;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: grab;
-    transition: all 0.2s;
-}
-.menu-item-card:hover {
-    background: var(--bs-gray-200);
-}
-.menu-item-card.dragging {
-    opacity: 0.5;
-    cursor: grabbing;
-}
-.menu-item-card.disabled-item {
-    opacity: 0.5;
-    background: var(--bs-gray-200);
-}
-.menu-item-card .drag-handle {
-    color: var(--bs-gray-500);
-    cursor: grab;
-}
-.menu-item-card .item-icon {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bs-primary);
-    color: white;
-    border-radius: 8px;
-    font-size: 18px;
-}
-.menu-item-card.disabled-item .item-icon {
-    background: var(--bs-gray-400);
-}
-.menu-item-card .item-info {
-    flex: 1;
-}
-.menu-item-card .item-label {
-    font-weight: 600;
-    color: var(--bs-gray-800);
-}
-.menu-item-card .item-section {
-    font-size: 12px;
-    color: var(--bs-gray-500);
-}
-.section-header {
-    font-weight: 700;
-    color: var(--bs-gray-600);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin: 20px 0 10px 0;
-    padding-bottom: 5px;
-    border-bottom: 1px solid var(--bs-gray-300);
-}
-.section-header:first-child {
-    margin-top: 0;
-}
-</style>
+<!-- Estilos en bold.css: .menu-item-card, .menu-config-section-header -->
 
 <script>
 (function() {
@@ -194,17 +92,19 @@ $ROLES = [
         let html = '';
 
         Object.keys(sections).forEach(section => {
-            html += `<div class="section-header">${escapeHtml(section)}</div>`;
+            html += `<div class="menu-config-section-header">${escapeHtml(section)}</div>`;
 
             sections[section].forEach(item => {
                 const disabledClass = item.is_visible ? '' : 'disabled-item';
+                // Añadir prefijo ki-outline si no lo tiene
+                const iconClass = item.icon.startsWith('ki-outline') ? item.icon : `ki-outline ${item.icon}`;
                 html += `
                     <div class="menu-item-card ${disabledClass}" data-key="${item.key}" draggable="true">
                         <div class="drag-handle">
                             <i class="ki-outline ki-dots-vertical fs-3"></i>
                         </div>
                         <div class="item-icon">
-                            <i class="${item.icon}"></i>
+                            <i class="${iconClass}"></i>
                         </div>
                         <div class="item-info">
                             <div class="item-label">${escapeHtml(item.label)}</div>
@@ -327,7 +227,7 @@ $ROLES = [
             });
         } finally {
             btnSave.disabled = false;
-            btnSave.innerHTML = '<i class="ki-outline ki-check me-1"></i>Guardar Cambios';
+            btnSave.innerHTML = '<i class="ki-outline ki-check me-1"></i>Guardar cambios';
         }
     }
 

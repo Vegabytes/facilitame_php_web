@@ -79,7 +79,13 @@ if ($method === 'GET') {
     // Obtener configuración de BD
     $stmt = $pdo->prepare("SELECT menu_key, is_visible, display_order FROM menu_config WHERE role_id = ?");
     $stmt->execute([$role_id]);
-    $config = $stmt->fetchAll(PDO::FETCH_KEY_PAIR | PDO::FETCH_GROUP);
+    $dbConfig = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Indexar por menu_key
+    $config = [];
+    foreach ($dbConfig as $row) {
+        $config[$row['menu_key']] = $row;
+    }
 
     // Construir respuesta con valores por defecto
     $items = [];
@@ -91,8 +97,8 @@ if ($method === 'GET') {
             'label' => $item['label'],
             'icon' => $item['icon'],
             'section' => $item['section'],
-            'is_visible' => isset($config[$key]) ? (bool)$config[$key][0]['is_visible'] : true,
-            'display_order' => isset($config[$key]) ? (int)$config[$key][0]['display_order'] : $order,
+            'is_visible' => isset($config[$key]) ? (bool)$config[$key]['is_visible'] : true,
+            'display_order' => isset($config[$key]) ? (int)$config[$key]['display_order'] : $order,
         ];
         $order++;
     }
