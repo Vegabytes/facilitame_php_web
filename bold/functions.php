@@ -878,15 +878,39 @@ function get_provider_categories($user_id, $user_role)
 }
 
 // Role check functions
-function proveedor() { return USER["role"] === "proveedor"; }
-function comercial() { return USER["role"] === "comercial"; }
-function asesoria() { return USER["role"] === "asesoria"; }
+function proveedor() {
+    if (!defined('USER') || !is_array(USER) || !isset(USER['role'])) return false;
+    return USER["role"] === "proveedor";
+}
+function comercial() {
+    if (!defined('USER') || !is_array(USER) || !isset(USER['role'])) return false;
+    return USER["role"] === "comercial";
+}
+function asesoria() {
+    if (!defined('USER') || !is_array(USER) || !isset(USER['role'])) return false;
+    return USER["role"] === "asesoria";
+}
 function sales_rep() { return comercial(); }
-function particular() { return USER["role"] === "particular"; }
-function autonomo() { return USER["role"] === "autonomo"; }
-function empresa() { return USER["role"] === "empresa"; }
-function cliente() { return in_array(USER["role"], ["particular", "autonomo", "empresa"]); }
-function admin() { return USER["role"] === "administrador"; }
+function particular() {
+    if (!defined('USER') || !is_array(USER) || !isset(USER['role'])) return false;
+    return USER["role"] === "particular";
+}
+function autonomo() {
+    if (!defined('USER') || !is_array(USER) || !isset(USER['role'])) return false;
+    return USER["role"] === "autonomo";
+}
+function empresa() {
+    if (!defined('USER') || !is_array(USER) || !isset(USER['role'])) return false;
+    return USER["role"] === "empresa";
+}
+function cliente() {
+    if (!defined('USER') || !is_array(USER) || !isset(USER['role'])) return false;
+    return in_array(USER["role"], ["particular", "autonomo", "empresa"]);
+}
+function admin() {
+    if (!defined('USER') || !is_array(USER) || !isset(USER['role'])) return false;
+    return USER["role"] === "administrador";
+}
 function guest($user = "") {
     return defined("USER") ? (USER["id"] == "361") : ($user["id"] == "361");
 }
@@ -1240,9 +1264,13 @@ function get_notifications($limit = 20)
 
         // Contar comunicaciones de asesoría no leídas (solo para clientes)
         if (cliente()) {
-            $stmt = $pdo->prepare("SELECT COUNT(*) FROM advisory_communication_recipients WHERE customer_id = ? AND is_read = 0");
-            $stmt->execute([$user_id]);
-            $unread_count += (int)$stmt->fetchColumn();
+            try {
+                $stmt = $pdo->prepare("SELECT COUNT(*) FROM advisory_communication_recipients WHERE customer_id = ? AND is_read = 0");
+                $stmt->execute([$user_id]);
+                $unread_count += (int)$stmt->fetchColumn();
+            } catch (PDOException $e) {
+                // Tabla puede no existir, ignorar
+            }
         }
 
         // Limited notifications (incluir sender_id para navegación en asesoria)
@@ -1257,37 +1285,41 @@ function get_notifications($limit = 20)
 
         // Añadir comunicaciones de asesoría para clientes
         if (cliente()) {
-            $stmt = $pdo->prepare("
-                SELECT
-                    acr.id,
-                    NULL as request_id,
-                    ac.advisory_id as sender_id,
-                    CONCAT('📢 ', ac.subject) as description,
-                    CASE WHEN acr.is_read = 1 THEN 1 ELSE 0 END as status,
-                    ac.created_at,
-                    'communication' as type,
-                    ac.id as communication_id
-                FROM advisory_communication_recipients acr
-                INNER JOIN advisory_communications ac ON ac.id = acr.communication_id
-                WHERE acr.customer_id = ?
-                ORDER BY acr.is_read ASC, ac.created_at DESC
-                LIMIT " . (int)$limit);
-            $stmt->execute([$user_id]);
-            $communications = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            try {
+                $stmt = $pdo->prepare("
+                    SELECT
+                        acr.id,
+                        NULL as request_id,
+                        ac.advisory_id as sender_id,
+                        CONCAT('📢 ', ac.subject) as description,
+                        CASE WHEN acr.is_read = 1 THEN 1 ELSE 0 END as status,
+                        ac.created_at,
+                        'communication' as type,
+                        ac.id as communication_id
+                    FROM advisory_communication_recipients acr
+                    INNER JOIN advisory_communications ac ON ac.id = acr.communication_id
+                    WHERE acr.customer_id = ?
+                    ORDER BY acr.is_read ASC, ac.created_at DESC
+                    LIMIT " . (int)$limit);
+                $stmt->execute([$user_id]);
+                $communications = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // Combinar y ordenar por fecha
-            $res = array_merge($res, $communications);
-            usort($res, function($a, $b) {
-                // Primero no leídas (status 0)
-                if ($a['status'] != $b['status']) {
-                    return $a['status'] - $b['status'];
-                }
-                // Luego por fecha descendente
-                return strtotime($b['created_at']) - strtotime($a['created_at']);
-            });
+                // Combinar y ordenar por fecha
+                $res = array_merge($res, $communications);
+                usort($res, function($a, $b) {
+                    // Primero no leídas (status 0)
+                    if ($a['status'] != $b['status']) {
+                        return $a['status'] - $b['status'];
+                    }
+                    // Luego por fecha descendente
+                    return strtotime($b['created_at']) - strtotime($a['created_at']);
+                });
 
-            // Limitar al total solicitado
-            $res = array_slice($res, 0, $limit);
+                // Limitar al total solicitado
+                $res = array_slice($res, 0, $limit);
+            } catch (PDOException $e) {
+                // Tabla puede no existir, ignorar error
+            }
         }
     }
 
@@ -3048,6 +3080,16 @@ function get_menu_config($role_id)
  */
 function is_menu_visible($menu_key, $role_id = null)
 {
+    // Si USER no está definido, mostrar todo por defecto
+    if (!defined('USER')) {
+        return true;
+    }
+
+    $user = USER;
+    if (!is_array($user) || !isset($user['role'])) {
+        return true;
+    }
+
     if ($role_id === null) {
         // Mapeo de roles a IDs
         $role_map = [
@@ -3057,7 +3099,7 @@ function is_menu_visible($menu_key, $role_id = null)
             'comercial' => 7,
             'asesoria' => 8,
         ];
-        $role_id = $role_map[USER['role']] ?? 1;
+        $role_id = $role_map[$user['role']] ?? 1;
     }
 
     $config = get_menu_config($role_id);

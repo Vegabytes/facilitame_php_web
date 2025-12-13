@@ -82,15 +82,12 @@ if (asesoria() && isset($pdo)) {
             
             <?php if (cliente()): ?>
                 <li class="menu-section"><span class="menu-section-text">Principal</span></li>
-                <?php if (is_menu_visible('home')): ?>
                 <li class="menu-item <?= ($currentPage === 'home') ? 'active' : '' ?>" role="none">
                     <a href="/home" class="menu-link" role="menuitem" data-tooltip="Inicio" <?= ($currentPage === 'home') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-home menu-icon" aria-hidden="true"></i>
                         <span class="menu-text">Inicio</span>
                     </a>
                 </li>
-                <?php endif; ?>
-                <?php if (is_menu_visible('notifications')): ?>
                 <li class="menu-item <?= ($currentPage === 'notifications') ? 'active' : '' ?>" role="none">
                     <a href="/notifications" class="menu-link" role="menuitem" data-tooltip="Notificaciones" <?= ($currentPage === 'notifications') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-notification-bing menu-icon" aria-hidden="true"></i>
@@ -100,34 +97,27 @@ if (asesoria() && isset($pdo)) {
                         <?php endif; ?>
                     </a>
                 </li>
-                <?php endif; ?>
-                <?php if (is_menu_visible('services')): ?>
                 <li class="menu-item <?= ($currentPage === 'services') ? 'active' : '' ?>" role="none">
                     <a href="/services" class="menu-link" role="menuitem" data-tooltip="Buscar servicios" <?= ($currentPage === 'services') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-search-list menu-icon" aria-hidden="true"></i>
                         <span class="menu-text">Buscar servicios</span>
                     </a>
                 </li>
-                <?php endif; ?>
-
+                
                 <li class="menu-section"><span class="menu-section-text">Mis Gestiones</span></li>
-                <?php if (is_menu_visible('my-services')): ?>
                 <li class="menu-item <?= ($currentPage === 'my-services') ? 'active' : '' ?>" role="none">
                     <a href="/my-services" class="menu-link" role="menuitem" data-tooltip="Mis solicitudes" <?= ($currentPage === 'my-services') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-folder menu-icon" aria-hidden="true"></i>
                         <span class="menu-text">Mis solicitudes</span>
                     </a>
                 </li>
-                <?php endif; ?>
-                <?php if (is_menu_visible('my-incidents')): ?>
                 <li class="menu-item <?= ($currentPage === 'my-incidents') ? 'active' : '' ?>" role="none">
                     <a href="/my-incidents" class="menu-link" role="menuitem" data-tooltip="Mis incidencias" <?= ($currentPage === 'my-incidents') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-information-5 menu-icon" aria-hidden="true"></i>
                         <span class="menu-text">Mis incidencias</span>
                     </a>
                 </li>
-                <?php endif; ?>
-                <?php if (!guest() && is_menu_visible('invoices')): ?>
+                <?php if (!guest()): ?>
                 <li class="menu-item <?= ($currentPage === 'invoices') ? 'active' : '' ?>" role="none">
                     <a href="/invoices" class="menu-link" role="menuitem" data-tooltip="Mis Recibos" <?= ($currentPage === 'invoices') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-credit-cart menu-icon" aria-hidden="true"></i>
@@ -138,7 +128,6 @@ if (asesoria() && isset($pdo)) {
 
                 <?php if ($has_advisory): ?>
                 <li class="menu-section"><span class="menu-section-text">Mi Asesoría</span></li>
-                <?php if (is_menu_visible('communications')): ?>
                 <li class="menu-item <?= ($currentPage === 'communications') ? 'active' : '' ?>" role="none">
                     <a href="/communications" class="menu-link" role="menuitem" data-tooltip="Comunicaciones" <?= ($currentPage === 'communications') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-sms menu-icon" aria-hidden="true"></i>
@@ -148,16 +137,12 @@ if (asesoria() && isset($pdo)) {
                         <?php endif; ?>
                     </a>
                 </li>
-                <?php endif; ?>
-                <?php if (is_menu_visible('advisory-invoices')): ?>
                 <li class="menu-item <?= ($currentPage === 'advisory-invoices') ? 'active' : '' ?>" role="none">
                     <a href="/advisory-invoices" class="menu-link" role="menuitem" data-tooltip="Facturas" <?= ($currentPage === 'advisory-invoices') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-document menu-icon" aria-hidden="true"></i>
                         <span class="menu-text">Facturas</span>
                     </a>
                 </li>
-                <?php endif; ?>
-                <?php if (is_menu_visible('appointments')): ?>
                 <li class="menu-item <?= ($currentPage === 'appointments') ? 'active' : '' ?>" role="none">
                     <a href="/appointments" class="menu-link" role="menuitem" data-tooltip="Solicitar Cita" <?= ($currentPage === 'appointments') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-calendar menu-icon" aria-hidden="true"></i>
@@ -167,7 +152,6 @@ if (asesoria() && isset($pdo)) {
                         <?php endif; ?>
                     </a>
                 </li>
-                <?php endif; ?>
                 <?php endif; ?>
                 
             <?php elseif (admin()): ?>
@@ -216,63 +200,44 @@ if (asesoria() && isset($pdo)) {
                         <span class="menu-text">Comisiones</span>
                     </a>
                 </li>
-
-                <li class="menu-section"><span class="menu-section-text">Configuración</span></li>
-                <li class="menu-item <?= ($currentPage === 'menu-config') ? 'active' : '' ?>" role="none">
-                    <a href="/menu-config" class="menu-link" role="menuitem" data-tooltip="Menú Lateral" <?= ($currentPage === 'menu-config') ? 'aria-current="page"' : '' ?>>
-                        <i class="ki-outline ki-menu menu-icon" aria-hidden="true"></i>
-                        <span class="menu-text">Menú Lateral</span>
-                    </a>
-                </li>
-
+                
             <?php elseif (proveedor()): ?>
                 <li class="menu-section"><span class="menu-section-text">Principal</span></li>
-                <?php if (is_menu_visible('home')): ?>
                 <li class="menu-item <?= ($currentPage === 'home') ? 'active' : '' ?>" role="none">
                     <a href="/home" class="menu-link" role="menuitem" data-tooltip="Inicio" <?= ($currentPage === 'home') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-home menu-icon" aria-hidden="true"></i>
                         <span class="menu-text">Inicio</span>
                     </a>
                 </li>
-                <?php endif; ?>
-                <?php if (is_menu_visible('log')): ?>
                 <li class="menu-item <?= ($currentPage === 'log') ? 'active' : '' ?>" role="none">
                     <a href="/log" class="menu-link" role="menuitem" data-tooltip="Seguimiento" <?= ($currentPage === 'log') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-time menu-icon" aria-hidden="true"></i>
                         <span class="menu-text">Seguimiento</span>
                     </a>
                 </li>
-                <?php endif; ?>
-
+                
                 <li class="menu-section"><span class="menu-section-text">Gestión</span></li>
-                <?php if (is_menu_visible('customers')): ?>
                 <li class="menu-item <?= ($currentPage === 'customers') ? 'active' : '' ?>" role="none">
                     <a href="/customers" class="menu-link" role="menuitem" data-tooltip="Clientes" <?= ($currentPage === 'customers') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-people menu-icon" aria-hidden="true"></i>
                         <span class="menu-text">Clientes</span>
                     </a>
                 </li>
-                <?php endif; ?>
-                <?php if (is_menu_visible('invoices')): ?>
                 <li class="menu-item <?= ($currentPage === 'invoices') ? 'active' : '' ?>" role="none">
                     <a href="/invoices" class="menu-link" role="menuitem" data-tooltip="Facturas" <?= ($currentPage === 'invoices') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-credit-cart menu-icon" aria-hidden="true"></i>
                         <span class="menu-text">Facturas</span>
                     </a>
                 </li>
-                <?php endif; ?>
-
+                
             <?php elseif (comercial()): ?>
                 <li class="menu-section"><span class="menu-section-text">Principal</span></li>
-                <?php if (is_menu_visible('home')): ?>
                 <li class="menu-item <?= ($currentPage === 'home') ? 'active' : '' ?>" role="none">
                     <a href="/home" class="menu-link" role="menuitem" data-tooltip="Inicio" <?= ($currentPage === 'home') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-home menu-icon" aria-hidden="true"></i>
                         <span class="menu-text">Inicio</span>
                     </a>
                 </li>
-                <?php endif; ?>
-                <?php if (is_menu_visible('notifications')): ?>
                 <li class="menu-item <?= ($currentPage === 'notifications') ? 'active' : '' ?>" role="none">
                     <a href="/notifications" class="menu-link" role="menuitem" data-tooltip="Notificaciones" <?= ($currentPage === 'notifications') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-notification-bing menu-icon" aria-hidden="true"></i>
@@ -282,45 +247,35 @@ if (asesoria() && isset($pdo)) {
                         <?php endif; ?>
                     </a>
                 </li>
-                <?php endif; ?>
-                <?php if (is_menu_visible('log')): ?>
                 <li class="menu-item <?= ($currentPage === 'log') ? 'active' : '' ?>" role="none">
                     <a href="/log" class="menu-link" role="menuitem" data-tooltip="Seguimiento" <?= ($currentPage === 'log') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-time menu-icon" aria-hidden="true"></i>
                         <span class="menu-text">Seguimiento</span>
                     </a>
                 </li>
-                <?php endif; ?>
-
+                
                 <li class="menu-section"><span class="menu-section-text">Gestión</span></li>
-                <?php if (is_menu_visible('customers')): ?>
                 <li class="menu-item <?= ($currentPage === 'customers') ? 'active' : '' ?>" role="none">
                     <a href="/customers" class="menu-link" role="menuitem" data-tooltip="Clientes" <?= ($currentPage === 'customers') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-people menu-icon" aria-hidden="true"></i>
                         <span class="menu-text">Clientes</span>
                     </a>
                 </li>
-                <?php endif; ?>
-                <?php if (is_menu_visible('commissions')): ?>
                 <li class="menu-item <?= ($currentPage === 'commissions') ? 'active' : '' ?>" role="none">
                     <a href="/commissions" class="menu-link" role="menuitem" data-tooltip="Comisiones" <?= ($currentPage === 'commissions') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-dollar menu-icon" aria-hidden="true"></i>
                         <span class="menu-text">Comisiones</span>
                     </a>
                 </li>
-                <?php endif; ?>
-
+                
             <?php elseif (asesoria()): ?>
                 <li class="menu-section"><span class="menu-section-text">Principal</span></li>
-                <?php if (is_menu_visible('home')): ?>
                 <li class="menu-item <?= ($currentPage === 'home') ? 'active' : '' ?>" role="none">
                     <a href="/home" class="menu-link" role="menuitem" data-tooltip="Inicio" <?= ($currentPage === 'home') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-home menu-icon" aria-hidden="true"></i>
                         <span class="menu-text">Inicio</span>
                     </a>
                 </li>
-                <?php endif; ?>
-                <?php if (is_menu_visible('notifications')): ?>
                 <li class="menu-item <?= ($currentPage === 'notifications') ? 'active' : '' ?>" role="none">
                     <a href="/notifications" class="menu-link" role="menuitem" data-tooltip="Notificaciones" <?= ($currentPage === 'notifications') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-notification-bing menu-icon" aria-hidden="true"></i>
@@ -330,18 +285,14 @@ if (asesoria() && isset($pdo)) {
                         <?php endif; ?>
                     </a>
                 </li>
-                <?php endif; ?>
 
                 <li class="menu-section"><span class="menu-section-text">Gestión</span></li>
-                <?php if (is_menu_visible('customers')): ?>
                 <li class="menu-item <?= ($currentPage === 'customers') ? 'active' : '' ?>" role="none">
                     <a href="/customers" class="menu-link" role="menuitem" data-tooltip="Mis Clientes" <?= ($currentPage === 'customers') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-people menu-icon" aria-hidden="true"></i>
                         <span class="menu-text">Mis Clientes</span>
                     </a>
                 </li>
-                <?php endif; ?>
-                <?php if (is_menu_visible('invoices')): ?>
                 <li class="menu-item <?= ($currentPage === 'invoices') ? 'active' : '' ?>" role="none">
                     <a href="/invoices" class="menu-link" role="menuitem" data-tooltip="Facturas Recibidas" <?= ($currentPage === 'invoices') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-document menu-icon" aria-hidden="true"></i>
@@ -351,8 +302,6 @@ if (asesoria() && isset($pdo)) {
                         <?php endif; ?>
                     </a>
                 </li>
-                <?php endif; ?>
-                <?php if (is_menu_visible('appointments')): ?>
                 <li class="menu-item <?= ($currentPage === 'appointments') ? 'active' : '' ?>" role="none">
                     <a href="/appointments" class="menu-link" role="menuitem" data-tooltip="Citas" <?= ($currentPage === 'appointments') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-calendar menu-icon" aria-hidden="true"></i>
@@ -362,8 +311,6 @@ if (asesoria() && isset($pdo)) {
                         <?php endif; ?>
                     </a>
                 </li>
-                <?php endif; ?>
-                <?php if (is_menu_visible('communications')): ?>
                 <li class="menu-item <?= ($currentPage === 'communications') ? 'active' : '' ?>" role="none">
                     <a href="/communications" class="menu-link" role="menuitem" data-tooltip="Comunicaciones" <?= ($currentPage === 'communications') ? 'aria-current="page"' : '' ?>>
                         <i class="ki-outline ki-sms menu-icon" aria-hidden="true"></i>
@@ -373,9 +320,7 @@ if (asesoria() && isset($pdo)) {
                         <?php endif; ?>
                     </a>
                 </li>
-                <?php endif; ?>
 
-                <?php if (is_menu_visible('inmatic')): ?>
                 <li class="menu-section"><span class="menu-section-text">Integraciones</span></li>
                 <li class="menu-item <?= ($currentPage === 'inmatic') ? 'active' : '' ?>" role="none">
                     <a href="/inmatic" class="menu-link" role="menuitem" data-tooltip="Inmatic" <?= ($currentPage === 'inmatic') ? 'aria-current="page"' : '' ?>>
@@ -383,7 +328,6 @@ if (asesoria() && isset($pdo)) {
                         <span class="menu-text">Inmatic</span>
                     </a>
                 </li>
-                <?php endif; ?>
             <?php endif; ?>
             
         </ul>
@@ -445,7 +389,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (overlay) overlay.classList.toggle('active');
         });
     }
-    
+
     const menuLinks = document.querySelectorAll('.menu-link');
     menuLinks.forEach(function(link) {
         link.addEventListener('click', function() {
