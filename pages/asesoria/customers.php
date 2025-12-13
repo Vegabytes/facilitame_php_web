@@ -68,6 +68,9 @@ $ROLES = [
                             <option value="100">100</option>
                         </select>
                     </div>
+                    <button type="button" class="btn btn-sm btn-light-success" id="btn-export-csv" onclick="exportClientsCSV()">
+                        <i class="ki-outline ki-file-down me-1"></i>CSV
+                    </button>
                     <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modal_create_customer">
                         <i class="ki-outline ki-plus fs-4 me-1"></i>Nuevo Cliente
                     </button>
@@ -334,7 +337,37 @@ function copyLink() {
     window.filterAdvisoryCustomers = window.filterCustomers;
     window.reloadClients = function() { loadData(); };
     window.reloadAdvisoryCustomers = window.reloadClients;
-    
+
+    window.exportClientsCSV = async function() {
+        var btn = document.getElementById('btn-export-csv');
+        var originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+        try {
+            var params = new URLSearchParams({ page: 1, limit: 10000, search: state.searchQuery });
+            var response = await fetch(API_URL + '?' + params);
+            var result = await response.json();
+            if (result.status === 'ok' && result.data && result.data.data && result.data.data.length > 0) {
+                var items = result.data.data;
+                var csv = 'ID;Nombre;Email;Teléfono;NIF/CIF;Tipo\n';
+                items.forEach(function(c) {
+                    csv += [c.id, '"'+(c.name||'')+' '+(c.lastname||'')+'"', '"'+(c.email||'')+'"', '"'+(c.phone||'')+'"', '"'+(c.nif_cif||'')+'"', '"'+(ROLES[c.role_name]||c.role_name||'')+'"'].join(';') + '\n';
+                });
+                var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+                var link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'clientes_asesoria_' + new Date().toISOString().slice(0,10) + '.csv';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                if (typeof Swal !== 'undefined') Swal.fire({ icon: 'success', title: 'CSV exportado', text: items.length + ' registros', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+            } else {
+                if (typeof Swal !== 'undefined') Swal.fire({ icon: 'warning', title: 'Sin datos', text: 'No hay clientes para exportar' });
+            }
+        } catch (e) { console.error(e); }
+        finally { btn.disabled = false; btn.innerHTML = originalHtml; }
+    };
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {

@@ -46,7 +46,11 @@ window.commissionTypes = <?php echo json_encode($commission_types ?? []); ?>;
                                     <option value="100">100</option>
                                 </select>
                             </div>
-                            
+
+                            <button type="button" class="btn btn-sm btn-light-success" id="btn-export-csv" onclick="exportCommissionsCSV()">
+                                <i class="ki-outline ki-file-down me-1"></i>Exportar CSV
+                            </button>
+
                         </div>
                     </div>
                     
@@ -356,7 +360,103 @@ window.commissionTypes = <?php echo json_encode($commission_types ?? []); ?>;
     }
     
     window.reloadCommissions = function() { loadData(); };
-    
+
+    // Función de exportar CSV
+    window.exportCommissionsCSV = async function() {
+        const btn = document.getElementById('btn-export-csv');
+        const originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Exportando...';
+
+        try {
+            const year = yearSelect.value;
+            const month = monthSelect.value;
+            const params = new URLSearchParams({
+                page: 1,
+                limit: 10000, // Obtener todos los registros
+                search: state.searchQuery,
+                year: year,
+                month: month
+            });
+
+            const response = await fetch(`${API_URL}?${params}`);
+            const result = await response.json();
+
+            if (result.status === 'ok' && result.data && result.data.data.length > 0) {
+                const items = result.data.data;
+
+                // Generar CSV
+                const headers = ['ID', 'Cliente', 'Categoría', 'Fecha Activación', 'Fecha Expiración', 'Importe Total', 'Tipo Comisión', 'Valor Comisión', 'Comercial', 'Comisión Comercial', 'Comisión Facilítame', 'Comisión Total'];
+                let csv = headers.join(';') + '\n';
+
+                items.forEach(c => {
+                    const row = [
+                        c.id,
+                        '"' + (c.customer_name || '').replace(/"/g, '""') + '"',
+                        '"' + (c.category_display || '').replace(/"/g, '""') + '"',
+                        c.activated_at || '',
+                        c.expires_at || '',
+                        (c.total_amount || 0).toString().replace('.', ','),
+                        '"' + (window.commissionTypes[c.commission_type_id] || '').replace(/"/g, '""') + '"',
+                        (c.commission_value || '').toString().replace('.', ','),
+                        '"' + (c.sales_rep_name || '').replace(/"/g, '""') + '"',
+                        (c.sales_rep_commission || 0).toString().replace('.', ','),
+                        (c.admin_commission || 0).toString().replace('.', ','),
+                        (c.total_commission || 0).toString().replace('.', ',')
+                    ];
+                    csv += row.join(';') + '\n';
+                });
+
+                // Descargar archivo
+                const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+                const filename = `comisiones_${meses[parseInt(month)-1]}_${year}.csv`;
+                const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'CSV exportado',
+                        text: `${items.length} registros exportados`,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                }
+            } else {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Sin datos',
+                        text: 'No hay comisiones para exportar en este período',
+                        buttonsStyling: false,
+                        customClass: { confirmButton: 'btn btn-primary' }
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error al exportar: ' + error.message,
+                    buttonsStyling: false,
+                    customClass: { confirmButton: 'btn btn-primary' }
+                });
+            }
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+        }
+    };
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {

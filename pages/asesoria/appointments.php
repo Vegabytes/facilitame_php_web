@@ -160,6 +160,9 @@ $statusLabels = ['solicitado' => 'Pendiente', 'agendado' => 'Confirmada', 'final
                             <option value="">Todos</option>
                         </select>
                     </div>
+                    <button type="button" class="btn btn-sm btn-light-success" id="btn-export-csv" onclick="exportAppointmentsCSV()">
+                        <i class="ki-outline ki-file-down me-1"></i>CSV
+                    </button>
                     <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modal_create_appointment">
                         <i class="ki-outline ki-plus me-1"></i>Nueva Cita
                     </button>
@@ -621,7 +624,69 @@ $statusLabels = ['solicitado' => 'Pendiente', 'agendado' => 'Confirmada', 'final
     
     // Funciones globales
     window.reloadAppointments = function() { loadData(); };
-    
+
+    // Función de exportar CSV
+    window.exportAppointmentsCSV = async function() {
+        var btn = document.getElementById('btn-export-csv');
+        var originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+
+        try {
+            var params = new URLSearchParams({
+                page: 1,
+                limit: 10000,
+                status: state.status,
+                search: state.searchQuery
+            });
+
+            var response = await fetch(API_URL + '?' + params);
+            var result = await response.json();
+
+            if (result.status === 'ok' && result.data && result.data.data.length > 0) {
+                var items = result.data.data;
+                var headers = ['ID', 'Cliente', 'Email', 'Tipo', 'Departamento', 'Estado', 'Fecha Propuesta', 'Motivo'];
+                var csv = headers.join(';') + '\n';
+
+                items.forEach(function(apt) {
+                    var row = [
+                        apt.id,
+                        '"' + (apt.customer_name || '').replace(/"/g, '""') + '"',
+                        '"' + (apt.customer_email || '').replace(/"/g, '""') + '"',
+                        '"' + (typeLabels[apt.type] || apt.type || '').replace(/"/g, '""') + '"',
+                        '"' + (deptLabels[apt.department] || apt.department || '').replace(/"/g, '""') + '"',
+                        '"' + (statusLabels[apt.status] || apt.status || '').replace(/"/g, '""') + '"',
+                        apt.proposed_date || '',
+                        '"' + (apt.reason || '').replace(/"/g, '""') + '"'
+                    ];
+                    csv += row.join(';') + '\n';
+                });
+
+                var filename = 'citas_asesoria_' + new Date().toISOString().slice(0, 10) + '.csv';
+                var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+                var link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({ icon: 'success', title: 'CSV exportado', text: items.length + ' registros', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+                }
+            } else {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({ icon: 'warning', title: 'Sin datos', text: 'No hay citas para exportar' });
+                }
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+        }
+    };
+
     window.filterByStatus = function(status) {
         statusFilter.value = status;
         state.status = status;

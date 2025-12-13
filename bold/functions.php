@@ -1512,12 +1512,14 @@ function get_user_profile($user_id)
     $user = $stmt->fetch();
 
     if ($user && $user['role_id'] == 7) {
-        // Si es comercial, obtener su código
-        $stmt2 = $pdo->prepare("SELECT code FROM sales_codes WHERE user_id = :user_id AND deleted_at IS NULL LIMIT 1");
+        // Si es comercial, obtener su código y configuración de comisiones
+        $stmt2 = $pdo->prepare("SELECT code, commission_percentage, point_value FROM sales_codes WHERE user_id = :user_id AND deleted_at IS NULL LIMIT 1");
         $stmt2->bindValue(":user_id", $user_id);
         $stmt2->execute();
-        $code = $stmt2->fetchColumn();
-        $user['code'] = $code ?: '';
+        $sales_code_data = $stmt2->fetch();
+        $user['code'] = $sales_code_data['code'] ?? '';
+        $user['commission_percentage'] = $sales_code_data['commission_percentage'] ?? 20.00;
+        $user['point_value'] = $sales_code_data['point_value'] ?? 20.00;
     }
 
     return $user ?: [];
@@ -1792,7 +1794,9 @@ function request_get_offers($request_id)
 function request_get_sales_rep($request_id)
 {
     global $pdo;
-    $stmt = $pdo->prepare("SELECT sales_rep.id AS sales_rep_id, sales_rep.name AS sales_rep_name
+    $stmt = $pdo->prepare("SELECT sales_rep.id AS sales_rep_id, sales_rep.name AS sales_rep_name,
+            COALESCE(sales_codes.commission_percentage, 20.00) AS commission_percentage,
+            COALESCE(sales_codes.point_value, 20.00) AS point_value
         FROM requests
         JOIN users AS requestor ON requestor.id = requests.user_id
         JOIN customers_sales_codes csc ON csc.customer_id = requestor.id
@@ -1810,6 +1814,16 @@ function commission_get_detail($request)
     $sales_rep_commission = 0.0;
     $admin_commission = 0.0;
 
+    // Obtener valores personalizados del comercial (por defecto 20% y 20€)
+    $rep_commission_pct = 0.20; // 20% por defecto
+    $rep_point_value = 20.00;   // 20€ por defecto
+    if ($sales_rep && isset($request["sales_rep"]["commission_percentage"])) {
+        $rep_commission_pct = floatval($request["sales_rep"]["commission_percentage"]) / 100;
+    }
+    if ($sales_rep && isset($request["sales_rep"]["point_value"])) {
+        $rep_point_value = floatval($request["sales_rep"]["point_value"]);
+    }
+
     if ($request["active_offer"]["expires_at"] > date("Y-m-d")) {
         $category_id = intval($request["category_id"]);
         $total_amount = floatval($request["active_offer"]["total_amount"] ?? 0);
@@ -1821,7 +1835,7 @@ function commission_get_detail($request)
                 if ($is_current_month) {
                     $admin_commission = 150.00 * $commision;
                     if ($sales_rep) {
-                        $sales_rep_commission = 20.00 * $commision;
+                        $sales_rep_commission = $rep_point_value * $commision;
                         $admin_commission -= $sales_rep_commission;
                     }
                 }
@@ -1831,8 +1845,8 @@ function commission_get_detail($request)
                 if ($is_current_month) {
                     $admin_commission = 0.10 * $total_amount;
                     if ($sales_rep) {
-                        $sales_rep_commission = 0.20 * $admin_commission;
-                        $admin_commission *= 0.80;
+                        $sales_rep_commission = $rep_commission_pct * $admin_commission;
+                        $admin_commission *= (1 - $rep_commission_pct);
                     }
                 }
                 break;
@@ -1842,8 +1856,8 @@ function commission_get_detail($request)
                     $rate = ($total_amount >= 2000) ? 0.04 : 0.08;
                     $admin_commission = $rate * $total_amount;
                     if ($sales_rep) {
-                        $sales_rep_commission = 0.20 * $admin_commission;
-                        $admin_commission *= 0.80;
+                        $sales_rep_commission = $rep_commission_pct * $admin_commission;
+                        $admin_commission *= (1 - $rep_commission_pct);
                     }
                 }
                 break;
@@ -1852,8 +1866,8 @@ function commission_get_detail($request)
                 if ($is_current_month) {
                     $admin_commission = 0.50 * $total_amount;
                     if ($sales_rep) {
-                        $sales_rep_commission = 0.20 * $admin_commission;
-                        $admin_commission *= 0.80;
+                        $sales_rep_commission = $rep_commission_pct * $admin_commission;
+                        $admin_commission *= (1 - $rep_commission_pct);
                     }
                 }
                 break;
@@ -1862,8 +1876,8 @@ function commission_get_detail($request)
                 if ($is_current_month) {
                     $admin_commission = 0.20 * $total_amount;
                     if ($sales_rep) {
-                        $sales_rep_commission = 0.20 * $admin_commission;
-                        $admin_commission *= 0.80;
+                        $sales_rep_commission = $rep_commission_pct * $admin_commission;
+                        $admin_commission *= (1 - $rep_commission_pct);
                     }
                 }
                 break;
@@ -1883,6 +1897,7 @@ function commission_get_detail($request)
                         $rep_rate = 0;
                     }
                     if ($sales_rep && isset($rep_rate)) {
+                        // Kit digital usa tasas específicas, no la personalizada
                         $sales_rep_commission = $rep_rate * $admin_commission;
                         $admin_commission *= (1 - $rep_rate);
                     }
@@ -1893,8 +1908,8 @@ function commission_get_detail($request)
                 if ($is_current_month) {
                     $admin_commission = 0.15 * $total_amount;
                     if ($sales_rep) {
-                        $sales_rep_commission = 0.20 * $admin_commission;
-                        $admin_commission *= 0.80;
+                        $sales_rep_commission = $rep_commission_pct * $admin_commission;
+                        $admin_commission *= (1 - $rep_commission_pct);
                     }
                 }
                 break;
@@ -1902,6 +1917,7 @@ function commission_get_detail($request)
             case 36: // Subvenciones
                 if ($is_current_month) {
                     if ($sales_rep) {
+                        // Subvenciones usa tasas específicas según monto
                         $rep_rate = ($total_amount < 12000) ? 0.20 : 0.30;
                         $sales_rep_commission = $rep_rate * $admin_commission;
                         $admin_commission *= (1 - $rep_rate);
@@ -1915,8 +1931,8 @@ function commission_get_detail($request)
                 if ($is_current_month) {
                     $admin_commission = 0.20 * $total_amount;
                     if ($sales_rep) {
-                        $sales_rep_commission = 0.20 * $admin_commission;
-                        $admin_commission *= 0.80;
+                        $sales_rep_commission = $rep_commission_pct * $admin_commission;
+                        $admin_commission *= (1 - $rep_commission_pct);
                     }
                 }
                 break;
@@ -1925,6 +1941,7 @@ function commission_get_detail($request)
                 if ($is_current_month) {
                     $admin_commission = 0.15 * $total_amount;
                     if ($sales_rep) {
+                        // TPV usa 15% fijo, no personalizado
                         $sales_rep_commission = 0.15 * $admin_commission;
                         $admin_commission *= 0.85;
                     }
@@ -1935,8 +1952,8 @@ function commission_get_detail($request)
                 if ($is_current_month) {
                     $admin_commission = 0.20 * $total_amount;
                     if ($sales_rep) {
-                        $sales_rep_commission = 0.20 * $admin_commission;
-                        $admin_commission *= 0.80;
+                        $sales_rep_commission = $rep_commission_pct * $admin_commission;
+                        $admin_commission *= (1 - $rep_commission_pct);
                     }
                 }
                 break;

@@ -100,6 +100,9 @@ $scripts = ["bold-submit"];
                         <option value="100">100</option>
                     </select>
                 </div>
+                <button type="button" class="btn btn-sm btn-light-success" id="btn-export-csv" onclick="exportAdvisoriesCSV()">
+                    <i class="ki-outline ki-file-down me-1"></i>CSV
+                </button>
                 <button type="button" class="btn btn-primary btn-sm" id="btnNewAdvisory">
                     <i class="ki-outline ki-plus me-1"></i>
                     Nueva Asesoría
@@ -558,6 +561,36 @@ $scripts = ["bold-submit"];
             state.currentPage = 1;
             loadData();
         }, 300);
+    };
+
+    window.exportAdvisoriesCSV = async function() {
+        const btn = document.getElementById('btn-export-csv');
+        const originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+        try {
+            const params = new URLSearchParams({ page: 1, limit: 10000, search: state.searchQuery, status: state.statusFilter, plan: state.planFilter });
+            const response = await fetch(`${API_URL}?${params}`);
+            const result = await response.json();
+            if (result.status === 'ok' && result.data?.data?.length > 0) {
+                const items = result.data.data;
+                let csv = 'ID;Nombre;CIF;Email;Teléfono;Plan;Estado;Clientes;Fecha Registro\n';
+                items.forEach(a => {
+                    csv += [a.id, '"'+(a.name||'')+'"', '"'+(a.cif||'')+'"', '"'+(a.email||'')+'"', '"'+(a.phone||'')+'"', '"'+(a.plan||'')+'"', '"'+(a.status||'')+'"', a.customers_count||0, a.created_at||''].join(';') + '\n';
+                });
+                const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'asesorias_' + new Date().toISOString().slice(0,10) + '.csv';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                if (typeof Swal !== 'undefined') Swal.fire({ icon: 'success', title: 'CSV exportado', text: items.length + ' registros', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+            } else {
+                if (typeof Swal !== 'undefined') Swal.fire({ icon: 'warning', title: 'Sin datos', text: 'No hay asesorías para exportar' });
+            }
+        } catch (e) { console.error(e); }
+        finally { btn.disabled = false; btn.innerHTML = originalHtml; }
     };
 
     // Init

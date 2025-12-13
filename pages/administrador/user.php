@@ -372,12 +372,79 @@ $role_label_cap = $is_comercial ? "Comercial" : "Proveedor";
                     <!-- Tab: Comisiones (solo comerciales) -->
                     <div class="tab-pane fade" id="tab-commissions" role="tabpanel">
                         <div class="tab-pane-content" style="padding: 1.5rem;">
-                            <div class="empty-state">
-                                <div class="empty-state-icon">
+                            <div class="details-section">
+                                <h6 class="details-section-title">
                                     <i class="ki-outline ki-dollar"></i>
+                                    Configuración de comisiones
+                                </h6>
+
+                                <div class="alert alert-info mb-4">
+                                    <i class="ki-outline ki-information-2 me-2"></i>
+                                    <strong>Por defecto:</strong> 20% sobre la comisión de Facilitame y 20€ por punto.
+                                    Aquí puedes configurar valores personalizados para este comercial.
                                 </div>
-                                <div class="empty-state-title">Sección de comisiones</div>
-                                <p class="empty-state-text">Funcionalidad en desarrollo</p>
+
+                                <form action="api/sales-rep-update-commissions" data-reload="1">
+                                    <input type="hidden" name="sales_rep_id" value="<?php echo $sales_rep["id"] ?>">
+
+                                    <div class="row g-4">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Porcentaje sobre comisión de Facilitame</label>
+                                            <div class="input-group">
+                                                <input type="number"
+                                                       name="commission_percentage"
+                                                       class="form-control"
+                                                       step="0.01"
+                                                       min="0"
+                                                       max="100"
+                                                       value="<?php echo number_format($sales_rep["commission_percentage"] ?? 20, 2, '.', ''); ?>">
+                                                <span class="input-group-text">%</span>
+                                            </div>
+                                            <div class="form-text">
+                                                Si Facilitame gana 100€, este comercial recibirá el <?php echo number_format($sales_rep["commission_percentage"] ?? 20, 0); ?>% = <?php echo number_format(($sales_rep["commission_percentage"] ?? 20), 0); ?>€
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Valor por punto</label>
+                                            <div class="input-group">
+                                                <input type="number"
+                                                       name="point_value"
+                                                       class="form-control"
+                                                       step="0.01"
+                                                       min="0"
+                                                       value="<?php echo number_format($sales_rep["point_value"] ?? 20, 2, '.', ''); ?>">
+                                                <span class="input-group-text">€</span>
+                                            </div>
+                                            <div class="form-text">
+                                                Por cada punto generado, el comercial recibirá esta cantidad
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end mt-4">
+                                        <button type="submit" class="btn btn-primary bold-submit">
+                                            <i class="ki-outline ki-check me-1"></i>
+                                            Guardar configuración
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <hr class="my-5">
+
+                            <!-- Resumen de comisiones -->
+                            <div class="details-section">
+                                <h6 class="details-section-title">
+                                    <i class="ki-outline ki-chart-simple"></i>
+                                    Resumen de comisiones
+                                </h6>
+
+                                <p class="text-muted">
+                                    Para ver el historial detallado de comisiones, ve a
+                                    <a href="/commissions" class="text-primary">Comisiones</a>
+                                    y filtra por este comercial.
+                                </p>
                             </div>
                         </div>
                     </div>

@@ -146,6 +146,9 @@ $tagLabels = [
                         <option value="3">T3 (Jul-Sep)</option>
                         <option value="4">T4 (Oct-Dic)</option>
                     </select>
+                    <button type="button" class="btn btn-sm btn-light-success" id="btn-export-csv" onclick="exportInvoicesCSV()">
+                        <i class="ki-outline ki-file-down me-1"></i>CSV
+                    </button>
                     <button type="button" class="btn btn-sm btn-primary-facilitame" data-bs-toggle="modal" data-bs-target="#modal_upload_invoices">
                         <i class="ki-outline ki-plus fs-4 me-1"></i>Subir Facturas
                     </button>
@@ -553,6 +556,71 @@ $tagLabels = [
     
     window.filterAdvisoryInvoices = window.filterInvoices;
     window.reloadInvoices = function() { loadData(); };
+
+    // Función de exportar CSV
+    window.exportInvoicesCSV = async function() {
+        var btn = document.getElementById('btn-export-csv');
+        var originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+
+        try {
+            var params = new URLSearchParams({
+                page: 1,
+                limit: 10000,
+                tag: state.tag,
+                status: state.status,
+                type: state.type,
+                month: state.month,
+                quarter: state.quarter
+            });
+
+            var response = await fetch(API_URL + '?' + params);
+            var result = await response.json();
+
+            if (result.status === 'ok' && result.data && result.data.data.length > 0) {
+                var items = result.data.data;
+                var headers = ['ID', 'Cliente', 'NIF/CIF', 'Archivo', 'Tipo', 'Etiqueta', 'Estado', 'Fecha'];
+                var csv = headers.join(';') + '\n';
+
+                items.forEach(function(inv) {
+                    var row = [
+                        inv.id,
+                        '"' + (inv.customer_name || '').replace(/"/g, '""') + '"',
+                        '"' + (inv.nif_cif || '').replace(/"/g, '""') + '"',
+                        '"' + (inv.filename || '').replace(/"/g, '""') + '"',
+                        inv.type || '',
+                        '"' + (tagLabels[inv.tag] || inv.tag || '').replace(/"/g, '""') + '"',
+                        inv.is_processed ? 'Procesada' : 'Pendiente',
+                        inv.created_at_formatted || ''
+                    ];
+                    csv += row.join(';') + '\n';
+                });
+
+                var filename = 'facturas_asesoria_' + new Date().toISOString().slice(0, 10) + '.csv';
+                var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+                var link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({ icon: 'success', title: 'CSV exportado', text: items.length + ' registros', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+                }
+            } else {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({ icon: 'warning', title: 'Sin datos', text: 'No hay facturas para exportar' });
+                }
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+        }
+    };
     
     // ============================================
     // MODAL: SUBIR FACTURAS

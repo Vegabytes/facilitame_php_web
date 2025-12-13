@@ -18,6 +18,9 @@
                     <option value="50">50</option>
                 </select>
             </div>
+            <button type="button" class="btn btn-sm btn-light-success" id="btn-export-csv" onclick="exportInvoicesCSV()">
+                <i class="ki-outline ki-file-down me-1"></i>CSV
+            </button>
         </div>
         
         <!-- Listado -->
@@ -374,7 +377,37 @@
     };
     
     window.reloadInvoices = () => loadData();
-    
+
+    window.exportInvoicesCSV = async function() {
+        const btn = document.getElementById('btn-export-csv');
+        const originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+        try {
+            const params = new URLSearchParams({ page: 1, limit: 10000, search: state.searchQuery });
+            const response = await fetch(`${API_URL}?${params}`);
+            const result = await response.json();
+            if (result.status === 'ok' && result.data?.data?.length > 0) {
+                const items = result.data.data;
+                let csv = 'ID;Solicitud;Cliente;Fecha;Descripción;Archivo\n';
+                items.forEach(i => {
+                    csv += [i.id, i.request_id||'', '"'+(i.customer_name||'')+'"', i.invoice_date||'', '"'+(i.description||'').replace(/"/g,'""')+'"', '"'+(i.filename||'')+'"'].join(';') + '\n';
+                });
+                const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'facturas_proveedor_' + new Date().toISOString().slice(0,10) + '.csv';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                if (typeof Swal !== 'undefined') Swal.fire({ icon: 'success', title: 'CSV exportado', text: items.length + ' registros', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+            } else {
+                if (typeof Swal !== 'undefined') Swal.fire({ icon: 'warning', title: 'Sin datos', text: 'No hay facturas para exportar' });
+            }
+        } catch (e) { console.error(e); }
+        finally { btn.disabled = false; btn.innerHTML = originalHtml; }
+    };
+
     // Init
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
