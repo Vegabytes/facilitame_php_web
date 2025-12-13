@@ -154,7 +154,6 @@ Expansión (Upgrade de plan)
 | **Frontend** | PHP + JavaScript + Bootstrap |
 | **Backend** | PHP 8.x |
 | **Base de datos** | MySQL 8.x |
-| **Pagos** | Stripe |
 | **OCR** | Inmatic API |
 | **Calendario** | Google Calendar API |
 | **Hosting** | Servidor dedicado/VPS |
@@ -164,7 +163,6 @@ Expansión (Upgrade de plan)
 
 | Sistema | Estado | Plan mínimo |
 |---------|--------|-------------|
-| **Stripe** | Activo | Todos |
 | **Google Calendar** | Activo | Estándar+ |
 | **Inmatic** | Activo | Pro+ |
 | **Email (SMTP)** | Activo | Todos |
@@ -266,13 +264,11 @@ advisories (1) <----+------+
 | **Backups** | Copias diarias automatizadas |
 | **Acceso** | Control por roles |
 | **APIs** | Tokens de autenticación |
-| **Pagos** | PCI DSS vía Stripe |
 
 ### 8.2 Cumplimiento normativo
 
 - **GDPR:** Gestión de consentimientos, derecho al olvido
 - **LOPD:** Registro de actividades de tratamiento
-- **PCI DSS:** Delegado a Stripe (sin datos de tarjetas en servidor)
 
 ### 8.3 Recomendaciones futuras
 
@@ -296,7 +292,6 @@ advisories (1) <----+------+
 - [x] Sistema de ofertas
 - [x] Integración Inmatic (OCR)
 - [x] Integración Google Calendar
-- [x] Sistema de suscripciones (Stripe)
 - [x] Panel de administración
 - [x] Sistema de comerciales
 
@@ -359,7 +354,6 @@ advisories (1) <----+------+
 | Categoría | % del ingreso |
 |-----------|---------------|
 | **Hosting/Infraestructura** | 5-8% |
-| **Stripe (comisiones)** | 2-3% |
 | **Inmatic (si aplicable)** | Variable |
 | **Soporte** | 10-15% |
 | **Desarrollo** | 15-20% |
@@ -431,7 +425,6 @@ Dirección (1)
 | Churn alto | Media | Alto | Onboarding, soporte |
 | Fallo técnico | Baja | Alto | Redundancia, backups |
 | Regulatorio | Baja | Medio | Cumplimiento proactivo |
-| Dependencia Stripe | Baja | Alto | Alternativas (Redsys) |
 | Ciberataque | Media | Alto | Seguridad, seguros |
 
 ### 13.2 Plan de contingencia
@@ -477,7 +470,6 @@ Dirección (1)
 
 | Servicio | Proveedor | Contacto |
 |----------|-----------|----------|
-| **Pagos** | Stripe | dashboard.stripe.com |
 | **OCR** | Inmatic | inmatic.ai |
 | **Hosting** | [Proveedor] | [Portal] |
 | **Dominio** | [Registrador] | [Portal] |
@@ -506,7 +498,6 @@ Dirección (1)
 - [ ] Plan de comunicación
 - [ ] Términos y condiciones legales
 - [ ] Política de privacidad
-- [ ] Configuración de Stripe (producción)
 - [ ] DNS y SSL configurados
 
 ### 16.2 Lanzamiento

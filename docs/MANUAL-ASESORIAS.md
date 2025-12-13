@@ -415,51 +415,6 @@ Para probar Inmatic sin plan Pro:
 
 ---
 
-## 11. Suscripción y Pagos
-
-### 11.1 Ver mi plan actual
-
-1. Ve a **"Suscripción"** en el menú
-2. Verás:
-   - Plan actual
-   - Precio
-   - Fecha de renovación
-   - Estado
-
-### 11.2 Cambiar de plan
-
-1. Ve a **"Suscripción"**
-2. Selecciona el nuevo plan
-3. Confirma el cambio
-4. Se te redirige a Stripe para el pago
-5. El plan se activa inmediatamente
-
-### 11.3 Gestionar método de pago
-
-1. Ve a **"Suscripción"**
-2. Haz clic en **"Gestionar"**
-3. Se abre el portal de Stripe donde puedes:
-   - Actualizar tarjeta
-   - Ver facturas
-   - Descargar recibos
-
-### 11.4 Cancelar suscripción
-
-1. Ve a **"Suscripción"**
-2. Haz clic en **"Cancelar"**
-3. La suscripción se cancela al final del periodo
-4. Mantienes acceso hasta entonces
-5. Puedes reactivar en cualquier momento
-
-### 11.5 Facturas de pago
-
-En el portal de Stripe puedes:
-- Ver historial de pagos
-- Descargar facturas en PDF
-- Actualizar datos de facturación
-
----
-
 ## 12. Configuración
 
 ### 12.1 Datos de la asesoría
@@ -629,7 +584,6 @@ Sí. En Configuración puedes exportar:
 | **Código de asesoría** | Identificador único para vincular clientes |
 | **OCR** | Reconocimiento óptico de caracteres |
 | **Inmatic** | Software de procesamiento de facturas |
-| **Stripe** | Plataforma de pagos |
 | **API** | Interfaz de programación |
 | **Webhook** | Notificación automática entre sistemas |
 | **Token** | Clave de acceso a servicios |

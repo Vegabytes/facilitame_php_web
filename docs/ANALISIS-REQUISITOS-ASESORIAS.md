@@ -322,9 +322,9 @@ Cuando estado != 'activo', la asesoria NO deberia poder:
 3. Configurar webhooks
 4. Crear interfaz en frontend
 
-### Fase 5: Sistema de Pagos (2-4 semanas)
+### Fase 5: Sistema de Pagos (futuro)
 
-1. Integrar pasarela de pagos (Stripe/Redsys)
+1. Integrar pasarela de pagos (Redsys u otra)
 2. Sistema de suscripciones
 3. Facturacion automatica
 4. Gestion de upgrades/downgrades

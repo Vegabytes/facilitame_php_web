@@ -3006,3 +3006,67 @@ function isGoogleCalendarConnected($user_id)
         return false;
     }
 }
+
+/**
+ * Obtiene la configuración del menú para un rol específico
+ *
+ * @param int $role_id ID del rol
+ * @return array Configuración del menú (menu_key => is_visible)
+ */
+function get_menu_config($role_id)
+{
+    global $pdo;
+    static $cache = [];
+
+    if (isset($cache[$role_id])) {
+        return $cache[$role_id];
+    }
+
+    try {
+        $stmt = $pdo->prepare("SELECT menu_key, is_visible FROM menu_config WHERE role_id = ?");
+        $stmt->execute([$role_id]);
+        $rows = $stmt->fetchAll();
+
+        $config = [];
+        foreach ($rows as $row) {
+            $config[$row['menu_key']] = (bool)$row['is_visible'];
+        }
+
+        $cache[$role_id] = $config;
+        return $config;
+    } catch (Exception $e) {
+        return [];
+    }
+}
+
+/**
+ * Verifica si un item del menú debe mostrarse para el rol actual
+ *
+ * @param string $menu_key Clave del item del menú
+ * @param int $role_id ID del rol (opcional, usa el del usuario actual)
+ * @return bool True si debe mostrarse
+ */
+function is_menu_visible($menu_key, $role_id = null)
+{
+    if ($role_id === null) {
+        // Mapeo de roles a IDs
+        $role_map = [
+            'particular' => 1, 'autonomo' => 1, 'empresa' => 1,
+            'administrador' => 2,
+            'proveedor' => 4,
+            'comercial' => 7,
+            'asesoria' => 8,
+        ];
+        $role_id = $role_map[USER['role']] ?? 1;
+    }
+
+    $config = get_menu_config($role_id);
+
+    // Si no hay configuración, mostrar por defecto
+    if (empty($config)) {
+        return true;
+    }
+
+    // Si el item no está en la configuración, mostrar por defecto
+    return $config[$menu_key] ?? true;
+}
