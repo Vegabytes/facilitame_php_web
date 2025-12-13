@@ -18,5 +18,5 @@ try
 }
 catch (Throwable $e)
 {
-    json_response("ko", MSG, 3336631781);
+    json_response("ko", "Error interno del servidor", 3336631781);
 }

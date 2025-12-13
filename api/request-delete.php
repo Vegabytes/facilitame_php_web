@@ -3,7 +3,7 @@
 
 $request_id = $_POST["request_id"] ?? null;
 if (!$request_id || !user_can_access_request($request_id)) {
-    json_response("ko", MSG, 1039333056);
+    json_response("ko", "No tienes acceso a esta solicitud", 1039333056);
 }
 
 $reason_raw = isset($_POST["reason"]) ? (string)$_POST["reason"] : '';
@@ -168,5 +168,5 @@ try {
     if (defined('DEBUG') && DEBUG) {
         json_response("ko", $e->getMessage(), 3795313703);
     }
-    json_response("ko", MSG, 3795313703);
+    json_response("ko", "Error al eliminar la solicitud", 3795313703);
 }

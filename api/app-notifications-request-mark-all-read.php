@@ -25,5 +25,5 @@ catch (Throwable $e)
 {
     $pdo->rollBack();
     file_put_contents($file_name_dir, date("d/m/Y H:i:s") . " : " . $e->getMessage() . "\n", FILE_APPEND | LOCK_EX);
-    json_response("ko", MSG, 4147438577);
+    json_response("ko", "Error interno del servidor", 4147438577);
 }

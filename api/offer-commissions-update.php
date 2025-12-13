@@ -34,6 +34,6 @@ catch (Throwable $e)
     }
     else
     {
-        json_response("ko", MSG, 666666);
+        json_response("ko", "Error al actualizar la comisión", 666666);
     }
 }

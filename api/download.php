@@ -24,7 +24,7 @@ if ($_POST["type"] == "offer")
 
 if ($res === false)
 {
-    json_response("ko", MSG, 3390297074);
+    json_response("ko", "Archivo no encontrado", 3390297074);
 }
 
 if (!user_can_access_request($res["request_id"]))

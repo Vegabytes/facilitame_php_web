@@ -52,10 +52,6 @@ $statusConfig = [
                     <!-- Meta -->
                     <div class="list-card-meta">
                         <span class="meta-item">
-                            <i class="ki-outline ki-profile-circle"></i>
-                            <?= htmlspecialchars($o["provider_name"]) ?>
-                        </span>
-                        <span class="meta-item">
                             <i class="ki-outline ki-calendar"></i>
                             <?= fdate($o["created_at"]) ?>
                         </span>

@@ -13,6 +13,8 @@ $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $tag = isset($_GET['tag']) ? trim($_GET['tag']) : '';
 $status = isset($_GET['status']) ? trim($_GET['status']) : '';
 $type = isset($_GET['type']) ? trim($_GET['type']) : '';
+$month = isset($_GET['month']) ? intval($_GET['month']) : 0;
+$quarter = isset($_GET['quarter']) ? intval($_GET['quarter']) : 0;
 $offset = ($page - 1) * $limit;
 
 try {
@@ -95,7 +97,28 @@ try {
         $whereConditions[] = "ai.type = ?";
         $params[] = $type;
     }
-    
+
+    // Filtro por mes
+    if ($month > 0 && $month <= 12) {
+        $whereConditions[] = "ai.month = ?";
+        $params[] = $month;
+    }
+
+    // Filtro por trimestre
+    if ($quarter > 0 && $quarter <= 4) {
+        $quarterMonths = [
+            1 => [1, 2, 3],
+            2 => [4, 5, 6],
+            3 => [7, 8, 9],
+            4 => [10, 11, 12]
+        ];
+        $months = $quarterMonths[$quarter];
+        $whereConditions[] = "ai.month IN (?, ?, ?)";
+        $params[] = $months[0];
+        $params[] = $months[1];
+        $params[] = $months[2];
+    }
+
     $whereClause = implode(' AND ', $whereConditions);
     
     // Obtener estadísticas globales (sin filtros de búsqueda/tag/status/type)

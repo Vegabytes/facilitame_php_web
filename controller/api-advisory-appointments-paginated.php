@@ -75,7 +75,7 @@ try {
     $sql = "
         SELECT 
             aa.*,
-            CONCAT(u.name, ' ', u.lastname) as customer_name,
+            CONCAT(u.name, ' ', COALESCE(u.lastname, '')) as customer_name,
             u.email as customer_email,
             COALESCE(unread.cnt, 0) as unread_messages
         FROM advisory_appointments aa

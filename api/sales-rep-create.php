@@ -74,5 +74,5 @@ try
 catch (Throwable $e)
 {
     $pdo->rollBack();
-    json_response("ko", MSG, 3472890866);
+    json_response("ko", "Error al crear el comercial", 3472890866);
 }

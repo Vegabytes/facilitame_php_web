@@ -16,7 +16,7 @@ $res = $stmt->fetch();
 
 if ($res === false)
 {
-    json_response("ko", MSG, 3390297074);
+    json_response("ko", "Documento no encontrado", 3390297074);
 }
 
 if (!user_can_access_request($res["request_id"]))

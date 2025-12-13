@@ -75,35 +75,7 @@ $isDeleted = ((int)$request["status_id"] === 9 || !is_null($request["deleted_at"
                     <!-- Tab: Ofertas (solo lectura) -->
                     <div class="tab-pane fade show active" id="tab-offers" role="tabpanel">
                         <div class="request-list-scroll" style="padding: 1rem 1.25rem;">
-                            <?php if (empty($offers)) : ?>
-                                <div class="empty-state empty-state-compact">
-                                    <div class="empty-state-icon"><i class="ki-outline ki-dollar"></i></div>
-                                    <p class="empty-state-text">No hay ofertas registradas</p>
-                                </div>
-                            <?php else : ?>
-                                <?php foreach ($offers as $offer) : ?>
-                                    <div class="list-card list-card-<?php echo $offer['status_id'] == 1 ? 'warning' : ($offer['status_id'] == 2 ? 'success' : 'muted'); ?> mb-2">
-                                        <div class="list-card-content">
-                                            <div class="list-card-title">
-                                                <?php secho($offer['title'] ?? 'Sin título'); ?>
-                                            </div>
-                                            <div class="list-card-meta">
-                                                <span><i class="ki-outline ki-calendar"></i> <?php echo fdate($offer['created_at']); ?></span>
-                                           <span class="badge-status badge-status-<?php echo $offer['status_id'] == 1 ? 'warning' : ($offer['status_id'] == 3 ? 'success' : 'muted'); ?>">
-    <?php echo $offer['status_id'] == 1 ? 'Pendiente' : ($offer['status_id'] == 3 ? 'Aceptada' : ($offer['status_id'] == 4 ? 'Rechazada' : 'Otro')); ?>
-</span>
-                                            </div>
-                                        </div>
-                                        <?php if (!empty($offer['file'])) : ?>
-                                        <div class="list-card-actions">
-                                            <a href="<?php echo MEDIA_DIR . '/' . $offer['file']; ?>" target="_blank" class="btn-icon btn-icon-info" title="Ver documento">
-                                                <i class="ki-outline ki-file"></i>
-                                            </a>
-                                        </div>
-                                        <?php endif; ?>
-                                    </div>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
+                            <?php require COMPONENTS_DIR . "/request-offers-comercial.php"; ?>
                         </div>
                     </div>
                     
@@ -116,21 +88,28 @@ $isDeleted = ((int)$request["status_id"] === 9 || !is_null($request["deleted_at"
                                     <p class="empty-state-text">No hay documentos adjuntos</p>
                                 </div>
                             <?php else : ?>
-                                <?php foreach ($documents as $doc) : ?>
+                                <?php
+                                $base_url = ROOT_URL . "/" . DOCUMENTS_DIR . "/";
+                                foreach ($documents as $doc) :
+                                    $file_url = $base_url . rawurlencode($doc["url"]);
+                                    $filename = $doc["filename"] ?? "Archivo";
+                                    $file_type = $file_types_kp[$doc["file_type_id"]] ?? "Documento";
+                                ?>
                                     <div class="list-card list-card-primary mb-2">
                                         <div class="list-card-content">
                                             <div class="list-card-title">
-                                                <?php secho($doc['file_name'] ?? $doc['name'] ?? 'Documento'); ?>
+                                                <?php secho($filename); ?>
                                             </div>
                                             <div class="list-card-meta">
                                                 <span><i class="ki-outline ki-calendar"></i> <?php echo fdate($doc['created_at']); ?></span>
-                                                <?php if (!empty($doc['type_name'])) : ?>
-                                                    <span class="badge-status badge-status-info"><?php secho($doc['type_name']); ?></span>
-                                                <?php endif; ?>
+                                                <span class="badge-status badge-status-info"><?php secho($file_type); ?></span>
                                             </div>
                                         </div>
                                         <div class="list-card-actions">
-                                            <a href="<?php echo MEDIA_DIR . '/' . $doc['file']; ?>" target="_blank" class="btn-icon" title="Descargar">
+                                            <a href="<?php echo $file_url; ?>" target="_blank" class="btn-icon btn-icon-primary" title="Ver documento">
+                                                <i class="ki-outline ki-eye"></i>
+                                            </a>
+                                            <a href="<?php echo $file_url; ?>" download="<?php secho($filename); ?>" class="btn-icon btn-icon-success" title="Descargar">
                                                 <i class="ki-outline ki-cloud-download"></i>
                                             </a>
                                         </div>

@@ -1233,20 +1233,62 @@ function get_notifications($limit = 20)
     } else {
         $user_id = USER["id"];
 
-        // Fast unread count
+        // Fast unread count - notificaciones estándar
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM notifications WHERE receiver_id = ? AND status = 0");
         $stmt->execute([$user_id]);
         $unread_count = (int)$stmt->fetchColumn();
 
+        // Contar comunicaciones de asesoría no leídas (solo para clientes)
+        if (cliente()) {
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM advisory_communication_recipients WHERE customer_id = ? AND is_read = 0");
+            $stmt->execute([$user_id]);
+            $unread_count += (int)$stmt->fetchColumn();
+        }
+
         // Limited notifications (incluir sender_id para navegación en asesoria)
         $order = IS_MOBILE_APP ? "created_at DESC" : "status ASC, created_at DESC";
-        $stmt = $pdo->prepare("SELECT id, request_id, sender_id, description, status, created_at
+        $stmt = $pdo->prepare("SELECT id, request_id, sender_id, description, status, created_at, 'notification' as type
             FROM notifications
             WHERE receiver_id = ?
             ORDER BY $order
             LIMIT " . (int)$limit);
         $stmt->execute([$user_id]);
         $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Añadir comunicaciones de asesoría para clientes
+        if (cliente()) {
+            $stmt = $pdo->prepare("
+                SELECT
+                    acr.id,
+                    NULL as request_id,
+                    ac.advisory_id as sender_id,
+                    CONCAT('📢 ', ac.subject) as description,
+                    CASE WHEN acr.is_read = 1 THEN 1 ELSE 0 END as status,
+                    ac.created_at,
+                    'communication' as type,
+                    ac.id as communication_id
+                FROM advisory_communication_recipients acr
+                INNER JOIN advisory_communications ac ON ac.id = acr.communication_id
+                WHERE acr.customer_id = ?
+                ORDER BY acr.is_read ASC, ac.created_at DESC
+                LIMIT " . (int)$limit);
+            $stmt->execute([$user_id]);
+            $communications = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Combinar y ordenar por fecha
+            $res = array_merge($res, $communications);
+            usort($res, function($a, $b) {
+                // Primero no leídas (status 0)
+                if ($a['status'] != $b['status']) {
+                    return $a['status'] - $b['status'];
+                }
+                // Luego por fecha descendente
+                return strtotime($b['created_at']) - strtotime($a['created_at']);
+            });
+
+            // Limitar al total solicitado
+            $res = array_slice($res, 0, $limit);
+        }
     }
 
     // Calculate time_from only for limited results

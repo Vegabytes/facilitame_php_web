@@ -58,7 +58,7 @@ try {
         // Verificar si el usuario tiene otros roles antes de eliminar
         $stmt = $pdo->prepare("
             SELECT COUNT(*) FROM model_has_roles
-            WHERE model_id = :user_id AND model_type = 'App\\\\Models\\\\User' AND role_id != 5
+            WHERE model_id = :user_id AND model_type = 'App\\\\Models\\\\User' AND role_id != 8
         ");
         $stmt->execute([':user_id' => $advisory['user_id']]);
         $hasOtherRoles = $stmt->fetchColumn() > 0;
@@ -66,7 +66,7 @@ try {
         // Eliminar rol de asesoría
         $stmt = $pdo->prepare("
             DELETE FROM model_has_roles
-            WHERE model_id = :user_id AND model_type = 'App\\\\Models\\\\User' AND role_id = 5
+            WHERE model_id = :user_id AND model_type = 'App\\\\Models\\\\User' AND role_id = 8
         ");
         $stmt->execute([':user_id' => $advisory['user_id']]);
 

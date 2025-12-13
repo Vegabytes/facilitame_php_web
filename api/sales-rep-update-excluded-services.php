@@ -37,5 +37,5 @@ try
 catch (Throwable $e)
 {
     $pdo->rollBack();
-    json_response("ko", MSG, 3440016322);
+    json_response("ko", "Error al actualizar exclusiones", 3440016322);
 }

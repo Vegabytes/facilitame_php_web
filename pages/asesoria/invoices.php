@@ -124,6 +124,28 @@ $tagLabels = [
                         <option value="pending">Pendiente</option>
                         <option value="processed">Procesada</option>
                     </select>
+                    <select class="form-select form-select-sm" id="inv-filter-month">
+                        <option value="">Mes</option>
+                        <option value="1">Enero</option>
+                        <option value="2">Febrero</option>
+                        <option value="3">Marzo</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Mayo</option>
+                        <option value="6">Junio</option>
+                        <option value="7">Julio</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                    <select class="form-select form-select-sm" id="inv-filter-quarter">
+                        <option value="">Trimestre</option>
+                        <option value="1">T1 (Ene-Mar)</option>
+                        <option value="2">T2 (Abr-Jun)</option>
+                        <option value="3">T3 (Jul-Sep)</option>
+                        <option value="4">T4 (Oct-Dic)</option>
+                    </select>
                     <button type="button" class="btn btn-sm btn-primary-facilitame" data-bs-toggle="modal" data-bs-target="#modal_upload_invoices">
                         <i class="ki-outline ki-plus fs-4 me-1"></i>Subir Facturas
                     </button>
@@ -300,6 +322,8 @@ $tagLabels = [
         tag: '',
         status: '',
         type: '',
+        month: '',
+        quarter: '',
         totalPages: 1,
         totalRecords: 0,
         isLoading: false
@@ -314,16 +338,32 @@ $tagLabels = [
     var tagFilter = document.getElementById('inv-filter-tag');
     var statusFilter = document.getElementById('inv-filter-status');
     var typeFilter = document.getElementById('inv-filter-type');
+    var monthFilter = document.getElementById('inv-filter-month');
+    var quarterFilter = document.getElementById('inv-filter-quarter');
     var paginationContainer = document.getElementById('inv-pagination');
-    
+
     var searchTimeout = null;
-    
+
     function init() {
         prevBtn.addEventListener('click', function() { goToPage(state.currentPage - 1); });
         nextBtn.addEventListener('click', function() { goToPage(state.currentPage + 1); });
         tagFilter.addEventListener('change', function(e) { state.tag = e.target.value; state.currentPage = 1; loadData(); });
         statusFilter.addEventListener('change', function(e) { state.status = e.target.value; state.currentPage = 1; loadData(); });
         typeFilter.addEventListener('change', function(e) { state.type = e.target.value; state.currentPage = 1; loadData(); });
+        monthFilter.addEventListener('change', function(e) {
+            state.month = e.target.value;
+            state.quarter = '';
+            quarterFilter.value = '';
+            state.currentPage = 1;
+            loadData();
+        });
+        quarterFilter.addEventListener('change', function(e) {
+            state.quarter = e.target.value;
+            state.month = '';
+            monthFilter.value = '';
+            state.currentPage = 1;
+            loadData();
+        });
         loadData();
         initUploadModal();
     }
@@ -333,13 +373,15 @@ $tagLabels = [
         state.isLoading = true;
         showLoading();
         
-        var params = new URLSearchParams({ 
-            page: state.currentPage, 
-            limit: state.pageSize, 
-            search: state.searchQuery, 
-            tag: state.tag, 
+        var params = new URLSearchParams({
+            page: state.currentPage,
+            limit: state.pageSize,
+            search: state.searchQuery,
+            tag: state.tag,
             status: state.status,
-            type: state.type
+            type: state.type,
+            month: state.month,
+            quarter: state.quarter
         });
         
         fetch(API_URL + '?' + params)

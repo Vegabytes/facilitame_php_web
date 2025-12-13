@@ -125,13 +125,23 @@ $tags = [
                     <label for="filter-month">Mes:</label>
                     <select id="filter-month" class="form-select form-select-sm">
                         <option value="">Todos</option>
-                        <?php 
-                        $months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                        <?php
+                        $months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
                                   'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-                        foreach ($months as $idx => $month): 
+                        foreach ($months as $idx => $month):
                         ?>
                         <option value="<?php echo $idx + 1; ?>"><?php echo $month; ?></option>
                         <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="pagination-size">
+                    <label for="filter-quarter">Trimestre:</label>
+                    <select id="filter-quarter" class="form-select form-select-sm">
+                        <option value="">Todos</option>
+                        <option value="1">T1 (Ene-Mar)</option>
+                        <option value="2">T2 (Abr-Jun)</option>
+                        <option value="3">T3 (Jul-Sep)</option>
+                        <option value="4">T4 (Oct-Dic)</option>
                     </select>
                 </div>
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal_send_invoice">
@@ -625,14 +635,22 @@ $tags = [
     const filesPreview = document.getElementById('files-preview');
     const formSendInvoice = document.getElementById('form_send_invoice');
     const filterMonth = document.getElementById('filter-month');
+    const filterQuarter = document.getElementById('filter-quarter');
     const filterTag = document.getElementById('filter-tag');
     const filterType = document.getElementById('filter-type');
-    
+
     function init() {
         if (!listContainer) return;
-        
+
         // Filtros
-        filterMonth?.addEventListener('change', resetAndLoad);
+        filterMonth?.addEventListener('change', function() {
+            if (filterQuarter) filterQuarter.value = '';
+            resetAndLoad();
+        });
+        filterQuarter?.addEventListener('change', function() {
+            if (filterMonth) filterMonth.value = '';
+            resetAndLoad();
+        });
         filterTag?.addEventListener('change', resetAndLoad);
         filterType?.addEventListener('change', resetAndLoad);
         
@@ -806,6 +824,7 @@ $tags = [
             const params = new URLSearchParams({
                 page: currentPage,
                 month: filterMonth?.value || '',
+                quarter: filterQuarter?.value || '',
                 tag: filterTag?.value || '',
                 type: filterType?.value || '',
                 search: searchQuery

@@ -22,5 +22,5 @@ try
 catch (Throwable $e)
 {
     $pdo->rollBack();
-    json_response("ko", MSG, 3665872587);
+    json_response("ko", "Error interno del servidor", 3665872587);
 }

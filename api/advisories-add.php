@@ -96,8 +96,8 @@ try {
             $stmt->execute([':user_id' => $user_id]);
             $roles = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-            if (!in_array(5, $roles)) { // 5 = rol asesoria
-                $stmt = $pdo->prepare("INSERT INTO model_has_roles (role_id, model_type, model_id) VALUES (5, 'App\\\\Models\\\\User', :user_id)");
+            if (!in_array(8, $roles)) { // 8 = rol asesoria
+                $stmt = $pdo->prepare("INSERT INTO model_has_roles (role_id, model_type, model_id) VALUES (8, 'App\\\\Models\\\\User', :user_id)");
                 $stmt->execute([':user_id' => $user_id]);
             }
         } else {
@@ -119,7 +119,7 @@ try {
             $user_id = $pdo->lastInsertId();
 
             // Asignar rol de asesoría
-            $stmt = $pdo->prepare("INSERT INTO model_has_roles (role_id, model_type, model_id) VALUES (5, 'App\\\\Models\\\\User', :user_id)");
+            $stmt = $pdo->prepare("INSERT INTO model_has_roles (role_id, model_type, model_id) VALUES (8, 'App\\\\Models\\\\User', :user_id)");
             $stmt->execute([':user_id' => $user_id]);
 
             // Enviar email de activación

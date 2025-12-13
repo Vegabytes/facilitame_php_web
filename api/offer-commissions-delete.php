@@ -27,6 +27,6 @@ catch (Throwable $e)
     }
     else
     {
-        json_response("ko", MSG, 2163541079);
+        json_response("ko", "Error al eliminar la comisión", 2163541079);
     }
 }

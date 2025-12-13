@@ -17,7 +17,7 @@ try
 
     if ($db === false)
     {
-        json_response("ko", MSG, 516269268);
+        json_response("ko", "Comercial no encontrado", 516269268);
     }
 
     if (!isset($_POST["code"]) || empty($_POST["code"]) || $_POST["code"] == "")
@@ -102,5 +102,5 @@ try
 catch (Throwable $e)
 {
     $pdo->rollBack();
-    json_response("ko", MSG, 3884004512);
+    json_response("ko", "Error al actualizar el comercial", 3884004512);
 }

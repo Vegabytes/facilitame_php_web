@@ -33,6 +33,7 @@ $offset = ($page - 1) * $limit;
 
 // Filtros
 $month = isset($_GET['month']) ? intval($_GET['month']) : 0;
+$quarter = isset($_GET['quarter']) ? intval($_GET['quarter']) : 0;
 $tag = isset($_GET['tag']) ? trim($_GET['tag']) : '';
 $type = isset($_GET['type']) ? trim($_GET['type']) : '';
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
@@ -42,8 +43,23 @@ $where = ["ai.advisory_id = ?", "ai.customer_id = ?"];
 $params = [$advisory_id, USER['id']];
 
 if ($month > 0 && $month <= 12) {
-    $where[] = "MONTH(ai.created_at) = ?";
+    $where[] = "ai.month = ?";
     $params[] = $month;
+}
+
+// Filtro por trimestre
+if ($quarter > 0 && $quarter <= 4) {
+    $quarterMonths = [
+        1 => [1, 2, 3],
+        2 => [4, 5, 6],
+        3 => [7, 8, 9],
+        4 => [10, 11, 12]
+    ];
+    $months = $quarterMonths[$quarter];
+    $where[] = "ai.month IN (?, ?, ?)";
+    $params[] = $months[0];
+    $params[] = $months[1];
+    $params[] = $months[2];
 }
 
 if ($tag !== '') {

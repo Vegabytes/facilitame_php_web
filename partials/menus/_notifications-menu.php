@@ -41,21 +41,26 @@
                 <?php if ($index === "unread") continue; ?>
                 <?php $is_unread = $notification["status"] == 0; ?>
                 <?php
-                // Asesoria navega al cliente, otros roles navegan a la solicitud
-                if (asesoria() && !empty($notification["sender_id"])) {
+                // Determinar URL según tipo de notificación
+                $notif_type = $notification["type"] ?? 'notification';
+                if ($notif_type === 'communication') {
+                    $notif_href = "/communications";
+                } elseif (asesoria() && !empty($notification["sender_id"])) {
                     $notif_href = "/customer?id=" . $notification["sender_id"];
                 } else {
                     $notif_href = "/request?id=" . $notification["request_id"];
                 }
+                $notif_icon = ($notif_type === 'communication') ? 'ki-notification-bing' : 'ki-notification-2';
                 ?>
 
-                <a href="<?= $notif_href ?>" 
-                   data-notification-status="<?= $notification["status"] ?>" 
-                   data-notification-id="<?= $notification["id"] ?>" 
+                <a href="<?= $notif_href ?>"
+                   data-notification-status="<?= $notification["status"] ?>"
+                   data-notification-id="<?= $notification["id"] ?>"
+                   data-notification-type="<?= $notif_type ?>"
                    class="notification-item <?= $is_unread ? 'notification-unread' : '' ?>">
-                    
+
                     <div class="notification-icon <?= $is_unread ? 'icon-unread' : 'icon-read' ?>">
-                        <i class="ki-outline ki-notification-2"></i>
+                        <i class="ki-outline <?= $notif_icon ?>"></i>
                     </div>
                     
                     <div class="notification-content">

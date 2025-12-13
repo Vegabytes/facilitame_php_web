@@ -87,6 +87,31 @@ $stmt = $pdo->prepare("
 $stmt->execute($params);
 $communications = $stmt->fetchAll();
 
+// Obtener archivos adjuntos para cada comunicación
+if (!empty($communications)) {
+    $comm_ids = array_column($communications, 'id');
+    $placeholders = implode(',', array_fill(0, count($comm_ids), '?'));
+    $stmt = $pdo->prepare("
+        SELECT id, communication_id, filename, url, mime_type, filesize
+        FROM advisory_communication_files
+        WHERE communication_id IN ($placeholders)
+    ");
+    $stmt->execute($comm_ids);
+    $files = $stmt->fetchAll();
+
+    // Agrupar archivos por communication_id
+    $files_by_comm = [];
+    foreach ($files as $file) {
+        $files_by_comm[$file['communication_id']][] = $file;
+    }
+
+    // Añadir archivos a cada comunicación
+    foreach ($communications as &$comm) {
+        $comm['attachments'] = $files_by_comm[$comm['id']] ?? [];
+    }
+    unset($comm);
+}
+
 $from = $total_records > 0 ? $offset + 1 : 0;
 $to = min($offset + $limit, $total_records);
 
